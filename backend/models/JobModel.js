@@ -12,6 +12,11 @@ const JobSchema = new mongoose.Schema(
     job: {
       jobName: { type: String, default: "" },
       jobCardId: { type: String, default: "" },
+      status: {
+        type: String,
+        enum: ["Pending", "In Progress", "Completed", "On Hold"],
+        default: "Pending"
+      },
       category: { type: String, default: "" },
       quantity: { type: Number, default: "" },
       jobSize: { type: String, default: "" },

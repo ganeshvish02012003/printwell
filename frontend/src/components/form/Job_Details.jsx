@@ -9,6 +9,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
   const defaultData = {
     jobName: "",
     jobCardId: "",
+    jobStatus:"Pending",
     category: "",
     quantity: "",
     jobSize: "A4",
@@ -103,22 +104,25 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 required
               />
 
-              {/* Job Id */}
-              <label
-                htmlFor="jobCardId"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal"
-              >
-                Job Card Id:
-              </label>
               <input
-                type="text"
+                type="number"
                 id="jobCardId"
                 name="jobCardId"
-                placeholder="Enter Job Name"
+                placeholder="jobCardId"
                 value={data.jobCardId || " "}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-1"
-                required
+              
+              />
+              <input
+                type="text"
+                id="jobStatus"
+                name="jobStatus"
+                placeholder="job status"
+                value={data.jobStatus || " "}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+               
               />
             </div>
 
