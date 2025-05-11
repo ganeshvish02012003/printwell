@@ -9,7 +9,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
   const defaultData = {
     jobName: "",
     jobCardId: "",
-    jobStatus:"Pending",
+    jobStatus: "Pending",
     category: "",
     quantity: "",
     jobSize: "A4",
@@ -20,27 +20,35 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
     paperColor: "White",
     job_description: "",
     sampleImage: null,
-    // sampleImage: databaseImage || null, // Use databaseImage if available
   };
-  const [previewFile, setPreviewFile] = useState(null); // For preview modal
 
+  const [previewFile, setPreviewFile] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const [data, setData] = useState({ ...defaultData, ...initialData });
+  const [viewMode, setViewMode] = useState("fit");
 
   useEffect(() => {
-    setData({ ...defaultData, ...initialData }); // Merge defaults with received data
+    setData({ ...defaultData, ...initialData });
   }, [initialData]);
 
   useEffect(() => {
     if (data.sampleImage) {
-      // const objectURL = URL.createObjectURL(data.sampleImage);
-      const objectURL = data.sampleImage;
+      const objectURL =
+        data.sampleImage instanceof Blob
+          ? URL.createObjectURL(data.sampleImage)
+          : data.sampleImage;
+
       setPreviewFile(objectURL);
 
-      // return () => URL.revokeObjectURL(objectURL); // Cleanup function
+      return () => {
+        if (data.sampleImage instanceof Blob) {
+          URL.revokeObjectURL(objectURL);
+        }
+      };
+    } else {
+      setPreviewFile(null);
     }
   }, [data.sampleImage]);
-
-  //-------------------------------
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -49,33 +57,21 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
     onChange(updatedData);
   };
 
-  //----------------------
   const handleUploadJob = (e) => {
     const file = e.target.files[0];
-    setData((prev) => {
-      const updatedData = { ...prev, sampleImage: file };
-      if (onChange) {
-        onChange(updatedData);
-      }
-      return updatedData;
-    });
+    if (!file) return;
+    const updatedData = { ...data, sampleImage: file };
+    setData(updatedData);
+    onChange(updatedData);
   };
-
-  //----------------------
 
   const handleDeleteFile = () => {
     setData({ ...data, sampleImage: null });
+    onChange({ ...data, sampleImage: null });
   };
 
-  // -----------------------
-
-  const handlePreviewFile = () => {
-    if (data.sampleImage && data.sampleImage instanceof Blob) {
-      // setPreviewFile(URL.createObjectURL(data.sampleImage));
-      setPreviewFile(data.sampleImage);
-    }
-  };
-  console.log("Sample Image Data:", data.sampleImage);
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
   return (
     <div>
@@ -86,10 +82,10 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
         <div className="w-3/4 p-2">
           <div className="rounded-xl">
             {/* Job Name */}
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            <div className="grid grid-cols-6 mb-2">
               <label
                 htmlFor="jobName"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal"
+                className="col-span-1 text-sm pl-1 flex items-center"
               >
                 Job Name:
               </label>
@@ -97,50 +93,42 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 type="text"
                 id="jobName"
                 name="jobName"
-                placeholder="Enter Job Name"
-                value={data.jobName || " "}
+                value={data.jobName}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-3"
-                required
               />
-
               <input
                 type="number"
                 id="jobCardId"
                 name="jobCardId"
-                placeholder="jobCardId"
-                value={data.jobCardId || " "}
+                value={data.jobCardId}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-1"
-              
               />
               <input
                 type="text"
                 id="jobStatus"
                 name="jobStatus"
-                placeholder="job status"
-                value={data.jobStatus || " "}
+                value={data.jobStatus}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-1"
-               
               />
             </div>
 
             {/* Category & Quantity */}
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            <div className="grid grid-cols-6 mb-2">
               <label
                 htmlFor="category"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal"
+                className="col-span-1 text-sm pl-1 flex items-center"
               >
                 Category:
               </label>
               <select
                 name="category"
                 id="category"
-                value={data.category || " "}
+                value={data.category}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                required
               >
                 <option value="" disabled>
                   Select a category
@@ -154,7 +142,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
 
               <label
                 htmlFor="quantity"
-                className="col-span-1 text-sm pl-1 mx-4 flex items-center font-normal"
+                className="col-span-1 text-sm pl-1 mx-4 flex items-center"
               >
                 Quantity:
               </label>
@@ -162,29 +150,26 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 type="number"
                 id="quantity"
                 name="quantity"
-                placeholder="Enter Quantity"
-                value={data.quantity || " "}
+                value={data.quantity}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                required
               />
             </div>
 
-            {/* Job Size & Number of Pages */}
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            {/* Job Size & Pages */}
+            <div className="grid grid-cols-6 mb-2">
               <label
                 htmlFor="jobSize"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal"
+                className="col-span-1 text-sm pl-1 flex items-center"
               >
                 Job Size:
               </label>
               <select
                 name="jobSize"
                 id="jobSize"
-                value={data.jobSize || " "}
+                value={data.jobSize}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                required
               >
                 <option value="" disabled>
                   Select Job Size
@@ -200,7 +185,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
 
               <label
                 htmlFor="pages"
-                className="col-span-1 text-sm pl-1 ml-2 flex items-center font-normal"
+                className="col-span-1 text-sm pl-1 ml-2 flex items-center"
               >
                 No. of Pages:
               </label>
@@ -208,25 +193,24 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 type="number"
                 id="pages"
                 name="pages"
-                placeholder="Enter Number of Pages"
-                value={data.pages || " "}
+                value={data.pages}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               />
             </div>
 
             {/* Color & Ink */}
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            <div className="grid grid-cols-6 mb-2">
               <label
                 htmlFor="color"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal"
+                className="col-span-1 text-sm pl-1 flex items-center"
               >
                 Color:
               </label>
               <select
                 name="color"
                 id="color"
-                value={data.color || " "}
+                value={data.color}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               >
@@ -236,18 +220,16 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
 
               <label
                 htmlFor="ink"
-                className="col-span-1 text-sm pl-1 mx-8 flex items-center font-normal"
+                className="col-span-1 text-sm pl-1 mx-8 flex items-center"
               >
                 Ink:
               </label>
               <select
                 name="ink"
                 id="ink"
-                value={data.ink || " "}
+                value={data.ink}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-
-                // disabled={formData.color === "MultiColor"}
               >
                 <option value="black">Black</option>
                 <option value="blue">Blue</option>
@@ -259,18 +241,18 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               </select>
             </div>
 
-            {/* Paper Name & Color */}
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            {/* Paper & Description */}
+            <div className="grid grid-cols-6 mb-2">
               <label
                 htmlFor="paperName"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal"
+                className="col-span-1 text-sm pl-1 flex items-center"
               >
                 Paper Name:
               </label>
               <select
                 name="paperName"
                 id="paperName"
-                value={data.paperName || " "}
+                value={data.paperName}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               >
@@ -287,14 +269,14 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
 
               <label
                 htmlFor="paperColor"
-                className="col-span-1 text-sm pl-1 ml-2 flex items-center font-normal"
+                className="col-span-1 text-sm pl-1 ml-2 flex items-center"
               >
                 Paper Color:
               </label>
               <select
                 name="paperColor"
                 id="paperColor"
-                value={data.paperColor || " "}
+                value={data.paperColor}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               >
@@ -307,128 +289,129 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               </select>
             </div>
 
-            {/* job_description */}
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            {/* Job Description */}
+            <div className="grid grid-cols-6 mb-2">
               <label
                 htmlFor="job_description"
-                className="col-span-1 pl-1 text-sm flex items-start font-normal"
+                className="col-span-1 text-sm pl-1 flex items-start"
               >
                 Description:
               </label>
               <textarea
                 name="job_description"
                 id="job_description"
-                placeholder="Enter Job Description"
-                value={data.job_description || " "}
+                value={data.job_description}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 text-sm border rounded col-span-5"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-5"
                 rows={3}
-              ></textarea>
+              />
             </div>
           </div>
         </div>
 
+        {/* Preview Section */}
         <div className="w-1/4 px-2 pt-1">
-          <label htmlFor="sampleImage" className="mt-3 p-1 pb-2">
+          <label htmlFor="sampleFile" className="block">
             Sample File:
           </label>
-          <label htmlFor="sampleImage">
-            <div className="p-2 bg-slate-100 border rounded h-64 w-full flex justify-center items-center cursor-pointer overflow-hidden relative">
-              {data.sampleImage ? (
-                <div className="w-full h-full flex items-center justify-center relative">
-                  {/* {data.sampleImage.type === "application/pdf" ? ( */}
-                  {data.sampleImage.type === "image/" ? (
-                    <iframe
-                      // src={URL.createObjectURL(data.sampleImage)}
-                      src={data.sampleImage}
-                      className="w-full h-full border-none"
-                      style={{ minHeight: "100%", minWidth: "100%" }}
-                    />
-                  ) : data?.sampleImage?.type?.startsWith("image/") ? (
-                    <img
-                      // src={URL.createObjectURL(data.sampleImage)}
-                      src={data.sampleImage}
-                      alt="Uploaded Preview"
-                      className="w-full h-full object-contain rounded"
-                    />
-                  ) : (
-                    <div className="text-center">
-                      <span className="text-4xl">📄</span>
-                      <p className="text-sm mt-2">{data.sampleImage.name}</p>
-                      <a
-                        // href={URL.createObjectURL(data.sampleImage)}
-                        src={data.sampleImage}
-                        download={data.sampleImage.name}
-                        className="text-blue-500 underline mt-2 block"
-                      >
-                        Download File
-                      </a>
-                    </div>
-                  )}
-
-                  {/* Preview & Delete Icons */}
-                  <div className="absolute top-2 right-2 flex gap-2">
-                    <button
-                      type="button"
-                      onClick={handlePreviewFile}
-                      className="bg-white p-1 rounded-full shadow-md hover:bg-gray-200"
-                    >
-                      <FaEye className="w-5 h-5 text-blue-500" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleDeleteFile}
-                      className="bg-white p-1 rounded-full shadow-md hover:bg-red-200"
-                    >
-                      <MdDeleteForever className="w-5 h-5 text-red-500" />
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="text-slate-500 flex justify-center items-center flex-col gap-2">
-                  <span className="text-4xl">📤</span>
-                  <p>Upload Final File</p>
-                  <input
-                    type="file"
-                    id="sampleImage"
-                    className="hidden"
-                    accept="image/*, application/pdf, .doc, .docx, .xls, .xlsx, .txt"
-                    onChange={handleUploadJob}
+          <input
+            type="file"
+            id="sampleFile"
+            accept="image/*,application/pdf"
+            onChange={handleUploadJob}
+            className="hidden"
+          />
+          <div
+            className="p-2 bg-slate-100 border rounded h-64 w-full flex justify-center items-center cursor-pointer overflow-hidden relative"
+            onClick={() => document.getElementById("sampleFile").click()}
+          >
+            {previewFile ? (
+              <>
+                {previewFile.endsWith(".pdf") ? (
+                  <iframe
+                    src={previewFile}
+                    className="w-full h-full"
+                    title="PDF preview"
                   />
-                </div>
-              )}
-            </div>
-          </label>
+                ) : (
+                  <img
+                    src={previewFile}
+                    alt="Sample Preview"
+                    className="object-contain max-h-full max-w-full"
+                  />
+                )}
+                <div className="absolute top-1 right-1 flex space-x-1">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation(); // <-- prevent file input from opening
+                      openModal();
+                    }}
+                    className="bg-white p-1 rounded shadow hover:bg-slate-200"
+                    title="Preview"
+                  >
+                    <FaEye size={16} />
+                  </button>
 
-          {/* Fullscreen Preview Modal */}
-          {previewFile && (
-            <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center  justify-center z-50">
-              <div className="w-8/12 flex justify-center">
-                <button
-                  onClick={() => setPreviewFile(null)}
-                  className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-md hover:bg-red-200"
-                >
-                  <IoMdCloseCircle className="w-6 h-6 text-red-500" />
-                </button>
-                <div className="relative ">
-                  {data?.sampleImage?.type?.startsWith("image/") ? (
-                    <img
-                      src={previewFile}
-                      alt="Preview"
-                      className=" h-screen"
-                    />
-                  ) : (
-                    <iframe
-                      src={previewFile}
-                      className="w-[90vw] h-screen border-none"
-                    />
-                  )}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation(); // <-- prevent file input from opening
+                      handleDeleteFile();
+                    }}
+                    className="bg-white p-1 rounded shadow hover:bg-red-200"
+                    title="Delete"
+                  >
+                    <MdDeleteForever size={16} />
+                  </button>
                 </div>
+              </>
+            ) : (
+              <div className="text-slate-500 flex flex-col items-center gap-2">
+                <span className="text-4xl">📤</span>
+                <p>Upload Image or PDF</p>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Fullscreen Modal Preview */}
+      {modalOpen && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+          <div className="bg-slate-300 relative rounded-lg overflow-y-auto max-w-screen-xl  w-full h-screen ">
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-red-400 hover:text-red-500"
+            >
+              <IoMdCloseCircle size={24} />
+            </button>
+
+            <div className="flex justify-center items-center h-full p-4">
+              {previewFile?.endsWith(".pdf") ? (
+                <iframe
+                  src={previewFile}
+                  className=" w-full h-full"
+                  title="PDF preview"
+                />
+              ) : (
+                <img
+                  src={previewFile}
+                  alt="Zoomed Preview"
+                  onDoubleClick={() =>
+                    setViewMode(viewMode === "fit" ? "max" : "fit")
+                  }
+                  className={`cursor-zoom-in   ${
+                    viewMode === "fit"
+                      ? "max-h-full max-w-full object-contain"
+                      : "w-auto h-auto object-none mt-[80%] py-10"
+                  }`}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -2,7 +2,7 @@ const userModel = require("../models/userModel")
 
 const uploadJobPermission = async (userId) => {  
     if (!userId) {
-        console.error("Error: 1 userId is undefined or null");
+        // console.error("Error: 1 userId is undefined or null");
         return false;
     }
 
