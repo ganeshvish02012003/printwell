@@ -1,205 +1,185 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 import Board from "../components/KanbanBoard/Board";
 import SummaryApi from "../common";
-import ROLE from "../common/role";
 import { useSelector } from "react-redux";
 import Login from "./Login";
+import throttle from "lodash/throttle";
+
+const statusToBoardId = {
+  Pending: "To_Do",
+  Desgin: "Desgin",
+  Printing: "Printing",
+  Other_work: "Other_work",
+  Completed: "Finished",
+};
+
+const boardIdToStatus = {
+  To_Do: "Pending",
+  Desgin: "Desgin",
+  Printing: "Printing",
+  Other_work: "Other_work",
+  Finished: "Completed",
+};
+
+const initialBoards = [
+  { id: "To_Do", title: "To Do", cards: [] },
+  { id: "Desgin", title: "Design", cards: [] },
+  { id: "Printing", title: "Printing", cards: [] },
+  { id: "Other_work", title: "Other Work", cards: [] },
+  { id: "Finished", title: "Finished", cards: [] },
+];
 
 const Home = () => {
-  const [boards, setBoards] = useState([
-    {
-      id: "To_Do",
-      title: "To Do",
-      cards: [],
-    },
-    {
-      id: "Desgin",
-      title: "Design",
-      cards: [],
-    },
-    {
-      id: "Printing",
-      title: "Printing",
-      cards: [],
-    },
-    {
-      id: "Other_work",
-      title: "Other Work",
-      cards: [],
-    },
-    {
-      id: "Finished",
-      title: "Finished",
-      cards: [],
-    },
-  ]);
-
+  const [boards, setBoards] = useState(initialBoards);
   const [target, setTarget] = useState({ cid: "", bid: "" });
   const [cardCounter, setCardCounter] = useState(1);
   const user = useSelector((state) => state?.user?.user);
 
-  const fetchAllJob = async () => {
-    const response = await fetch(SummaryApi.allJob.url);
-    const dataResponse = await response.json();
-    const allJobs = dataResponse?.data || [];
-    console.log("allJob", allJobs);
+  /* ------------------------------------------------------------------ */
+  /* 1️⃣  FETCH ALL JOBS (memoised so reference stays stable)            */
+  /* ------------------------------------------------------------------ */
+  const fetchAllJob = useCallback(async () => {
+    try {
+      const res = await fetch(SummaryApi.allJob.url);
+      const { data: allJobs = [] } = await res.json();
 
-    // Get current stored data
-    const savedJobs = JSON.parse(localStorage.getItem("kanban_jobs")) || [];
-    const savedPositions =
-      JSON.parse(localStorage.getItem("kanban_card_positions")) || {};
-
-    const isSameData =
-      savedJobs.length === allJobs.length &&
-      savedJobs.every((job, idx) => {
-        const newJob = allJobs[idx];
-        return (
-          job?.job?.jobName === newJob?.job?.jobName &&
-            job?.job?.jobCardId === newJob?.job?.jobCardId,
-          job?.date === newJob?.date && job?.desc === newJob?.desc
-        );
-      });
-
-    if (!isSameData) {
-      // Only update localStorage if data has changed
-      localStorage.setItem("kanban_jobs", JSON.stringify(allJobs));
-    }
-
-    const tempBoards = [...boards];
-    const cards = allJobs.map((job) => {
-      const id = job?.job?.jobCardId;
-      const boardId = savedPositions[id] || "To_Do";
-      return {
-        id,
+      const cards = allJobs.map((job) => ({
+        id: job?.job?.jobCardId,
+        _id: job._id,
         title: job?.job?.jobName,
         labels: [],
         tasks: [],
         date: job.date || "",
         desc: job.desc || "",
-        boardId,
-      };
-    });
+        boardId: statusToBoardId[job?.job?.status] || "To_Do",
+        job: job.job,
+      }));
 
-    // Clear all cards first
-    tempBoards.forEach((board) => (board.cards = []));
+      const temp = initialBoards.map((b) => ({ ...b, cards: [] }));
+      cards.forEach((c) => {
+        const board = temp.find((b) => b.id === c.boardId);
+        board && board.cards.push(c);
+      });
 
-    // Assign cards to boards based on saved boardId
-    cards.forEach((card) => {
-      const board = tempBoards.find((b) => b.id === card.boardId);
-      if (board) board.cards.push(card);
-    });
-
-    setBoards(tempBoards);
-  };
-
-  useEffect(() => {
-    fetchAllJob();
+      setBoards(temp);
+    } catch (err) {
+      console.error("Failed to fetch jobs:", err);
+    }
   }, []);
 
-  // --------------------------------------------
-  const addCard = (title, bid) => {
-    const newId = String(cardCounter).padStart(4, "0");
+  /* ------------------------------------------------------------------ */
+  /* 2️⃣  THROTTLED WRAPPER                                             */
+  /* ------------------------------------------------------------------ */
+  const throttledFetchJobs = useMemo(
+    () => throttle(fetchAllJob, 1000), // once per second max
+    [fetchAllJob]
+  );
 
-    const card = {
-      id: newId,
+  /* ------------------------------------------------------------------ */
+  /* 3️⃣  INITIAL LOAD + STORAGE-EVENT LISTENER                         */
+  /* ------------------------------------------------------------------ */
+  useEffect(() => {
+    fetchAllJob();
+
+    const onStorage = (e) => {
+      if (e.key === "kanban_sync") throttledFetchJobs();
+    };
+    window.addEventListener("storage", onStorage);
+
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      throttledFetchJobs.cancel();
+    };
+  }, [fetchAllJob, throttledFetchJobs]);
+
+  /* ------------------------------------------------------------------ */
+  /* 4️⃣  HELPER CALLBACKS                                              */
+  /* ------------------------------------------------------------------ */
+  const addCard = (title, bid) => {
+    const newCard = {
+      id: String(cardCounter).padStart(4, "0"),
       title,
       labels: [],
       tasks: [],
       date: "",
       desc: "",
     };
-
-    const index = boards.findIndex((item) => item.id === bid);
-    if (index < 0) return;
-
-    const tempBoards = [...boards];
-    tempBoards[index].cards.push(card);
-    setBoards(tempBoards);
-    setCardCounter((prev) => prev + 1);
+    setBoards((prev) =>
+      prev.map((b) =>
+        b.id === bid ? { ...b, cards: [...b.cards, newCard] } : b
+      )
+    );
+    setCardCounter((c) => c + 1);
   };
 
-  const removeCard = (cid, bid) => {
-    const bIndex = boards.findIndex((item) => item.id === bid);
-    if (bIndex < 0) return;
-
-    const cIndex = boards[bIndex].cards.findIndex((item) => item.id === cid);
-    if (cIndex < 0) return;
-
-    const tempBoards = [...boards];
-    tempBoards[bIndex].cards.splice(cIndex, 1);
-    setBoards(tempBoards);
-  };
-
-  const handleDragEnter = (cid, bid) => {
-    setTarget({ cid: cid || null, bid });
-  };
-
-  const handleDragEnd = (cid, bid) => {
-    // Find source board
-    let s_bIndex = boards.findIndex((item) => item.id === bid);
-    if (s_bIndex < 0) return;
-
-    // Find source card
-    let s_cIndex = boards[s_bIndex].cards.findIndex((item) => item.id === cid);
-    if (s_cIndex < 0) return;
-
-    // Find target board
-    let t_bIndex = boards.findIndex((item) => item.id === target.bid);
-    if (t_bIndex < 0) return;
-
-    const tempBoards = [...boards];
-    const tempCard = tempBoards[s_bIndex].cards[s_cIndex];
-
-    // Remove card from source board
-    tempBoards[s_bIndex].cards.splice(s_cIndex, 1);
-
-    // Find target card index
-    let t_cIndex = tempBoards[t_bIndex].cards.findIndex(
-      (item) => item.id === target.cid
+  const removeCard = (cid, bid) =>
+    setBoards((prev) =>
+      prev.map((b) =>
+        b.id === bid
+          ? { ...b, cards: b.cards.filter((c) => c.id !== cid) }
+          : b
+      )
     );
 
-    // Add card to target board
-    if (t_cIndex < 0 || target.cid === null) {
-      tempBoards[t_bIndex].cards.push(tempCard);
-    } else {
-      tempBoards[t_bIndex].cards.splice(t_cIndex, 0, tempCard);
-    }
+  const handleDragEnter = (cid, bid) => setTarget({ cid: cid || null, bid });
 
-    // Update UI state
+  /* ------------------------------------------------------------------ */
+  /* 5️⃣  DRAG-END (update UI + backend + broadcast)                    */
+  /* ------------------------------------------------------------------ */
+  const handleDragEnd = async (cid, bid) => {
+    const s_bIndex = boards.findIndex((b) => b.id === bid);
+    const t_bIndex = boards.findIndex((b) => b.id === target.bid);
+    if (s_bIndex < 0 || t_bIndex < 0) return;
+
+    const s_cIndex = boards[s_bIndex].cards.findIndex((c) => c.id === cid);
+    if (s_cIndex < 0) return;
+
+    const tempBoards = [...boards];
+    const movedCard = tempBoards[s_bIndex].cards.splice(s_cIndex, 1)[0];
+
+    const t_cIndex = tempBoards[t_bIndex].cards.findIndex(
+      (c) => c.id === target.cid
+    );
+    if (t_cIndex < 0 || target.cid == null)
+      tempBoards[t_bIndex].cards.push(movedCard);
+    else tempBoards[t_bIndex].cards.splice(t_cIndex, 0, movedCard);
+
     setBoards(tempBoards);
     setTarget({ cid: null, bid: null });
 
-    // Save updated jobs in "To_Do" to localStorage
-    const toDoBoard = tempBoards.find((b) => b.id === "To_Do");
-    if (toDoBoard) {
-      const jobsToSave = toDoBoard.cards.map((card) => ({
-        job: { jobName: card.title },
-        date: card.date,
-        desc: card.desc,
-      }));
-      localStorage.setItem("kanban_jobs", JSON.stringify(jobsToSave));
-    }
-
-    // Save updated positions to separate localStorage key
-    const positions = {};
-    tempBoards.forEach((board) => {
-      board.cards.forEach((card) => {
-        positions[card.id] = board.id;
+    /* ---- backend sync ---- */
+    try {
+      const newStatus = boardIdToStatus[target.bid] || "Pending";
+      await fetch(SummaryApi.upDateJob.url, {
+        method: SummaryApi.upDateJob.method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          _id: movedCard._id,
+          job: { ...movedCard.job, status: newStatus },
+        }),
       });
-    });
-    localStorage.setItem("kanban_positions", JSON.stringify(positions));
+      // broadcast change so other tabs refresh
+      localStorage.setItem("kanban_sync", Date.now().toString());
+    } catch (err) {
+      console.error("Backend update failed", err);
+    }
   };
 
-  if (!user?.role) {
-    return <Login />;
-  }
+  /* ------------------------------------------------------------------ */
+  /* 6️⃣  RENDER                                                       */
+  /* ------------------------------------------------------------------ */
+  if (!user?.role) return <Login />;
 
   return (
     <div className="h-[calc(100vh-164px)] bg-slate-400 mx-1 rounded-md px-4 flex flex-col gap-5">
-      <div className="w-full border-b border-gray-300">
-        {/* <h2>Kanban</h2> */}
-      </div>
-
       <div className="flex-1 w-full overflow-x-scroll">
         <div className="min-w-fit flex gap-1">
           {boards.map((board) => (

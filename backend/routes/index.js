@@ -11,7 +11,6 @@ const UploadJob = require("../controller/job/UploadJob");
 const getJobController = require("../controller/job/getJob");
 const UpdateJob = require("../controller/job/UpdateJob");
 
-const { saveCardPositionController, getCardPositionController } = require("../controller/job/cardPosition");
 
 router.post("/signup", userSignUpController);
 router.post("/signin", userSignInController);
@@ -24,9 +23,9 @@ router.post("/update-user", authToken, updateUser);
 
 //Job
 router.post("/upload-job", authToken, UploadJob); 
-router.post("/update-job",authToken, UpdateJob )
+// router.post("/update-job", authToken, UpdateJob )
+router.post("/update-job", UpdateJob )
 router.get("/get-job", getJobController);
-router.post("/save-positions", saveCardPositionController); // Save positions (from frontend)
-router.get("/get-positions", getCardPositionController);    // Retrieve saved positions
+
 
 module.exports = router;

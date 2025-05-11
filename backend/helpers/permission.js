@@ -1,14 +1,12 @@
-// const jobModel = require("../models/JobModel");
 const userModel = require("../models/userModel")
 
-const uploadJobPermission = async (userId) => {
+const uploadJobPermission = async (userId) => {  
     if (!userId) {
-        console.error("Error: userId is undefined or null");
+        console.error("Error: 1 userId is undefined or null");
         return false;
     }
 
     const user = await userModel.findById(userId)
-
 
     if (!user) {
         console.log(`Error: No user found with ID ${userId}`);

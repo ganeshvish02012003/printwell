@@ -14,7 +14,7 @@ const JobSchema = new mongoose.Schema(
       jobCardId: { type: String, default: "" },
       status: {
         type: String,
-        enum: ["Pending", "In Progress", "Completed", "On Hold"],
+        enum: ["Pending", "Desgin", "Printing", "Other_work", "Completed" ], 
         default: "Pending"
       },
       category: { type: String, default: "" },

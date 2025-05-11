@@ -17,7 +17,7 @@ const getJobController = async (req, res) => {
       message: err.message || err,
       error: true,
       success: false,
-    });
+    }); 
   }
 };
 module.exports=getJobController

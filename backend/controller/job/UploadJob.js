@@ -1,42 +1,5 @@
-// const uploadJobPermission = require("../../helpers/permission");
-// const jobModel = require("../../models/JobModel");
-
-// async function UploadJob(req, res) {
-//   try {
-//     const sessionUserId = req.userId;
-
-//     // Check user permission
-//     if (!uploadJobPermission (sessionUserId)) {
-//       throw new Error("Permission denied");
-//     }
-
-//     // Create and save the product
-//     const uploadJob = new jobModel (req.body); 
-//     const saveJob = await uploadJob.save();
-
-//     // Send success response
-//     res.status(201).json({
-//       message: "Job Added successfully",
-//       error: false,
-//       success: true,
-//       data: saveJob,
-//     });
-//   } catch (err) {
-//     // Send error response
-//     res.status(400).json({
-//       message: err.message || "An error occurred",
-//       error: true,
-//       success: false,
-//     });
-//   }
-// }
-
-// module.exports = UploadJob;
-
-
 const uploadJobPermission = require("../../helpers/permission");
 const jobModel = require("../../models/JobModel");
-const CounterModel = require("../../models/CounterModel");
 
 async function UploadJob(req, res) {
   try {
@@ -47,13 +10,6 @@ async function UploadJob(req, res) {
       throw new Error("Permission denied");
     }
 
-    // Get or create jobCardId counter
-    const counter = await CounterModel.findOneAndUpdate(
-      { name: "jobCardId" },
-      { $inc: { seq: 1 } },
-      { new: true, upsert: true }
-    );
-
     // Pad the jobCardId to 4 digits (e.g., "0001")
     const paddedJobCardId = String(counter.seq).padStart(4, "0");
 
@@ -61,7 +17,6 @@ async function UploadJob(req, res) {
     if (!req.body.job) req.body.job = {};
     req.body.job.jobCardId = paddedJobCardId;
     req.body.job.status = req.body.job.status || "Pending";
-
 
     // Create and save the job
     const uploadJob = new jobModel(req.body);
@@ -83,5 +38,3 @@ async function UploadJob(req, res) {
 }
 
 module.exports = UploadJob;
-
-
