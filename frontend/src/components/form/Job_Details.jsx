@@ -4,6 +4,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import "react-medium-image-zoom/dist/styles.css";
+import { FaDownload } from "react-icons/fa";
 
 const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
   const defaultData = {
@@ -50,6 +51,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
     }
   }, [data.sampleImage]);
 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const updatedData = { ...data, [name]: value };
@@ -72,6 +74,18 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
+
+  const handleDownloadFile = () => {
+    if (!previewFile) return;
+
+    const link = document.createElement("a");
+    link.href = previewFile;
+    link.target = "_blank"; // Open in new tab
+    link.rel = "noopener noreferrer"; // For security best practices
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div>
@@ -330,7 +344,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 {previewFile.endsWith(".pdf") ? (
                   <iframe
                     src={previewFile}
-                    className="w-full h-full"
+                    className="h-full w-full object-contain "
                     title="PDF preview"
                   />
                 ) : (
@@ -341,6 +355,18 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                   />
                 )}
                 <div className="absolute top-1 right-1 flex space-x-1">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent file input from opening
+                      handleDownloadFile();
+                    }}
+                    className="bg-white p-1 rounded shadow hover:bg-green-200"
+                    title="Download"
+                  >
+                    <FaDownload size={16} />
+                  </button>
+
                   <button
                     type="button"
                     onClick={(e) => {

@@ -23,9 +23,11 @@ const AdminJobCard = ({ job, index ,fetchAllJob}) => {
             <BsThreeDotsVertical />
           </button>
         </td>
+        <td>
         {editJob && (
           <AdminEditJob job={job} onClose={() => setEditJob(false)}  fetchAllJob={fetchAllJob}/>
         )}
+        </td>
 
       </tr>
     </>
