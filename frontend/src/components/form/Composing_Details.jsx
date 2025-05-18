@@ -26,10 +26,6 @@ const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
   }, [initialData]);
 
   useEffect(() => {
-    console.log("initialData in Composing_Details:", initialData);
-  }, [initialData]);
-
-  useEffect(() => {
     if (data.finalImage) {
       const objectURL =
         data.finalImage instanceof Blob
