@@ -11,7 +11,7 @@ const AllJob = () => {
     const response = await fetch(SummaryApi.allJob.url);
     const dataResponse = await response.json();
 
-    console.log("response", dataResponse);
+    // console.log("response", dataResponse);
     setAllJob(dataResponse?.data || []);
   };
 

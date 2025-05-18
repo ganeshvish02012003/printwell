@@ -10,13 +10,13 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
   const defaultData = {
     jobName: "",
     jobCardId: "",
-    jobStatus: "Pending",
+    jobStatus: "",
     category: "",
     quantity: "",
     jobSize: "A4",
     pages: "",
-    color: "singleColor",
-    ink: "Black",
+    color: "",
+    ink: "",
     paperName: "",
     paperColor: "White",
     job_description: "",
@@ -51,10 +51,18 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
     }
   }, [data.sampleImage]);
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const updatedData = { ...data, [name]: value };
+    let updatedData = { ...data, [name]: value };
+
+    if (name === "color") {
+      if (value === "MultiColor") {
+        updatedData.ink = "multi";
+      } else if (value === "singleColor") {
+        updatedData.ink = "black";
+      }
+    }
+
     setData(updatedData);
     onChange(updatedData);
   };
@@ -107,31 +115,24 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 type="text"
                 id="jobName"
                 name="jobName"
-                value={data.jobName}
+                value={data.jobName || ""}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-3"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-4"
               />
-              <input
-                type="number"
-                id="jobCardId"
-                name="jobCardId"
-                value={data.jobCardId}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
-              />
+              
               <input
                 type="text"
                 id="jobStatus"
                 name="jobStatus"
-                value={data.jobStatus}
+                value={data.jobStatus || ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-1"
               />
             </div>
 
-            {/* Category & Quantity */}
-            <div className="grid grid-cols-6 mb-2">
-              <label
+             {/* Job Name */}
+             <div className="grid grid-cols-6 mb-2">
+             <label
                 htmlFor="category"
                 className="col-span-1 text-sm pl-1 flex items-center"
               >
@@ -140,9 +141,9 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               <select
                 name="category"
                 id="category"
-                value={data.category}
+                value={data.category || ""}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-3"
               >
                 <option value="" disabled>
                   Select a category
@@ -158,13 +159,50 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 htmlFor="quantity"
                 className="col-span-1 text-sm pl-1 mx-4 flex items-center"
               >
+                Job No:
+              </label>
+              <input
+                type="number"
+                id="jobCardId"
+                name="jobCardId"
+                value={data.jobCardId || ""}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+              />
+              
+            </div>
+
+            {/* Category & Quantity */}
+            <div className="grid grid-cols-6 mb-2">
+              <label
+                htmlFor="PrintingSide"
+                className="col-span-1 text-sm pl-1 flex items-center"
+              >
+                Print side:
+              </label>
+              <select
+                name="PrintingSide"
+                id="PrintingSide"
+                value={data.PrintingSide || ""}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+              >
+                <option value="SingleSide">Single side</option>  
+                <option value="BothSide">Both side</option>
+
+              </select>
+
+              <label
+                htmlFor="quantity"
+                className="col-span-1 text-sm pl-1 mx-4 flex items-center"
+              >
                 Quantity:
               </label>
               <input
                 type="number"
                 id="quantity"
                 name="quantity"
-                value={data.quantity}
+                value={data.quantity || ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               />
@@ -181,7 +219,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               <select
                 name="jobSize"
                 id="jobSize"
-                value={data.jobSize}
+                value={data.jobSize || ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               >
@@ -207,7 +245,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 type="number"
                 id="pages"
                 name="pages"
-                value={data.pages}
+                value={data.pages || ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               />
@@ -224,7 +262,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               <select
                 name="color"
                 id="color"
-                value={data.color}
+                value={data.color || ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               >
@@ -241,9 +279,10 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               <select
                 name="ink"
                 id="ink"
-                value={data.ink}
+                value={data.ink || ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                disabled={data.color === "MultiColor"}
               >
                 <option value="black">Black</option>
                 <option value="blue">Blue</option>
@@ -266,7 +305,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               <select
                 name="paperName"
                 id="paperName"
-                value={data.paperName}
+                value={data.paperName || ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               >
@@ -290,7 +329,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               <select
                 name="paperColor"
                 id="paperColor"
-                value={data.paperColor}
+                value={data.paperColor || ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               >
@@ -314,7 +353,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               <textarea
                 name="job_description"
                 id="job_description"
-                value={data.job_description}
+                value={data.job_description || ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-5"
                 rows={3}

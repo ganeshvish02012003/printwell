@@ -1,32 +1,52 @@
 import React, { useEffect, useState } from "react";
-import JobCategory from "../../helpers/JobCategory";
 import { IoMdCloseCircle } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
-import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
-import panzoom from "panzoom";
+import { FaDownload } from "react-icons/fa";
 
-const Composing_Details = ({ onChange, initialData }) => {
-  const [data, setData] = useState({
+const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
+  const defaultData = {
     jobName: "",
     category: "",
     quantity: 1,
     description: "",
     proofs: [{ id: 1, status: null }],
     finalImage: null,
-  });
-  const [previewFile, setPreviewFile] = useState(null); // For preview modal
+  };
+
+
+  const [previewFile, setPreviewFile] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [data, setData] = useState({ ...defaultData, ...initialData });
+  const [viewMode, setViewMode] = useState("fit");
 
   useEffect(() => {
-    if (initialData) {
-      setData((prev) => ({
-        ...prev,
-        ...initialData,
-        proofs: initialData.proofs || [{ id: 1, status: null }],
-      }));
-    }
+    setData({ ...defaultData, ...initialData });
   }, [initialData]);
+
+  useEffect(() => {
+    console.log("initialData in Composing_Details:", initialData);
+  }, [initialData]);
+
+  useEffect(() => {
+    if (data.finalImage) {
+      const objectURL =
+        data.finalImage instanceof Blob
+          ? URL.createObjectURL(data.finalImage)
+          : data.finalImage;
+
+      setPreviewFile(objectURL);
+
+      return () => {
+        if (data.finalImage instanceof Blob) {
+          URL.revokeObjectURL(objectURL);
+        }
+      };
+    } else {
+      setPreviewFile(null);
+    }
+  }, [data.finalImage]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -35,44 +55,43 @@ const Composing_Details = ({ onChange, initialData }) => {
     onChange(updatedData);
   };
 
-  const handleStatusChange = (index, status) => {
-    const updatedProofs = (data.proofs ?? []).map((proof, index) =>
-      i === index ? { ...proof, status } : proof
-    );
-    setData((prev) => ({ ...prev, proofs: updatedProofs }));
-    if (onChange) {
-      onChange({ ...data, proofs: updatedProofs });
-    }
-  };
-
   const handleUploadJob = (e) => {
     const file = e.target.files[0];
-    setData((prev) => ({ ...prev, finalImage: file }));
-
-    if (onChange) {
-      onChange({ ...data, finalImage: file });
-    }
+    if (!file) return;
+    const updatedData = { ...data, finalImage: file };
+    setData(updatedData);
+    onChange(updatedData);
   };
 
   const handleDeleteFile = () => {
     setData({ ...data, finalImage: null });
+    onChange({ ...data, finalImage: null });
   };
 
-  const handlePreviewFile = () => {
-    if (data.finalImage) {
-      setPreviewFile(URL.createObjectURL(data.finalImage));
-    }
-    console.log()
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
+  const handleDownloadFile = () => {
+    if (!previewFile) return;
+
+    const link = document.createElement("a");
+    link.href = previewFile;
+    link.target = "_blank"; // Open in new tab
+    link.rel = "noopener noreferrer"; // For security best practices
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
-  useEffect(() => {
-    if (previewFile && !data.finalImage.type.startsWith("image/")) {
-      const elem = document.getElementById("preview-iframe");
-      if (elem) {
-        const instance = panzoom(elem, { minZoom: 0.5, maxZoom: 3 });
-      }
-    }
-  }, [previewFile]);
+  // const handleStatusChange = (index, status) => {
+  //   const updatedProofs = (data.proofs ?? []).map((proof, index) =>
+  //     i === index ? { ...proof, status } : proof
+  //   );
+  //   setData((prev) => ({ ...prev, proofs: updatedProofs }));
+  //   if (onChange) {
+  //     onChange({ ...data, proofs: updatedProofs });
+  //   }
+  // };
 
   return (
     <div>
@@ -94,58 +113,55 @@ const Composing_Details = ({ onChange, initialData }) => {
                 id="jobName"
                 name="jobName"
                 placeholder="Job Name"
-                value={data.jobName}
+                value={data.jobName ||""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-5"
               />
             </div>
 
-            <div className="grid grid-cols-6 mb-2">
+            <div className="grid grid-cols-6 mb-2 justify-center">
               <label
-                htmlFor="category"
-                className="col-span-1 text-sm pl-1 flex items-center"
+                htmlFor="Mobile_number"
+                className="col-span-1 text-sm pl-1 flex items-center font-normal"
               >
-                Category:
-              </label>
-              <select
-                name="category"
-                id="category"
-                value={data.category}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-              >
-                <option value="" disabled>
-                  Select a category
-                </option>
-                {JobCategory.map((el, index) => (
-                  <option value={el.value} key={el.value + index}>
-                    {el.label}
-                  </option>
-                ))}
-              </select>
-
-              <label
-                htmlFor="quantity"
-                className="col-span-1 text-sm pl-1 mx-4 flex items-center"
-              >
-                Quantity:
+                WhatApp No. :
               </label>
               <input
-                type="number"
-                id="quantity"
-                name="quantity"
-                placeholder="Enter Quantity"
-                value={data.quantity}
+                type="text"
+                id="Mobile_number"
+                name="Mobile_number"
+                placeholder="WhatApp for Proof"
+                value={data.Mobile_number || ""}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-5"
+                required
+              />
+            </div>
+            <div className="grid grid-cols-6 mb-2 justify-center">
+              <label
+                htmlFor="Mobile_number"
+                className="col-span-1 text-sm pl-1 flex items-center font-normal"
+              >
+                Email :
+              </label>
+              <input
+                type="text"
+                id="Mobile_number"
+                name="Mobile_number"
+                placeholder="Mail for Proof"
+                value={data.Mobile_number || ""}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-5"
+                required
               />
             </div>
 
+
             <div className="grid grid-cols-6 mb-2">
               <h2 className="col-span-1 pl-1 text-sm flex items-start">
-                Proof Check (Client Approval)
+                Proof Check 
               </h2>
-              <div className="p-2 text-sm border rounded col-span-5">
+              {/* <div className="p-2 text-sm border rounded col-span-5">
                 <div className="grid grid-cols-1 md:grid-cols-6 gap-1">
                   {data.proofs.map((proof, index) => (
                     <button
@@ -184,7 +200,7 @@ const Composing_Details = ({ onChange, initialData }) => {
                     </button>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="grid grid-cols-6 mb-2">
@@ -207,105 +223,124 @@ const Composing_Details = ({ onChange, initialData }) => {
           </div>
         </div>
 
+        {/* final image */}
         <div className="w-1/4 px-2 pt-1">
-          <label htmlFor="finalImage" className="mt-3 p-1 pb-2">
-            Final File:
-          </label>
-          <label htmlFor="finalImage">
-            <div className="p-2 bg-slate-100 border rounded h-64 w-full flex justify-center items-center cursor-pointer overflow-hidden relative">
-              {data.finalImage ? (
-                <div  className="w-full h-full flex items-center justify-center relative">
-                  {data.finalImage.type === "application/pdf" ? (
-                    <iframe
-                      // src={URL.createObjectURL(data.finalImage)}
-                      className="w-full h-full border-none"
-                      style={{ minHeight: "100%", minWidth: "100%" }}
-                    />
-                  // ) : data.finalImage.type.startsWith("image/") ? (
-                  //   <img
-                  //     // src={URL.createObjectURL(data.finalImage)}
-                  //     alt="Uploaded Preview"
-                  //     className="w-full h-full object-contain rounded"
-                  //   />
-                  ) : (
-                    <div className="text-center">
-                      <span className="text-4xl">📄</span>
-                      <p className="text-sm mt-2">{data.finalImage.name}</p>
-                      <a
-                        // href={URL.createObjectURL(data.finalImage)}
-                        download={data.finalImage.name}
-                        className="text-blue-500 underline mt-2 block"
-                      >
-                        Download File
-                      </a>
-                    </div>
-                  )}
-
-                  {/* Preview & Delete Icons */}
-                  <div className="absolute top-2 right-2 flex gap-2">
-                    <button
-                    type="button" 
-                      onClick={handlePreviewFile}
-                      className="bg-white p-1 rounded-full shadow-md hover:bg-gray-200"
-                    >
-                      <FaEye className="w-5 h-5 text-blue-500" />
-                    </button>
-                    <button
-                    type="button" 
-                      onClick={handleDeleteFile}
-                      className="bg-white p-1 rounded-full shadow-md hover:bg-red-200"
-                    >
-                      <MdDeleteForever className="w-5 h-5 text-red-500" />
-                    </button>
-                  </div>
-                </div>
+        <label htmlFor="sampleFile" className="block">
+        Final File
+        </label>
+        <input
+          type="file"
+          id="sampleFile"
+          accept="image/*,application/pdf"
+          onChange={handleUploadJob}
+          className="hidden"
+        />
+        <div
+          className="p-2 bg-slate-100 border rounded h-64 w-full flex justify-center items-center cursor-pointer overflow-hidden relative"
+          onClick={() => document.getElementById("sampleFile").click()}
+        >
+          {previewFile ? (
+            <>
+              {previewFile.endsWith(".pdf") ? (
+                <iframe
+                  src={previewFile}
+                  className="h-full w-full object-contain "
+                  title="PDF preview"
+                />
               ) : (
-                <div className="text-slate-500 flex justify-center items-center flex-col gap-2">
-                  <span className="text-4xl">📤</span>
-                  <p>Upload Final File</p>
-                  <input
-                    type="file"
-                    id="finalImage"
-                    className="hidden"
-                    accept="image/*, application/pdf, .doc, .docx, .xls, .xlsx, .txt"
-                    onChange={handleUploadJob}
-                  />
-                </div>
+                <img
+                  src={previewFile}
+                  alt="Sample Preview"
+                  className="object-contain max-h-full max-w-full"
+                />
               )}
-            </div>
-          </label>
-
-          {/* Fullscreen Preview Modal */}
-          {previewFile && (
-            <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center  justify-center z-50">
-              <div className="w-8/12 flex justify-center">
+              <div className="absolute top-1 right-1 flex space-x-1">
                 <button
-                  onClick={() => setPreviewFile(null)}
-                  className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-md hover:bg-red-200"
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent file input from opening
+                    handleDownloadFile();
+                  }}
+                  className="bg-white p-1 rounded shadow hover:bg-green-200"
+                  title="Download"
                 >
-                  <IoMdCloseCircle className="w-6 h-6 text-red-500" />
+                  <FaDownload size={16} />
                 </button>
-                {/* <div className="relative ">
-                  {data.finalImage.type.startsWith("image/") ? (
-                    <img
-                      src={previewFile}
-                      alt="Preview"
-                      className=" h-screen"
-                    />
-                  ) : (
-                    <iframe
-                      src={previewFile}
-                      className="w-[90vw] h-screen border-none"
-                    />
-                  )}
-                </div> */}
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation(); // <-- prevent file input from opening
+                    openModal();
+                  }}
+                  className="bg-white p-1 rounded shadow hover:bg-slate-200"
+                  title="Preview"
+                >
+                  <FaEye size={16} />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation(); // <-- prevent file input from opening
+                    handleDeleteFile();
+                  }}
+                  className="bg-white p-1 rounded shadow hover:bg-red-200"
+                  title="Delete"
+                >
+                  <MdDeleteForever size={16} />
+                </button>
               </div>
+            </>
+          ) : (
+            <div className="text-slate-500 flex flex-col items-center gap-2">
+              <span className="text-4xl">📤</span>
+              <p>Upload Image or PDF</p>
             </div>
           )}
-
-     
         </div>
       </div>
+      </div>
+
+      {/* Preview Section */}
+     
+
+      {/* Fullscreen Modal Preview */}
+      {modalOpen && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+          <div className="bg-slate-300 relative rounded-lg overflow-y-auto max-w-screen-xl  w-full h-screen ">
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-red-400 hover:text-red-500"
+            >
+              <IoMdCloseCircle size={24} />
+            </button>
+
+            <div className="flex justify-center items-center h-full p-4">
+              {previewFile?.endsWith(".pdf") ? (
+                <iframe
+                  src={previewFile}
+                  className=" w-full h-full"
+                  title="PDF preview"
+                />
+              ) : (
+                <img
+                  src={previewFile}
+                  alt="Zoomed Preview"
+                  onDoubleClick={() =>
+                    setViewMode(viewMode === "fit" ? "max" : "fit")
+                  }
+                  className={`cursor-zoom-in   ${
+                    viewMode === "fit"
+                      ? "max-h-full max-w-full object-contain"
+                      : "w-auto h-auto object-none mt-[80%] py-10"
+                  }`}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 const uploadJobPermission = require("../../helpers/permission");
 const jobModel = require("../../models/JobModel");
+const Counter = require("../../models/CounterModel"); 
 
 async function UploadJob(req, res) {
   try {
@@ -10,15 +11,21 @@ async function UploadJob(req, res) {
       throw new Error("Permission denied");
     }
 
-    // Pad the jobCardId to 4 digits (e.g., "0001")
+    // Increment the counter and get the new value
+    const counter = await Counter.findByIdAndUpdate(
+      { _id: "jobCardId" },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true } // create if not exists
+    );
+
     const paddedJobCardId = String(counter.seq).padStart(4, "0");
 
-    // ✅ INSERT THIS BLOCK HERE
+    // Ensure job object exists
     if (!req.body.job) req.body.job = {};
     req.body.job.jobCardId = paddedJobCardId;
     req.body.job.status = req.body.job.status || "Pending";
 
-    // Create and save the job
+    // Save the job
     const uploadJob = new jobModel(req.body);
     const saveJob = await uploadJob.save();
 
