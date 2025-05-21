@@ -48,11 +48,14 @@ const Home = () => {
       const res = await fetch(SummaryApi.allJob.url);
       const { data: allJobs = [] } = await res.json();
 
+      // console.log("job",allJobs)
+
       const cards = allJobs.map((job) => ({
         id: job?.job?.jobCardId,
         _id: job._id,
-        title: job?.job?.jobName,
-        labels: [],
+        JobName: job?.job?.jobName,
+        Customer: job?.general?.Customer_name,
+        labels: [], 
         tasks: [],
         date: job.date || "",
         desc: job.desc || "",
