@@ -51,13 +51,17 @@ const Home = () => {
       // console.log("job",allJobs)
 
       const cards = allJobs.map((job) => ({
-        id: job?.job?.jobCardId,
         _id: job._id,
-        JobName: job?.job?.jobName,
-        Customer: job?.general?.Customer_name,
-   
         boardId: statusToBoardId[job?.job?.status] || "To_Do",
+        createdAt : job.createdAt,
+        
+        general: job.general,
         job: job.job,
+        composing: job.composing ,
+        paper: job.paper ,
+        printing: job.printing ,
+        binding: job.binding ,
+        finished: job.finished ,
       }));
 
       const temp = initialBoards.map((b) => ({ ...b, cards: [] }));

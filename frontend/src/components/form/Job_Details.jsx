@@ -6,6 +6,7 @@ import { FaEye } from "react-icons/fa";
 import "react-medium-image-zoom/dist/styles.css";
 import { FaDownload } from "react-icons/fa";
 
+
 const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
   const defaultData = {
     jobName: "",
@@ -21,6 +22,9 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
     paperColor: "White",
     job_description: "",
     sampleImage: null,
+    PrintingSide:"SingleSide",
+    When_to_give_goods:"",
+    Time_of_give_goods:"",
   };
 
   const [previewFile, setPreviewFile] = useState(null);
@@ -344,34 +348,34 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
 
             <div className="grid grid-cols-6 mb-2 justify-center">
               <label
-                htmlFor="Start_date_of_print"
+                htmlFor="When_to_give_goods"
                 className="col-span-1 text-sm  pl-1  flex items-center font-normal "
               >
                 When to give
               </label>
               <input
                 type="date"
-                id="Start_date_of_print"
-                name="Start_date_of_print"
+                id="When_to_give_goods"
+                name="When_to_give_goods"
                 placeholder="When to give"
-                value={data.Start_date_of_print}
+                value={data.When_to_give_goods}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
                
               />
 
               <label
-                htmlFor="Start_time_of_print"
+                htmlFor="Time_of_give_goods"
                 className="col-span-1 text-sm  px-4  flex items-center font-normal "
               >
                time
               </label>
               <input
                 type="time"
-                id="Start_time_of_print"
-                name="Start_time_of_print"
+                id="Time_of_give_goods"
+                name="Time_of_give_goods"
                 placeholder="Quantity of paper ordered"
-                value={data.Start_time_of_print}
+                value={data.Time_of_give_goods}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
                 

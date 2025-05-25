@@ -4,18 +4,24 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaRegClock } from "react-icons/fa";
 import { FaRegCheckSquare } from "react-icons/fa";
 import Dropdown from "./Dropdown";
-import AdminEditJob from "../AdminEditJob"
+import AdminEditJob from "../AdminEditJob";
+import moment from "moment";
+import { FaUserTie } from "react-icons/fa";
+import { BiTask } from "react-icons/bi";
+import { MdModeEditOutline } from "react-icons/md";
+import { FaMaximize } from "react-icons/fa6";
+import { IoMdPrint } from "react-icons/io";
+import { TbArrowsMaximize } from "react-icons/tb";
 
 const KanbanCard = ({
   card,
   boardId,
-  // removeCard,
+
   handleDragEnd,
   handleDragEnter,
-  fetchAllJob
+  fetchAllJob,
 }) => {
-  const [showDropdown, setShowDropdown] = useState(false);
-    const [editJob, setEditJob] = useState(false);
+  const [editJob, setEditJob] = useState(false);
   return (
     <div
       className="p-2 mb-1 border rounded-md bg-white flex flex-col group hover:shadow-md transition"
@@ -23,80 +29,68 @@ const KanbanCard = ({
       onDragEnd={() => handleDragEnd(card?.id, boardId)}
       onDragEnter={() => handleDragEnter(card?.id, boardId)}
     >
-      <div className="flex w-full gap-2">
+      <div className="flex ">
         {/* Left Section */}
-        <div className="w-3/4">
-          <div className="font-bold">{card.JobName}</div>
-          <div className="font-normal ">{card.Customer}</div>
-          <div className="font-normal ">{card.Customer}</div>
-          <div className="font-normal">{card.title}</div>
-          <div className="flex justify-between items-center mt-2">
-            <p className="flex items-center gap-2 text-sm">
-              <FaRegClock />
-              {card.date || "No date"} 
+        <div className=" w-75% pr-2 flex flex-col gap-1 ">
+          <div className="flex justify-between">
+            <div className="font-bold flex items-center gap-2">
+              <BiTask /> {card.job?.jobName || "- Job Name -"}
+            </div>
+            <div className="text-sm font-bold text-red-500">
+              {card.job?.jobCardId}
+            </div>
+          </div>
+          
+          <div className="font-normal  flex items-center gap-2  ">
+            <FaUserTie  className="text-gray-500"/>
+            {card.general?.Customer_name || "- Customer -"}
+          </div>
+
+          <div className="flex justify-between items-center ">
+            <p className="flex-1 text-base leading-none text-center  ">
+              {card.job?.category || "category"}
+            </p>
+            <p className="flex-1 text-base leading-none text-center  ">
+              {card.job?.quantity || "quantity"}
+            </p>
+          </div>
+
+          <div className="flex justify-between items-center p-1 pb-0">
+            <p className="flex-1 text-sm leading-none   text-center   ">
+              {card.createdAt
+                ? moment(card.createdAt).format("LLL")
+                : "date of Order"}
+            </p>
+            <p className="flex-1 text-sm leading-none text-center ">
+              {card.job?.When_to_give_goods
+                ? moment(card.job?.When_to_give_goods).format("LLL")
+                : "date of Submit"}
             </p>
           </div>
         </div>
 
         {/* Right Section */}
-        <div className="w-1/4 flex flex-col items-end ">
-          {/* Labels */}
-          {/* <div className="flex flex-wrap justify-end gap-1">
-            {card.labels?.map((label, index) => (
-              <Chip key={index} text={label.text} color={label.color} />
-            ))}
-          </div> */}
+        <div className=" flex w-25% p-1 ">
+          {/* Right side: Dropdown Icon */}
+          <div className="relative   ">
+      
+            <TbArrowsMaximize className="transition-opacity cursor-pointer text-gray-500 hover:text-black  opacity-0 group-hover:opacity-100"/>
 
-          <div className="flex justify-between items-center w-full">
-            <div className="text-sm font-bold text-red-600">{card.id}</div>
+            <MdModeEditOutline
+              onClick={() => setEditJob(true)}
+              className="mt-6 transition-opacity rounded-full cursor-pointer text-gray-500 hover:text-black text-lg  opacity-0 group-hover:opacity-100 "
+            />
 
-            {/* Right side: Dropdown Icon */}
-            <div
-              className="relative cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowDropdown(true);
-              }}
-            >
-              <BsThreeDotsVertical
-                className={`transition-opacity ${
-                  showDropdown
-                    ? "opacity-100"
-                    : "opacity-100 group-hover:opacity-100"
-                }`}
-              />
-              {showDropdown && (
-                <Dropdown onClose={() => setShowDropdown(false)}>
-                  <div className="bg-white border rounded-md shadow-lg w-32">
-                    <p className="text-center hover:bg-slate-400 hover:text-white rounded-md">
-                      View Card
-                    </p>
-                    <p className="text-center hover:bg-slate-400 hover:text-white rounded-md" onClick={() => setEditJob(true)}>
-                      Edit Card
-                    </p>
-                    <p
-                      className="text-center hover:bg-red-400 hover:text-white rounded-md"
-                      // onClick={() => removeCard(card.id, boardId)}
-                    >
-                      Delete Card
-                    </p>
-                  </div>
-                </Dropdown>
-              )}
-            </div>
+            <IoMdPrint className=" mt-6 transition-opacitycursor-pointer text-gray-500 hover:text-black opacity-0 group-hover:opacity-100" />
           </div>
 
-           {editJob && (
-          <AdminEditJob job={card} onClose={() => setEditJob(false)}  fetchAllJob={fetchAllJob}/>
-        )}
-
-          {/* Bottom Content */}
-          <div className="mt-auto pt-2">
-            <p className="flex items-center gap-2 text-sm">
-              <FaRegCheckSquare />
-              <span>1/4</span>
-            </p>
-          </div>
+          {editJob && (
+            <AdminEditJob
+              job={card}
+              onClose={() => setEditJob(false)}
+              fetchAllJob={fetchAllJob}
+            />
+          )}
         </div>
       </div>
     </div>

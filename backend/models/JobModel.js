@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const JobSchema = new mongoose.Schema(
   {
-
     general: {
       Customer_name: { type: String, default: "" },
       Mobile_number: { type: Number, default: "" },
@@ -14,8 +13,8 @@ const JobSchema = new mongoose.Schema(
       jobCardId: { type: String, default: "" },
       status: {
         type: String,
-        enum: ["Pending", "Desgin", "Printing", "Other_work", "Completed" ], 
-        default: "Pending"
+        enum: ["Pending", "Desgin", "Printing", "Other_work", "Completed"],
+        default: "Pending",
       },
       category: { type: String, default: "" },
       quantity: { type: Number, default: "" },
@@ -27,6 +26,9 @@ const JobSchema = new mongoose.Schema(
       paperColor: { type: String, default: "" },
       job_description: { type: String, default: "" },
       sampleImage: { type: String, default: null },
+      PrintingSide: { type: String, default: "" },
+      When_to_give_goods: { type: String, default: "" },
+      Time_of_give_goods: { type: String, default: "" },
     },
     composing: {
       jobName: { type: String, default: "" },
