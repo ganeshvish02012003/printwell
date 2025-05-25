@@ -4,17 +4,18 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaRegClock } from "react-icons/fa";
 import { FaRegCheckSquare } from "react-icons/fa";
 import Dropdown from "./Dropdown";
-import AdminJobCard from "../AdminJobCard";
-// import CardInfo from "./CardInfo";
+import AdminEditJob from "../AdminEditJob"
 
 const KanbanCard = ({
   card,
   boardId,
-  removeCard,
+  // removeCard,
   handleDragEnd,
   handleDragEnter,
+  fetchAllJob
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+    const [editJob, setEditJob] = useState(false);
   return (
     <div
       className="p-2 mb-1 border rounded-md bg-white flex flex-col group hover:shadow-md transition"
@@ -27,8 +28,8 @@ const KanbanCard = ({
         <div className="w-3/4">
           <div className="font-bold">{card.JobName}</div>
           <div className="font-normal ">{card.Customer}</div>
+          <div className="font-normal ">{card.Customer}</div>
           <div className="font-normal">{card.title}</div>
-
           <div className="flex justify-between items-center mt-2">
             <p className="flex items-center gap-2 text-sm">
               <FaRegClock />
@@ -40,11 +41,11 @@ const KanbanCard = ({
         {/* Right Section */}
         <div className="w-1/4 flex flex-col items-end ">
           {/* Labels */}
-          <div className="flex flex-wrap justify-end gap-1">
-            {card.labels.map((label, index) => (
+          {/* <div className="flex flex-wrap justify-end gap-1">
+            {card.labels?.map((label, index) => (
               <Chip key={index} text={label.text} color={label.color} />
             ))}
-          </div>
+          </div> */}
 
           <div className="flex justify-between items-center w-full">
             <div className="text-sm font-bold text-red-600">{card.id}</div>
@@ -70,12 +71,12 @@ const KanbanCard = ({
                     <p className="text-center hover:bg-slate-400 hover:text-white rounded-md">
                       View Card
                     </p>
-                    <p className="text-center hover:bg-slate-400 hover:text-white rounded-md">
+                    <p className="text-center hover:bg-slate-400 hover:text-white rounded-md" onClick={() => setEditJob(true)}>
                       Edit Card
                     </p>
                     <p
                       className="text-center hover:bg-red-400 hover:text-white rounded-md"
-                      onClick={() => removeCard(card.id, boardId)}
+                      // onClick={() => removeCard(card.id, boardId)}
                     >
                       Delete Card
                     </p>
@@ -84,6 +85,10 @@ const KanbanCard = ({
               )}
             </div>
           </div>
+
+           {editJob && (
+          <AdminEditJob job={card} onClose={() => setEditJob(false)}  fetchAllJob={fetchAllJob}/>
+        )}
 
           {/* Bottom Content */}
           <div className="mt-auto pt-2">

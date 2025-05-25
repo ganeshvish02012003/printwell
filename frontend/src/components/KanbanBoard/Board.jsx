@@ -12,6 +12,7 @@ const Board = ({
   removeCard,
   handleDragEnd,
   handleDragEnter,
+  fetchAllJob,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   return (
@@ -58,9 +59,10 @@ const Board = ({
                 key={card.id}
                 card={card}
                 boardId={boards.id}
-                removeCard={removeCard}
+                // removeCard={removeCard}
                 handleDragEnd={handleDragEnd}
                 handleDragEnter={handleDragEnter}
+                fetchAllJob={fetchAllJob}
               />
             );
           })}

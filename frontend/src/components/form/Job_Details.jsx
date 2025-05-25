@@ -342,6 +342,42 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               </select>
             </div>
 
+            <div className="grid grid-cols-6 mb-2 justify-center">
+              <label
+                htmlFor="Start_date_of_print"
+                className="col-span-1 text-sm  pl-1  flex items-center font-normal "
+              >
+                When to give
+              </label>
+              <input
+                type="date"
+                id="Start_date_of_print"
+                name="Start_date_of_print"
+                placeholder="When to give"
+                value={data.Start_date_of_print}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+               
+              />
+
+              <label
+                htmlFor="Start_time_of_print"
+                className="col-span-1 text-sm  px-4  flex items-center font-normal "
+              >
+               time
+              </label>
+              <input
+                type="time"
+                id="Start_time_of_print"
+                name="Start_time_of_print"
+                placeholder="Quantity of paper ordered"
+                value={data.Start_time_of_print}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                
+              />
+            </div>
+
             {/* Job Description */}
             <div className="grid grid-cols-6 mb-2">
               <label
@@ -359,6 +395,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 rows={3}
               />
             </div>
+    
           </div>
         </div>
 

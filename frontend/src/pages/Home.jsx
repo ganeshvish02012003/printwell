@@ -55,10 +55,7 @@ const Home = () => {
         _id: job._id,
         JobName: job?.job?.jobName,
         Customer: job?.general?.Customer_name,
-        labels: [], 
-        tasks: [],
-        date: job.date || "",
-        desc: job.desc || "",
+   
         boardId: statusToBoardId[job?.job?.status] || "To_Do",
         job: job.job,
       }));
@@ -103,31 +100,31 @@ const Home = () => {
   /* ------------------------------------------------------------------ */
   /* 4️⃣  HELPER CALLBACKS                                              */
   /* ------------------------------------------------------------------ */
-  const addCard = (title, bid) => {
-    const newCard = {
-      id: String(cardCounter).padStart(4, "0"),
-      title,
-      labels: [],
-      tasks: [],
-      date: "",
-      desc: "",
-    };
-    setBoards((prev) =>
-      prev.map((b) =>
-        b.id === bid ? { ...b, cards: [...b.cards, newCard] } : b
-      )
-    );
-    setCardCounter((c) => c + 1);
-  };
+  // const addCard = (title, bid) => {
+  //   const newCard = {
+  //     id: String(cardCounter).padStart(4, "0"),
+  //     title,
+  //     labels: [],
+  //     tasks: [],
+  //     date: "",
+  //     desc: "",
+  //   };
+  //   setBoards((prev) =>
+  //     prev.map((b) =>
+  //       b.id === bid ? { ...b, cards: [...b.cards, newCard] } : b
+  //     )
+  //   );
+  //   setCardCounter((c) => c + 1);
+  // };
 
-  const removeCard = (cid, bid) =>
-    setBoards((prev) =>
-      prev.map((b) =>
-        b.id === bid
-          ? { ...b, cards: b.cards.filter((c) => c.id !== cid) }
-          : b
-      )
-    );
+  // const removeCard = (cid, bid) =>
+  //   setBoards((prev) =>
+  //     prev.map((b) =>
+  //       b.id === bid
+  //         ? { ...b, cards: b.cards.filter((c) => c.id !== cid) }
+  //         : b
+  //     )
+  //   );
 
   const handleDragEnter = (cid, bid) => setTarget({ cid: cid || null, bid });
 
@@ -182,17 +179,18 @@ const Home = () => {
   if (!user?.role) return <Login />;
 
   return (
-    <div className="h-[calc(100vh-164px)] bg-slate-400 mx-1 rounded-md px-4 flex flex-col gap-5">
+    <div className="h-[calc(100vh-164px)] bg-slate-400 mx-1 rounded-md p-4 pb-2 flex flex-col gap-5">
       <div className="flex-1 w-full overflow-x-scroll">
         <div className="min-w-fit flex gap-1">
           {boards.map((board) => (
             <Board
               key={board.id}
               boards={board}
-              addCard={addCard}
-              removeCard={removeCard}
+              // addCard={addCard}
+              // removeCard={removeCard}
               handleDragEnd={handleDragEnd}
               handleDragEnter={handleDragEnter}
+              fetchAllJob={fetchAllJob}
             />
           ))}
         </div>

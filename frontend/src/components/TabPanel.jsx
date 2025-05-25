@@ -20,7 +20,7 @@ function TabPanel({ children, value, index }) {
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
-      className="bg-slate-300 border-slate-500 h-96 border-x-8 border-b-8 rounded-b-lg shadow-md"
+      className="bg-slate-300 border-slate-500 h-auto border-x-8 border-b-8 rounded-b-lg shadow-md"
     >
       {value === index && <Box className="p-3">{children}</Box>}
     </div>
