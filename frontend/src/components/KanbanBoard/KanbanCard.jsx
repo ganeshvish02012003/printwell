@@ -12,6 +12,7 @@ import { MdModeEditOutline } from "react-icons/md";
 import { FaMaximize } from "react-icons/fa6";
 import { IoMdPrint } from "react-icons/io";
 import { TbArrowsMaximize } from "react-icons/tb";
+import PrintableJobView from "../PrintableJobView";
 
 const KanbanCard = ({
   card,
@@ -22,6 +23,10 @@ const KanbanCard = ({
   fetchAllJob,
 }) => {
   const [editJob, setEditJob] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
   return (
     <div
       className="p-2 mb-1 border rounded-md bg-white flex flex-col group hover:shadow-md transition"
@@ -56,12 +61,12 @@ const KanbanCard = ({
           </div>
 
           <div className="flex justify-between items-center p-1 pb-0">
-            <p className="flex-1 text-sm leading-none   text-center   ">
+            <p className="flex-1 text-sm leading-none opacity-70  text-center   ">
               {card.createdAt
                 ? moment(card.createdAt).format("LLL")
                 : "date of Order"}
             </p>
-            <p className="flex-1 text-sm leading-none text-center ">
+            <p className="flex-1 text-sm leading-none opacity-70 text-center ">
               {card.job?.When_to_give_goods
                 ? moment(card.job?.When_to_give_goods).format("LLL")
                 : "date of Submit"}
@@ -69,12 +74,17 @@ const KanbanCard = ({
           </div>
         </div>
 
+
+
         {/* Right Section */}
         <div className=" flex w-25% p-1 ">
           {/* Right side: Dropdown Icon */}
           <div className="relative   ">
       
-            <TbArrowsMaximize className="transition-opacity cursor-pointer text-gray-500 hover:text-black  opacity-0 group-hover:opacity-100"/>
+           <TbArrowsMaximize
+              onClick={openModal}
+              className="transition-opacity cursor-pointer text-gray-500 hover:text-black  opacity-0 group-hover:opacity-100"
+            />
 
             <MdModeEditOutline
               onClick={() => setEditJob(true)}
@@ -83,6 +93,11 @@ const KanbanCard = ({
 
             <IoMdPrint className=" mt-6 transition-opacitycursor-pointer text-gray-500 hover:text-black opacity-0 group-hover:opacity-100" />
           </div>
+
+          {modalOpen && (
+            <PrintableJobView closeModal={closeModal} key={card.id}
+                card={card} fetchAllJob={fetchAllJob}/>
+          )}
 
           {editJob && (
             <AdminEditJob

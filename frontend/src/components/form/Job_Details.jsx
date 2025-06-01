@@ -396,7 +396,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 value={data.job_description || ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-5"
-                rows={3}
+                rows={1}
               />
             </div>
     
