@@ -6,6 +6,8 @@ import SignUp from "../pages/signUp";
 import AdminPanal from "../pages/AdminPanel"
 import AllUser from "../pages/AllUser";
 import AllJob from "../pages/AllJob";
+import ViewDesginBoardPage from "../pages/ViewDesginBoardPage";
+import ViewPrintBoardPage from "../pages/ViewPrintBoardPage";
 
 
 const router = createBrowserRouter([
@@ -40,6 +42,14 @@ const router = createBrowserRouter([
             element: <AllJob />,
           },
         ],
+      },
+        {
+        path: "view-board/Printing",
+        element: <ViewPrintBoardPage/>,
+      },
+            {
+        path: "view-board/Desgin",
+        element: <ViewDesginBoardPage />,
       },
     ],
   },
