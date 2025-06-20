@@ -16,6 +16,20 @@ const JobSchema = new mongoose.Schema(
         enum: ["Pending", "Desgin", "Printing", "Other_work", "Completed"],
         default: "Pending",
       },
+      subStatus: {
+        type: String,
+        enum: [
+          "",
+          "To Do",
+          "Designer 1",
+          "Designer 2",
+          "Proof",
+          "Final",
+          "Print",
+          "send to print",
+        ],
+        default: "",
+      },
       category: { type: String, default: "" },
       quantity: { type: Number, default: "" },
       jobSize: { type: String, default: "" },
@@ -88,9 +102,13 @@ const JobSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Automatically adds `createdAt` and `updatedAt` fields
+    timestamps: true,
   }
 );
+
+// 🔍 Optional: Add indexes for faster query
+JobSchema.index({ "job.status": 1 });
+JobSchema.index({ "job.subStatus": 1 });
 
 const jobModel = mongoose.model("job", JobSchema);
 

@@ -104,31 +104,6 @@ const Home = () => {
   /* ------------------------------------------------------------------ */
   /* 4️⃣  HELPER CALLBACKS                                              */
   /* ------------------------------------------------------------------ */
-  // const addCard = (title, bid) => {
-  //   const newCard = {
-  //     id: String(cardCounter).padStart(4, "0"),
-  //     title,
-  //     labels: [],
-  //     tasks: [],
-  //     date: "",
-  //     desc: "",
-  //   };
-  //   setBoards((prev) =>
-  //     prev.map((b) =>
-  //       b.id === bid ? { ...b, cards: [...b.cards, newCard] } : b
-  //     )
-  //   );
-  //   setCardCounter((c) => c + 1);
-  // };
-
-  // const removeCard = (cid, bid) =>
-  //   setBoards((prev) =>
-  //     prev.map((b) =>
-  //       b.id === bid
-  //         ? { ...b, cards: b.cards.filter((c) => c.id !== cid) }
-  //         : b
-  //     )
-  //   );
 
   const handleDragEnter = (cid, bid) => setTarget({ cid: cid || null, bid });
 
@@ -190,8 +165,6 @@ const Home = () => {
             <Board
               key={board.id}
               boards={board}
-              // addCard={addCard}
-              // removeCard={removeCard}
               handleDragEnd={handleDragEnd}
               handleDragEnter={handleDragEnter}
               fetchAllJob={fetchAllJob}
