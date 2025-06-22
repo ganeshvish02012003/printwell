@@ -721,3 +721,9 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
 };
 
 export default Job_Details;
+
+
+
+
+
+

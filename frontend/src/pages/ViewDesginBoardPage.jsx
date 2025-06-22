@@ -1,7 +1,7 @@
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import SummaryApi from "../common";
 import DesginBoard from "../components/pageKanbanBoard/desginBoard";
+import { throttle } from "lodash";
 
 // Mapping of board DOM IDs to subStatus values
 const boardIdToSubStatus = {
@@ -39,7 +39,6 @@ const ViewDesginBoardPage = () => {
       let cards = [];
 
       if (status === "Print") {
-        // Only printing jobs with Print subStatus
         cards = jobs
           .filter(
             (job) =>
@@ -53,13 +52,13 @@ const ViewDesginBoardPage = () => {
             createdAt: job.createdAt,
           }));
       } else if (status === "To Do") {
-        // Catch all Design jobs with missing or invalid subStatus
         const validSubStatuses = statuses.slice(1); // exclude "To Do"
         cards = jobs
           .filter(
             (job) =>
               job.job?.status === "Desgin" &&
-              (!job.job?.subStatus || !validSubStatuses.includes(job.job?.subStatus))
+              (!job.job?.subStatus ||
+                !validSubStatuses.includes(job.job?.subStatus))
           )
           .map((job) => ({
             id: job._id + "-copy",
@@ -69,7 +68,6 @@ const ViewDesginBoardPage = () => {
             createdAt: job.createdAt,
           }));
       } else {
-        // Design jobs with exact matching subStatus
         cards = jobs
           .filter(
             (job) =>
@@ -94,9 +92,28 @@ const ViewDesginBoardPage = () => {
     setBoards(boardList);
   };
 
+  // ✅ Throttle the fetch for safe re-renders
+  const throttledFetchJobs = useMemo(
+    () => throttle(fetchAllJob, 1000),
+    [fetchAllJob]
+  );
+
+  // ✅ Auto-fetch on mount & sync on localStorage change
   useEffect(() => {
     fetchAllJob();
-  }, []);
+
+    const onStorage = (e) => {
+      if (e.key === "kanban_sync") {
+        throttledFetchJobs();
+      }
+    };
+
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      throttledFetchJobs.cancel();
+    };
+  }, [throttledFetchJobs]);
 
   const handleDragEnter = (cardId, boardId) => {
     setTargetCard({ bid: boardId, cid: cardId });
@@ -131,6 +148,7 @@ const ViewDesginBoardPage = () => {
 
     const updatedSourceCards = [...sourceBoard.cards];
     updatedSourceCards.splice(cardIndex, 1);
+
     const updatedTargetCards = [...targetBoard.cards];
     if (dropIndex === -1) {
       updatedTargetCards.push(cardToMove);

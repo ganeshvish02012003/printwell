@@ -1,9 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import Board from "../components/KanbanBoard/Board";
 import SummaryApi from "../common";
 import { useSelector } from "react-redux";
@@ -48,21 +43,30 @@ const Home = () => {
       const res = await fetch(SummaryApi.allJob.url);
       const { data: allJobs = [] } = await res.json();
 
-      // console.log("job",allJobs)
+      const cards = allJobs.map((job) => {
+        let boardId = statusToBoardId[job?.job?.status] || "To_Do";
 
-      const cards = allJobs.map((job) => ({
-        _id: job._id,
-        boardId: statusToBoardId[job?.job?.status] || "To_Do",
-        createdAt : job.createdAt,
-        
-        general: job.general,
-        job: job.job,
-        composing: job.composing ,
-        paper: job.paper ,
-        printing: job.printing ,
-        binding: job.binding ,
-        finished: job.finished ,
-      }));
+        // ✅ Special case for Binding jobs under Printing
+        if (
+          job.job?.status === "Printing" &&
+          job.job?.subStatus === "Binding"
+        ) {
+          boardId = "Other_work";
+        }
+
+        return {
+          _id: job._id,
+          boardId,
+          createdAt: job.createdAt,
+          general: job.general,
+          job: job.job,
+          composing: job.composing,
+          paper: job.paper,
+          printing: job.printing,
+          binding: job.binding,
+          finished: job.finished,
+        };
+      });
 
       const temp = initialBoards.map((b) => ({ ...b, cards: [] }));
       cards.forEach((c) => {

@@ -20,6 +20,7 @@ const JobSchema = new mongoose.Schema(
         type: String,
         enum: [
           "",
+          // Design Flow
           "To Do",
           "Designer 1",
           "Designer 2",
@@ -27,6 +28,15 @@ const JobSchema = new mongoose.Schema(
           "Final",
           "Print",
           "send to print",
+
+          // Print Flow
+          "print To Do",
+          "Printer 1",
+          "Printer 2",
+          "Printer 3",
+          "Printer 4",
+          "Printer 5",
+          "Binding",
         ],
         default: "",
       },
