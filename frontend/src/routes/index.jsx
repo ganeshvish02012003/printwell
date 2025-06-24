@@ -4,10 +4,12 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import SignUp from "../pages/signUp";
 import AdminPanal from "../pages/AdminPanel"
-import AllUser from "../pages/AllUser";
-import AllJob from "../pages/AllJob";
+import AllUser from "../components/AdminCompoments/AllUser";
+import AllJob from "../components/AdminCompoments/AllJob";
+import AllCustomer from "../components/AdminCompoments/AllCustomer";
 import ViewDesginBoardPage from "../pages/ViewDesginBoardPage";
 import ViewPrintBoardPage from "../pages/ViewPrintBoardPage";
+
 
 
 const router = createBrowserRouter([
@@ -20,7 +22,6 @@ const router = createBrowserRouter([
         element: <Home />,
      
       },
-
       {
         path: "login",
         element: <Login />,
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
           {
             path: "all-job",
             element: <AllJob />,
+          },
+          {
+            path: "all-customer",
+            element: <AllCustomer/>
           },
         ],
       },

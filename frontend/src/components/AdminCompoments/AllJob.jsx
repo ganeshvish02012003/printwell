@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import TabPanel from "../components/TabPanel";
-import SummaryApi from "../common";
-import AdminJobCard from "../components/AdminJobCard";
+import TabPanel from "../TabPanel";
+import SummaryApi from "../../common";
+import AdminJobCard from "../AdminJobCard";
 
 const AllJob = () => {
   const [openAddJob, setOpenAddJob] = useState(false);

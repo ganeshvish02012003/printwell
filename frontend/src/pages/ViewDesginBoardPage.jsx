@@ -196,7 +196,7 @@ const ViewDesginBoardPage = () => {
   };
 
   return (
-    <div className="flex gap-4 overflow-x-auto p-4">
+    <div className="flex gap-1 mx-1 rounded-md bg-slate-400 overflow-x-auto py-2 p-4">
       {boards.map((board) => (
         <DesginBoard
           key={board.id}

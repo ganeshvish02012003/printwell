@@ -22,7 +22,7 @@ const DesginBoard = ({
 
   return (
     <div className="min-w-[290px] ">
-      <div className="bg-slate-50 rounded border-b border-slate-400">
+      <div className="bg-green-400 rounded border-b border-slate-400">
         <div className="flex justify-between items-center p-1 px-4">
           <p className="flex-1 text-center text-xl font-bold">
             {boards.title}
@@ -34,7 +34,7 @@ const DesginBoard = ({
         </div>
 
         <div
-          className="bg-slate-50 h-[calc(100vh-255px)] rounded-md p-2 overflow-y-scroll"
+          className="bg-slate-50 h-[calc(100vh-170px)] rounded-md p-2 overflow-y-scroll"
           onDragEnter={() => handleDragEnter(null, boards.id)}
         >
           {boards.cards.map((card, index) => (

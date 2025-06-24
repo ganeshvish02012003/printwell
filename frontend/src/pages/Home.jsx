@@ -162,7 +162,7 @@ const Home = () => {
   if (!user?.role) return <Login />;
 
   return (
-    <div className="h-[calc(100vh-164px)] bg-slate-400 mx-1 rounded-md p-4 pb-2 flex flex-col gap-5">
+    <div className="h-[calc(86vh)] bg-slate-400 mx-1 rounded-md p-4 py-2 flex flex-col gap-5">
       <div className="flex-1 w-full overflow-x-scroll">
         <div className="min-w-fit flex gap-1">
           {boards.map((board) => (
