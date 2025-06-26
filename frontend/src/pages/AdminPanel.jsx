@@ -15,8 +15,8 @@ const AdminPanel = () => {
   }, [user, navigate]); // ✅ added dependency array for better practice
 
   return (
-    <div className="px-1 h-[calc(100vh-165px)] md:flex hidden">
-      <aside className="bg-slate-400 w-full max-w-60 mr-1 rounded-md px-1">
+    <div className="px-1 h-[calc(100vh-90px)] md:flex hidden">
+      <aside className="bg-slate-400 w-60 mr-1 rounded-md px-1">
         <div className="h-36 flex justify-center items-center flex-col">
           <div className="text-5xl cursor-pointer relative justify-center">
             {user?.profilePic ? (
@@ -43,7 +43,28 @@ const AdminPanel = () => {
                 }`
               }
             >
-              All User
+              Users
+            </NavLink>
+
+            <NavLink
+              to="all-customer"
+              className={({ isActive }) =>
+                `px-2 py-1 rounded hover:bg-slate-500 hover:text-white ${
+                  isActive ? "bg-slate-600 text-white font-semibold" : ""
+                }`
+              }
+            >
+              Frequenter Customers
+            </NavLink>
+            <NavLink
+              to="Menage-Job-Card"
+              className={({ isActive }) =>
+                `px-2 py-1 rounded hover:bg-slate-500 hover:text-white ${
+                  isActive ? "bg-slate-600 text-white font-semibold" : ""
+                }`
+              }
+            >
+              Menage Active Job 
             </NavLink>
             <NavLink
               to="all-job"
@@ -53,17 +74,27 @@ const AdminPanel = () => {
                 }`
               }
             >
-              All Job
+              All Jobs
             </NavLink>
             <NavLink
-              to="all-customer"
+              to="Peyment-Status"
               className={({ isActive }) =>
                 `px-2 py-1 rounded hover:bg-slate-500 hover:text-white ${
                   isActive ? "bg-slate-600 text-white font-semibold" : ""
                 }`
               }
             >
-              regular customer
+              Peyment Status
+            </NavLink>
+            <NavLink
+              to="Job-History"
+              className={({ isActive }) =>
+                `px-2 py-1 rounded hover:bg-slate-500 hover:text-white ${
+                  isActive ? "bg-slate-600 text-white font-semibold" : ""
+                }`
+              }
+            >
+              Job History
             </NavLink>
           </nav>
         </div>

@@ -9,6 +9,9 @@ import AllJob from "../components/AdminCompoments/AllJob";
 import AllCustomer from "../components/AdminCompoments/AllCustomer";
 import ViewDesginBoardPage from "../pages/ViewDesginBoardPage";
 import ViewPrintBoardPage from "../pages/ViewPrintBoardPage";
+import MenageJobCard from "../components/AdminCompoments/MenageJobCard";
+import PeymentStatus from "../components/AdminCompoments/PeymentStatus";
+import JobHistory from "../components/AdminCompoments/JobHistory";
 
 
 
@@ -44,7 +47,19 @@ const router = createBrowserRouter([
           },
           {
             path: "all-customer",
-            element: <AllCustomer/>
+            element: <AllCustomer/>,
+          },
+          {
+            path: "Menage-Job-Card",
+            element: <MenageJobCard/>
+          },
+          {
+            path: "Peyment-Status",
+            element: <PeymentStatus/>
+          },
+           {
+            path: "Job-History",
+            element: <JobHistory/>
           },
         ],
       },
