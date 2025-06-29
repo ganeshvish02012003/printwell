@@ -205,80 +205,44 @@ const ViewPrintBoardPage = () => {
     }
   };
 
-return (
-  <div className="h-[calc(86vh)]  w-full flex flex-col gap-2">
-  <div className="flex-1 bg-slate-400 rounded-md p-2 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200">
-  <div className="flex gap-2 min-w-fit overflow-x-auto ">
-    {boards
-      .filter((board) => board.title !== "Binding")
-      .map((board) => (
-        <DesginBoard
-          key={board.id}
-          boards={board}
-          handleDragEnd={handleDragEnd}
-          handleDragEnter={handleDragEnter}
-          fetchAllJob={fetchAllJob}
-        />
-      ))}
-  </div>
-</div>
-
-{/* Binding Board at Bottom */}
-<div className="h-[10%] min-h-[100px] w-full bg-slate-400 rounded-md  overflow-y-auto overflow-x-hidden">
-  <div className="flex flex-row ">
-    {boards
-      .filter((board) => board.title === "Binding")
-      .map((board) => (
-        <DesginBoard
-          key={board.id}
-          boards={board}
-          handleDragEnd={handleDragEnd}
-          handleDragEnter={handleDragEnter}
-          fetchAllJob={fetchAllJob}
-        />
-      ))}
-  </div>
-</div>
-
-
-    {/* Binding Board at Bottom
-    <div className="h-[10%] min-h-[100px] w-full bg-slate-300 rounded-md p-2 overflow-x-auto overflow-y-hidden">
-      <div className="flex gap-2 min-w-fit">
-        {boards
-          .filter((board) => board.title === "Binding")
-          .map((board) => (
-            <DesginBoard
-              key={board.id}
-              boards={board}
-              handleDragEnd={handleDragEnd}
-              handleDragEnter={handleDragEnter}
-              fetchAllJob={fetchAllJob}
-            />
-          ))}
+  return (
+    <div className="h-[calc(86vh)] mx-1 flex flex-col gap-1">
+      <div className="flex-1 bg-slate-400 rounded-md p-2 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200">
+        <div className="flex gap-2 min-w-fit overflow-x-auto ">
+          {boards
+            .filter((board) => board.title !== "Binding")
+            .map((board) => (
+              <DesginBoard
+                key={board.id}
+                boards={board}
+                handleDragEnd={handleDragEnd}
+                handleDragEnter={handleDragEnter}
+                fetchAllJob={fetchAllJob}
+              />
+            ))}
+        </div>
       </div>
-    </div> */}
-  </div>
-);
 
-
-
-
-
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  // return (
-  //   <div className="flex gap-1 mx-1 rounded-md bg-slate-400 overflow-x-auto py-2 p-4">
-  //     {boards.map((board) => (
-  //       <DesginBoard
-  //         key={board.id}
-  //         boards={board}
-  //         handleDragEnd={handleDragEnd}
-  //         handleDragEnter={handleDragEnter}
-  //         fetchAllJob={fetchAllJob}
-  //       />
-  //     ))}
-  //   </div>
-  // );
+      {/* Binding Board at Bottom */}
+      <div className=" min-h-[100px] w-full bg-slate-400 rounded-md  overflow-y-auto overflow-x-hidden">
+        <div className="flex flex-row ">
+          {boards
+            .filter((board) => board.title === "Binding")
+            .map((board) => (
+              <DesginBoard
+                key={board.id}
+                boards={board}
+                handleDragEnd={handleDragEnd}
+                handleDragEnter={handleDragEnter}
+                fetchAllJob={fetchAllJob}
+                flex=" flex "
+                hight=" h-24 w-screen "
+              />
+            ))}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default ViewPrintBoardPage;

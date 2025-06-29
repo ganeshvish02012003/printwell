@@ -42,8 +42,7 @@ const ViewDesginBoardPage = () => {
           cards = jobs
             .filter(
               (job) =>
-                job.job?.status === "Printing" &&
-                job.job?.subStatus === "Print"
+                job.job?.status === "Printing" && job.job?.subStatus === "Print"
             )
             .map((job) => ({
               _id: job._id,
@@ -72,8 +71,7 @@ const ViewDesginBoardPage = () => {
           cards = jobs
             .filter(
               (job) =>
-                job.job?.status === "Desgin" &&
-                job.job?.subStatus === status
+                job.job?.status === "Desgin" && job.job?.subStatus === status
             )
             .map((job) => ({
               _id: job._id,
@@ -203,16 +201,41 @@ const ViewDesginBoardPage = () => {
   };
 
   return (
-    <div className="flex gap-1 mx-1 rounded-md bg-slate-400 overflow-x-auto py-2 p-4">
-      {boards.map((board) => (
-        <DesginBoard
-          key={board.id}
-          boards={board}
-          handleDragEnd={handleDragEnd}
-          handleDragEnter={handleDragEnter}
-          fetchAllJob={fetchAllJob}
-        />
-      ))}
+    <div className="h-[calc(86vh)] mx-1  flex flex-col gap-1">
+      <div className="flex-1 bg-slate-400 rounded-md p-2 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200">
+        <div className="flex gap-2 min-w-fit overflow-x-auto ">
+          {boards
+            .filter((board) => board.title !== "Print")
+            .map((board) => (
+              <DesginBoard
+                key={board.id}
+                boards={board}
+                handleDragEnd={handleDragEnd}
+                handleDragEnter={handleDragEnter}
+                fetchAllJob={fetchAllJob}
+              />
+            ))}
+        </div>
+      </div>
+
+      {/* Print Board at Bottom */}
+      <div className=" min-h-[100px] w-full bg-slate-400 rounded-md  overflow-y-auto overflow-x-hidden">
+        <div className="flex flex-row ">
+          {boards
+            .filter((board) => board.title === "Print")
+            .map((board) => (
+              <DesginBoard
+                key={board.id}
+                boards={board}
+                handleDragEnd={handleDragEnd}
+                handleDragEnter={handleDragEnter}
+                fetchAllJob={fetchAllJob}
+                flex=" flex "
+                hight=" h-24 w-screen "
+              />
+            ))}
+        </div>
+      </div>
     </div>
   );
 };

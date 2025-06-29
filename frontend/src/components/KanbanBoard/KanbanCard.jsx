@@ -29,7 +29,7 @@ const KanbanCard = ({
   const closeModal = () => setModalOpen(false);
   return (
     <div
-      className="p-2 mb-1 max-w-[265px]  border rounded-md bg-white flex flex-col group hover:shadow-md transition"
+      className="p-2 mb-1 max-w-[265px] h-32  border rounded-md bg-white flex flex-col group hover:shadow-md transition"
       draggable
       onDragEnd={() => handleDragEnd(card?._id, boardId)}
       onDragEnter={() => handleDragEnter(card?._id, boardId)}

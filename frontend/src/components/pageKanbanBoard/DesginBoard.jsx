@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-// import KanbanCard from "./KanbanCard";
-// import { BsThreeDotsVertical } from "react-icons/bs";
-// import { IoMdArrowDropdown } from "react-icons/io";
-// import Dropdown from "./Dropdown";
-import { useNavigate } from "react-router-dom"; // add this at the top
+import { useNavigate } from "react-router-dom";
 import KanbanCard from "../KanbanBoard/KanbanCard";
 
 const DesginBoard = ({
@@ -14,6 +10,8 @@ const DesginBoard = ({
   handleDragEnd,
   handleDragEnter,
   fetchAllJob,
+  flex = "",
+  hight = "",
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -22,11 +20,13 @@ const DesginBoard = ({
 
   return (
     <div className={`min-w-[290px]`}>
-      <div className={` bg-green-400 rounded border-b border-slate-400 `}>
+      <div
+        className={` ${flex} bg-green-400 rounded border-b border-slate-400 `}
+      >
         <div className="flex justify-between items-center p-1 px-4 ">
           <p className="flex-1 text-center text-xl font-bold">
             {boards.title}
-            <span className="text-gray-500 text-base"> 
+            <span className="text-gray-500 text-base">
               {" "}
               {boards.cards.length}
             </span>
@@ -34,7 +34,7 @@ const DesginBoard = ({
         </div>
 
         <div
-          className={` bg-slate-50 h-[calc(100vh-250px)] rounded-md p-2 overflow-y-scroll  scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200`}
+          className={`${flex}  bg-slate-50 h-[calc(100vh-250px)] ${hight} rounded-md p-2 overflow-y-scroll  scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200`}
           onDragEnter={() => handleDragEnter(null, boards.id)}
         >
           {boards.cards.map((card, index) => (
@@ -54,62 +54,3 @@ const DesginBoard = ({
 };
 
 export default DesginBoard;
-
-
-
-// import React, { useState } from "react";
-// // import KanbanCard from "./KanbanCard";
-// // import { BsThreeDotsVertical } from "react-icons/bs";
-// // import { IoMdArrowDropdown } from "react-icons/io";
-// // import Dropdown from "./Dropdown";
-// import { useNavigate } from "react-router-dom"; // add this at the top
-// import KanbanCard from "../KanbanBoard/KanbanCard";
-
-// const DesginBoard = ({
-//   boards,
-//   removeBoard,
-//   addCard,
-//   removeCard,
-//   handleDragEnd,
-//   handleDragEnter,
-//   fetchAllJob,
-// }) => {
-//   const [showDropdown, setShowDropdown] = useState(false);
-//   const [isExpanded, setIsExpanded] = useState(false);
-
-//   const navigate = useNavigate();
-
-//   return (
-//     <div className={``}>
-//       <div className={`flex `}>
-//         <div className=" p-4 bg-green-400 ">
-//           <p className="">
-//             {boards.title}
-//             <span className=""> 
-//               {" "}
-//               {boards.cards.length}
-//             </span>
-//           </p>
-//         </div>
-
-//         <div
-//           className={` bg-slate-50 h-28 w-screen rounded-md overflow-y-scroll  scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200`}
-//           onDragEnter={() => handleDragEnter(null, boards.id)}
-//         >
-//           {boards.cards.map((card, index) => (
-//             <KanbanCard
-//               key={card.id}
-//               card={card}
-//               boardId={boards.id}
-//               handleDragEnd={handleDragEnd}
-//               handleDragEnter={handleDragEnter}
-//               fetchAllJob={fetchAllJob}
-//             />
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default DesginBoard;
