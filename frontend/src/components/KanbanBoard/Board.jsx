@@ -64,7 +64,7 @@ const Board = ({
         </div>
 
         <div
-          className="bg-slate-50 h-[calc(100vh-170px)] rounded-md p-2 overflow-y-scroll"
+          className="bg-slate-50 h-[calc(100vh-155px)] rounded-md p-2 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-100"
           onDragEnter={() => handleDragEnter(null, boards.id)}
         >
           {boards.cards.map((card, index) => (

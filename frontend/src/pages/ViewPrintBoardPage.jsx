@@ -3,6 +3,7 @@ import SummaryApi from "../common";
 import DesginBoard from "../components/pageKanbanBoard/desginBoard";
 import { throttle } from "lodash";
 
+// ✅ Map DOM board IDs to subStatus values
 const boardIdToSubStatus = {
   "print-to-do-board": "print To Do",
   "printer-1-board": "Printer 1",
@@ -14,90 +15,90 @@ const boardIdToSubStatus = {
 };
 
 const ViewPrintBoardPage = () => {
-  const [allJob, setAllJob] = useState([]);
   const [boards, setBoards] = useState([]);
   const [targetCard, setTargetCard] = useState({ bid: "", cid: "" });
 
+  // ✅ Fetch Jobs and map to boards
   const fetchAllJob = async () => {
-    const response = await fetch(SummaryApi.allJob.url);
-    const dataResponse = await response.json();
-    const jobs = dataResponse?.data || [];
-    setAllJob(jobs);
+    try {
+      const response = await fetch(SummaryApi.allJob.url);
+      const dataResponse = await response.json();
+      const jobs = dataResponse?.data || [];
 
-    const statuses = [
-      "print To Do",
-      "Printer 1",
-      "Printer 2",
-      "Printer 3",
-      "Printer 4",
-      "Printer 5",
-      "Binding",
-    ];
+      const statuses = [
+        "print To Do",
+        "Printer 1",
+        "Printer 2",
+        "Printer 3",
+        "Printer 4",
+        "Printer 5",
+        "Binding",
+      ];
 
-    const boardList = statuses.map((status) => {
-      let cards = [];
+      const boardList = statuses.map((status) => {
+        let cards = [];
 
-      if (status === "Binding") {
-        cards = jobs
-          .filter(
-            (job) =>
-              job.job?.status === "Printing" && job.job?.subStatus === "Binding"
-          )
-          .map((job) => ({
-            id: job._id + "-copy",
-            title: job.job?.jobName || "Untitled",
-            job: job.job,
-            general: job.general,
-            createdAt: job.createdAt,
-          }));
-      } else if (status === "print To Do") {
-        const validSubStatuses = statuses.slice(1); // exclude "To Do"
-        cards = jobs
-          .filter(
-            (job) =>
-              job.job?.status === "Printing" &&
-              (!job.job?.subStatus ||
-                !validSubStatuses.includes(job.job?.subStatus))
-          )
-          .map((job) => ({
-            id: job._id + "-copy",
-            title: job.job?.jobName || "Untitled",
-            job: job.job,
-            general: job.general,
-            createdAt: job.createdAt,
-          }));
-      } else {
-        cards = jobs
-          .filter(
-            (job) =>
-              job.job?.status === "Printing" && job.job?.subStatus === status
-          )
-          .map((job) => ({
-            id: job._id,
-            title: job.job?.jobName || "Untitled",
-            job: job.job,
-            general: job.general,
-            createdAt: job.createdAt,
-          }));
-      }
+        if (status === "Binding") {
+          cards = jobs
+            .filter(
+              (job) =>
+                job.job?.status === "Printing" &&
+                job.job?.subStatus === "Binding"
+            )
+            .map((job) => ({
+              _id: job._id,
+              title: job.job?.jobName || "Untitled",
+              job: job.job,
+              general: job.general,
+              createdAt: job.createdAt,
+            }));
+        } else if (status === "print To Do") {
+          const validSubStatuses = statuses.slice(1); // exclude 'print To Do'
+          cards = jobs
+            .filter(
+              (job) =>
+                job.job?.status === "Printing" &&
+                (!job.job?.subStatus ||
+                  !validSubStatuses.includes(job.job?.subStatus))
+            )
+            .map((job) => ({
+              _id: job._id + "-copy", // mark as copy for frontend drag
+              title: job.job?.jobName || "Untitled",
+              job: job.job,
+              general: job.general,
+              createdAt: job.createdAt,
+            }));
+        } else {
+          cards = jobs
+            .filter(
+              (job) =>
+                job.job?.status === "Printing" && job.job?.subStatus === status
+            )
+            .map((job) => ({
+              _id: job._id,
+              title: job.job?.jobName || "Untitled",
+              job: job.job,
+              general: job.general,
+              createdAt: job.createdAt,
+            }));
+        }
 
-      return {
-        id: `${status.toLowerCase().replace(/\s+/g, "-")}-board`,
-        title: status,
-        cards,
-      };
-    });
+        return {
+          id: `${status.toLowerCase().replace(/\s+/g, "-")}-board`,
+          title: status,
+          cards,
+        };
+      });
 
-    setBoards(boardList);
+      setBoards(boardList);
+    } catch (err) {
+      console.error("Failed to fetch jobs:", err);
+    }
   };
 
-  // ✅ Throttled wrapper for fetchAllJob
-  const throttledFetchJobs = useMemo(
-    () => throttle(fetchAllJob, 1000),
-    [fetchAllJob]
-  );
+  // ✅ Throttled fetch wrapper
+  const throttledFetchJobs = useMemo(() => throttle(fetchAllJob, 1000), []);
 
-  // ✅ Auto-reload when localStorage changes
   useEffect(() => {
     fetchAllJob();
 
@@ -114,45 +115,47 @@ const ViewPrintBoardPage = () => {
     };
   }, [throttledFetchJobs]);
 
-  const handleDragEnter = (cardId, boardId) => {
-    setTargetCard({ bid: boardId, cid: cardId });
+  // ✅ Drag handlers
+  const handleDragEnter = (cid, bid) => {
+    setTargetCard({ cid, bid });
   };
 
-  const handleDragEnd = async (cardId, sourceBoardId) => {
-    const sourceBoardIndex = boards.findIndex((b) => b.id === sourceBoardId);
+  const handleDragEnd = async (cid, bid) => {
+    const sourceBoardIndex = boards.findIndex((b) => b.id === bid);
     const targetBoardIndex = boards.findIndex((b) => b.id === targetCard.bid);
-    if (sourceBoardIndex === -1 || targetBoardIndex === -1) return;
+    if (sourceBoardIndex < 0 || targetBoardIndex < 0) return;
 
     const sourceBoard = boards[sourceBoardIndex];
     const targetBoard = boards[targetBoardIndex];
 
-    const cardIndex = sourceBoard.cards.findIndex((c) => c.id === cardId);
-    const dropIndex = targetBoard.cards.findIndex(
-      (c) => c.id === targetCard.cid
+    const sourceCardIndex = sourceBoard.cards.findIndex((c) => c._id === cid);
+    const targetCardIndex = targetBoard.cards.findIndex(
+      (c) => c._id === targetCard.cid
     );
 
-    const cardToMove = sourceBoard.cards[cardIndex];
-    if (!cardToMove) return;
+    if (sourceCardIndex < 0) return;
 
-    if (
-      sourceBoardId === targetCard.bid &&
-      (dropIndex === cardIndex ||
-        dropIndex === cardIndex + 1 ||
-        dropIndex === cardIndex - 1 ||
-        dropIndex === -1)
-    ) {
+    const cardToMove = sourceBoard.cards[sourceCardIndex];
+
+    // ✅ Check if dropping on the same position (avoid duplicate)
+    const isSameBoard = sourceBoard.id === targetBoard.id;
+    const isSamePosition =
+      (targetCardIndex === -1 && isSameBoard) ||
+      sourceCardIndex === targetCardIndex;
+
+    if (isSameBoard && isSamePosition) {
       setTargetCard({ bid: "", cid: "" });
       return;
     }
 
     const updatedSourceCards = [...sourceBoard.cards];
-    updatedSourceCards.splice(cardIndex, 1);
+    updatedSourceCards.splice(sourceCardIndex, 1);
 
     const updatedTargetCards = [...targetBoard.cards];
-    if (dropIndex === -1) {
+    if (targetCardIndex === -1) {
       updatedTargetCards.push(cardToMove);
     } else {
-      updatedTargetCards.splice(dropIndex, 0, cardToMove);
+      updatedTargetCards.splice(targetCardIndex, 0, cardToMove);
     }
 
     const updatedBoards = [...boards];
@@ -168,10 +171,11 @@ const ViewPrintBoardPage = () => {
     setBoards(updatedBoards);
     setTargetCard({ bid: "", cid: "" });
 
+    // ✅ Backend update
     try {
       let newSubStatus = boardIdToSubStatus[targetCard.bid] || "print To Do";
 
-      // Clear subStatus if removed from Binding
+      // ✅ Clear subStatus if moved away from Binding
       if (
         cardToMove.job?.subStatus === "Binding" &&
         newSubStatus !== "Binding"
@@ -186,7 +190,7 @@ const ViewPrintBoardPage = () => {
           Authorization: localStorage.getItem("token"),
         },
         body: JSON.stringify({
-          _id: cardToMove.id.replace("-copy", ""),
+          _id: cid.replace("-copy", ""),
           job: {
             ...cardToMove.job,
             status: "Printing",
@@ -197,13 +201,17 @@ const ViewPrintBoardPage = () => {
 
       localStorage.setItem("kanban_sync", Date.now().toString());
     } catch (err) {
-      console.error("Failed to update print subStatus:", err);
+      console.error("Failed to update job:", err);
     }
   };
 
-  return (
-    <div className="flex gap-1 mx-1 rounded-md bg-slate-400 overflow-x-auto py-2 p-4">
-      {boards.map((board) => (
+return (
+  <div className="h-[calc(86vh)]  w-full flex flex-col gap-2">
+  <div className="flex-1 bg-slate-400 rounded-md p-2 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200">
+  <div className="flex gap-2 min-w-fit overflow-x-auto ">
+    {boards
+      .filter((board) => board.title !== "Binding")
+      .map((board) => (
         <DesginBoard
           key={board.id}
           boards={board}
@@ -212,8 +220,65 @@ const ViewPrintBoardPage = () => {
           fetchAllJob={fetchAllJob}
         />
       ))}
-    </div>
-  );
+  </div>
+</div>
+
+{/* Binding Board at Bottom */}
+<div className="h-[10%] min-h-[100px] w-full bg-slate-400 rounded-md  overflow-y-auto overflow-x-hidden">
+  <div className="flex flex-row ">
+    {boards
+      .filter((board) => board.title === "Binding")
+      .map((board) => (
+        <DesginBoard
+          key={board.id}
+          boards={board}
+          handleDragEnd={handleDragEnd}
+          handleDragEnter={handleDragEnter}
+          fetchAllJob={fetchAllJob}
+        />
+      ))}
+  </div>
+</div>
+
+
+    {/* Binding Board at Bottom
+    <div className="h-[10%] min-h-[100px] w-full bg-slate-300 rounded-md p-2 overflow-x-auto overflow-y-hidden">
+      <div className="flex gap-2 min-w-fit">
+        {boards
+          .filter((board) => board.title === "Binding")
+          .map((board) => (
+            <DesginBoard
+              key={board.id}
+              boards={board}
+              handleDragEnd={handleDragEnd}
+              handleDragEnter={handleDragEnter}
+              fetchAllJob={fetchAllJob}
+            />
+          ))}
+      </div>
+    </div> */}
+  </div>
+);
+
+
+
+
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+  // return (
+  //   <div className="flex gap-1 mx-1 rounded-md bg-slate-400 overflow-x-auto py-2 p-4">
+  //     {boards.map((board) => (
+  //       <DesginBoard
+  //         key={board.id}
+  //         boards={board}
+  //         handleDragEnd={handleDragEnd}
+  //         handleDragEnter={handleDragEnter}
+  //         fetchAllJob={fetchAllJob}
+  //       />
+  //     ))}
+  //   </div>
+  // );
 };
 
 export default ViewPrintBoardPage;

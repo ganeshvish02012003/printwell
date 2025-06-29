@@ -126,14 +126,14 @@ const MenageJobCard = () => {
     const t_bIndex = boards.findIndex((b) => b.id === target.bid);
     if (s_bIndex < 0 || t_bIndex < 0) return;
 
-    const s_cIndex = boards[s_bIndex].cards.findIndex((c) => c.id === cid);
+    const s_cIndex = boards[s_bIndex].cards.findIndex((c) => c._id === cid);
     if (s_cIndex < 0) return;
 
     const tempBoards = [...boards];
     const movedCard = tempBoards[s_bIndex].cards.splice(s_cIndex, 1)[0];
 
     const t_cIndex = tempBoards[t_bIndex].cards.findIndex(
-      (c) => c.id === target.cid
+      (c) => c._id === target.cid
     );
     if (t_cIndex < 0 || target.cid == null)
       tempBoards[t_bIndex].cards.push(movedCard);
@@ -172,7 +172,7 @@ const MenageJobCard = () => {
 
   return (
       <div className="h-[calc(86vh)] w-[83vw]  mx-1 rounded-md p-2 px-1 flex flex-col gap-5">
-      <div className="flex-1  overflow-x-scroll">
+      <div className="flex-1  overflow-x-scroll scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-400 ">
         <div className=" flex gap-1">
           {boards.map((board) => (
             <Board
