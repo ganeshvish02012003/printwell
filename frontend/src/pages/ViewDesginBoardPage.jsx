@@ -213,6 +213,7 @@ const ViewDesginBoardPage = () => {
                 handleDragEnd={handleDragEnd}
                 handleDragEnter={handleDragEnter}
                 fetchAllJob={fetchAllJob}
+                color="bg-gradient-to-r from-[#9C27B0] to-[#E1BEE7] "
               />
             ))}
         </div>
@@ -231,7 +232,8 @@ const ViewDesginBoardPage = () => {
                 handleDragEnter={handleDragEnter}
                 fetchAllJob={fetchAllJob}
                 flex=" flex "
-                hight=" h-24 w-screen "
+                hight=" h-[calc(100vh-540px)] w-screen "
+                color="bg-gradient-to-r from-[#9C27B0] to-[#E1BEE7]"
               />
             ))}
         </div>

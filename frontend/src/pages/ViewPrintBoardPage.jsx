@@ -218,6 +218,7 @@ const ViewPrintBoardPage = () => {
                 handleDragEnd={handleDragEnd}
                 handleDragEnter={handleDragEnter}
                 fetchAllJob={fetchAllJob}
+                color="bg-gradient-to-r from-[#03A9F4] to-[#B3E5FC]"
               />
             ))}
         </div>
@@ -236,7 +237,8 @@ const ViewPrintBoardPage = () => {
                 handleDragEnter={handleDragEnter}
                 fetchAllJob={fetchAllJob}
                 flex=" flex "
-                hight=" h-24 w-screen "
+                hight=" h-[calc(100vh-540px)] w-screen "
+                color="bg-gradient-to-r from-[#03A9F4] to-[#B3E5FC]"
               />
             ))}
         </div>
