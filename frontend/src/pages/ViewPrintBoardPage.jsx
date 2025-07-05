@@ -2,6 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import SummaryApi from "../common";
 import DesginBoard from "../components/pageKanbanBoard/desginBoard";
 import { throttle } from "lodash";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import ROLE from "../common/role";
 
 // ✅ Map DOM board IDs to subStatus values
 const boardIdToSubStatus = {
@@ -17,6 +20,14 @@ const boardIdToSubStatus = {
 const ViewPrintBoardPage = () => {
   const [boards, setBoards] = useState([]);
   const [targetCard, setTargetCard] = useState({ bid: "", cid: "" });
+  const user = useSelector((state) => state?.user?.user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user?.role) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   // ✅ Fetch Jobs and map to boards
   const fetchAllJob = async () => {

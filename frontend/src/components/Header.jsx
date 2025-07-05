@@ -109,7 +109,7 @@ const Header = () => {
                       <nav>
                         {user?.role === ROLE.ADMIN && (
                           <Link
-                            to={"/admin-panel/all-job"}
+                            to={"/admin-panel/Menage-Job-Card"} 
                             className="whitespace-nowrap shadow-lg bg-white  hover:bg-slate-100 p-2 hidden md:block "
                           >
                             {" "}
