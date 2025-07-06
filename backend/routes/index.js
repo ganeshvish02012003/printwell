@@ -10,6 +10,9 @@ const updateUser = require("../controller/updateUser");
 const UploadJob = require("../controller/job/UploadJob");
 const getJobController = require("../controller/job/getJob");
 const UpdateJob = require("../controller/job/UpdateJob");
+const updateCustomer = require("../controller/customer/updateCustomer");
+const addCustomer = require("../controller/customer/addCustomer");
+const allCustomers = require("../controller/customer/allCustomers");
 
 
 router.post("/signup", userSignUpController);
@@ -26,6 +29,11 @@ router.post("/upload-job", authToken, UploadJob);
 // router.post("/update-job", authToken, UpdateJob )
 router.post("/update-job", UpdateJob )
 router.get("/get-job", getJobController);
+
+// Customer
+router.post("/add-customer", addCustomer);
+router.put("/update-customer/:customerId",   updateCustomer); 
+router.get("/all-customer",  allCustomers);
 
 
 module.exports = router;

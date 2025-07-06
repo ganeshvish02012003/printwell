@@ -67,7 +67,7 @@ const Header = () => {
               </div>
               {/* <div className="hidden flex-none lg:block ">
                 <ul className="menu menu-horizontal">
-                 
+
                   <li>
                     <button className="btn btn-ghost">Home</button>
                   </li>
