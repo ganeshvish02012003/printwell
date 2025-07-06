@@ -4,6 +4,7 @@ import SummaryApi from "../../common";
 import { useSelector } from "react-redux";
 import Login from "../../pages/Login";
 import throttle from "lodash/throttle";
+import TabPanel from "../TabPanel";
 
 const statusToBoardId = {
   Pending: "To_Do",
@@ -29,13 +30,11 @@ const initialBoards = [
   { id: "Finished", title: "Finished", cards: [] },
 ];
 
-
 const MenageJobCard = () => {
-
   const [boards, setBoards] = useState(initialBoards);
   const [target, setTarget] = useState({ cid: "", bid: "" });
-  const [cardCounter, setCardCounter] = useState(1);
   const user = useSelector((state) => state?.user?.user);
+  const [openAddJob, setOpenAddJob] = useState(false);
 
   /* ------------------------------------------------------------------ */
   /* 1️⃣  FETCH ALL JOBS (memoised so reference stays stable)            */
@@ -114,9 +113,8 @@ const MenageJobCard = () => {
   // const handleDragEnter = (cid, bid) => setTarget({ cid: cid || null, bid });
 
   const handleDragEnter = (cid, bid) => {
-  setTarget({ cid: cid || null, bid });
-};
-
+    setTarget({ cid: cid || null, bid });
+  };
 
   /* ------------------------------------------------------------------ */
   /* 5️⃣  DRAG-END (update UI + backend + broadcast)                    */
@@ -168,10 +166,17 @@ const MenageJobCard = () => {
   /* ------------------------------------------------------------------ */
   if (!user?.role) return <Login />;
 
-
-
   return (
-      <div className="h-[calc(86vh)] w-[83vw]  mx-1 rounded-md p-2 px-1 flex flex-col gap-5">
+    <div className="h-[calc(88vh)] w-[84vw]   rounded-md p-2 pb-0 flex flex-col gap-1">
+      <div className="w-full px-4 h-10 bg-slate-500 rounded-md flex justify-between items-center ">
+        <h2 className="font-bold text-white text-lg">Menage Jobs</h2>
+        <button
+          className="  border-2 px-2  border-green-400 text-green-400 hover:bg-green-400 hover:text-white transition-all rounded-full"
+          onClick={() => setOpenAddJob(true)}
+        >
+          Add Job
+        </button>
+      </div>
       <div className="flex-1  overflow-x-scroll scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-400 ">
         <div className=" flex gap-1">
           {boards.map((board) => (
@@ -185,8 +190,15 @@ const MenageJobCard = () => {
           ))}
         </div>
       </div>
-    </div>
-  )
-}
 
-export default MenageJobCard
+      {openAddJob && (
+        <TabPanel
+          onClose={() => setOpenAddJob(false)}
+          fetchAllJob={fetchAllJob}
+        />
+      )}
+    </div>
+  );
+};
+
+export default MenageJobCard;

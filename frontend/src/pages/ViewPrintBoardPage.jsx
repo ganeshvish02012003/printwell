@@ -217,9 +217,9 @@ const ViewPrintBoardPage = () => {
   };
 
   return (
-    <div className="h-[calc(86vh)] mx-1 flex flex-col gap-1">
+    <div className="h-[calc(88vh)] mx-1 flex flex-col ">
       <div className="flex-1 bg-slate-400 rounded-md p-2 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200">
-        <div className="flex gap-2 min-w-fit overflow-x-auto ">
+        <div className="flex gap-1 min-w-fit overflow-x-auto ">
           {boards
             .filter((board) => board.title !== "Binding")
             .map((board) => (
@@ -236,7 +236,7 @@ const ViewPrintBoardPage = () => {
       </div>
 
       {/* Binding Board at Bottom */}
-      <div className=" min-h-[100px] w-full bg-slate-400 rounded-md  overflow-y-auto overflow-x-hidden">
+      <div className="  w-full bg-slate-400 rounded-md  overflow-y-auto overflow-x-hidden">
         <div className="flex flex-row ">
           {boards
             .filter((board) => board.title === "Binding")
@@ -248,7 +248,7 @@ const ViewPrintBoardPage = () => {
                 handleDragEnter={handleDragEnter}
                 fetchAllJob={fetchAllJob}
                 flex=" flex "
-                hight=" h-[calc(100vh-540px)] w-screen "
+                hight="h-[calc(100vh-525px)] py-0 w-screen "
                 color="bg-gradient-to-r from-[#03A9F4] to-[#B3E5FC]"
               />
             ))}

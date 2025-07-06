@@ -15,7 +15,7 @@ const AdminPanel = () => {
   }, [user, navigate]); // ✅ added dependency array for better practice
 
   return (
-    <div className="px-1 h-[calc(100vh-90px)] md:flex hidden">
+    <div className="px-1 h-[calc(100vh-75px)] md:flex hidden">
       <aside className="bg-slate-400 w-60 mr-1 rounded-md px-1">
         <div className="h-36 flex justify-center items-center flex-col">
           <div className="text-5xl cursor-pointer relative justify-center">

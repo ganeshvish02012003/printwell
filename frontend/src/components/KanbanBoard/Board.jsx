@@ -28,8 +28,8 @@ const Board = ({
 
   return (
     <div className="min-w-[290px] ">
-      <div className="bg-slate-50 rounded border-b border-slate-400">
-        <div className="flex justify-between items-center p-1 px-4">
+      <div className="bg-slate-300 rounded border-b border-slate-400">
+        <div className="flex justify-between items-center p-1 pb-0">
           <p className="flex-1 text-center text-xl font-bold">
             {boards.title}
             <span className="text-gray-500 text-base">
@@ -64,7 +64,7 @@ const Board = ({
         </div>
 
         <div
-          className="bg-slate-50 h-[calc(100vh-155px)] rounded-md p-2 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-100"
+          className="bg-slate-50 h-[calc(100vh-175px)] rounded-md p-2 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-100"
           onDragEnter={() => handleDragEnter(null, boards.id)}
         >
           {boards.cards.map((card, index) => (

@@ -21,7 +21,7 @@ const AllJob = () => {
 
   return (
     <div className="m-2 h-[calc(100vh-180px)] overflow-y-scroll">
-      <div className="bg-slate-500 px-4 py-1 flex justify-between items-center mb-1">
+      <div className="bg-slate-500 px-4 py-1 rounded-md flex justify-between items-center mb-1">
         <h2 className="font-bold text-white text-lg">All Jobs</h2>
         <button
           className=" border-2 px-2 py-1 border-green-400 text-green-400 hover:bg-green-400 hover:text-white transition-all rounded-full"

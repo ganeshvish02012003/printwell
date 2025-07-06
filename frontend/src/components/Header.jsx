@@ -65,9 +65,9 @@ const Header = () => {
                   GPCI Maneger
                 </Link>
               </div>
-              <div className="hidden flex-none lg:block ">
+              {/* <div className="hidden flex-none lg:block ">
                 <ul className="menu menu-horizontal">
-                  {/* Navbar menu content here */}
+                 
                   <li>
                     <button className="btn btn-ghost">Home</button>
                   </li>
@@ -84,7 +84,7 @@ const Header = () => {
                     <button className="btn btn-ghost">Delevery</button>
                   </li>
                 </ul>
-              </div>
+              </div> */}
               <div className=" lg-px-2">
                 <div
                   className="relative flex justify-center "
