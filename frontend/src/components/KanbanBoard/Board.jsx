@@ -69,7 +69,7 @@ const Board = ({
         >
           {boards.cards.map((card, index) => (
             <KanbanCard
-              key={card.id}
+              key={card._id || card.id || `${boards.id}-${index}`}
               card={card}
               boardId={boards.id}
               handleDragEnd={handleDragEnd}

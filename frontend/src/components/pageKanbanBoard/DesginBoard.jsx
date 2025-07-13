@@ -12,7 +12,7 @@ const DesginBoard = ({
   fetchAllJob,
   flex = "",
   hight = "",
-  color=""
+  color = "",
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -40,7 +40,7 @@ const DesginBoard = ({
         >
           {boards.cards.map((card, index) => (
             <KanbanCard
-              key={card.id}
+              key={card._id || card.id || `${boards.id}-${index}`}
               card={card}
               boardId={boards.id}
               handleDragEnd={handleDragEnd}

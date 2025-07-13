@@ -148,7 +148,7 @@ const ViewPrintBoardPage = () => {
 
     const cardToMove = sourceBoard.cards[sourceCardIndex];
 
-    // ✅ Check if dropping on the same position (avoid duplicate)
+    // ✅ Avoid unnecessary move
     const isSameBoard = sourceBoard.id === targetBoard.id;
     const isSamePosition =
       (targetCardIndex === -1 && isSameBoard) ||
@@ -159,6 +159,7 @@ const ViewPrintBoardPage = () => {
       return;
     }
 
+    // ✅ Update UI
     const updatedSourceCards = [...sourceBoard.cards];
     updatedSourceCards.splice(sourceCardIndex, 1);
 
@@ -182,18 +183,28 @@ const ViewPrintBoardPage = () => {
     setBoards(updatedBoards);
     setTargetCard({ bid: "", cid: "" });
 
-    // ✅ Backend update
+    // ✅ Prepare for backend update
     try {
-      let newSubStatus = boardIdToSubStatus[targetCard.bid] || "print To Do";
+      const realId = cid.replace("-copy", "");
 
-      // ✅ Clear subStatus if moved away from Binding
+      let newSubStatus = boardIdToSubStatus[targetCard.bid] || "print To Do";
+      let newStatus = "Printing";
+
+      // ✅ If moved INTO Binding
+      if (newSubStatus === "Binding") {
+        newStatus = "Other_work";
+      }
+
+      // ✅ If moved OUT of Binding
       if (
         cardToMove.job?.subStatus === "Binding" &&
         newSubStatus !== "Binding"
       ) {
         newSubStatus = "";
+        newStatus = "Printing";
       }
 
+      // ✅ Force correct status + subStatus update
       await fetch(SummaryApi.upDateJob.url, {
         method: SummaryApi.upDateJob.method,
         headers: {
@@ -201,10 +212,10 @@ const ViewPrintBoardPage = () => {
           Authorization: localStorage.getItem("token"),
         },
         body: JSON.stringify({
-          _id: cid.replace("-copy", ""),
+          _id: realId,
           job: {
             ...cardToMove.job,
-            status: "Printing",
+            status: newStatus,
             subStatus: newSubStatus,
           },
         }),

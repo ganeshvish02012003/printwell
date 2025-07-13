@@ -142,18 +142,39 @@ const MenageJobCard = () => {
 
     /* ---- backend sync ---- */
     try {
-      const newStatus = boardIdToStatus[target.bid] || "Pending";
-      await fetch(SummaryApi.upDateJob.url, {
-        method: SummaryApi.upDateJob.method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
-        },
-        body: JSON.stringify({
-          _id: movedCard._id,
-          job: { ...movedCard.job, status: newStatus },
-        }),
-      });
+      try {
+        const newStatus = boardIdToStatus[target.bid] || "Pending";
+        let newSubStatus = movedCard.job?.subStatus;
+
+        // ✅ Clear subStatus if moved out of "Other_work" (Binding)
+        if (
+          movedCard.job?.subStatus === "Binding" &&
+          newStatus !== "Other_work"
+        ) {
+          newSubStatus = "";
+        }
+
+        await fetch(SummaryApi.upDateJob.url, {
+          method: SummaryApi.upDateJob.method,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("token"),
+          },
+          body: JSON.stringify({
+            _id: movedCard._id,
+            job: {
+              ...movedCard.job,
+              status: newStatus,
+              subStatus: newSubStatus,
+            },
+          }),
+        });
+
+        localStorage.setItem("kanban_sync", Date.now().toString());
+      } catch (err) {
+        console.error("Backend update failed", err);
+      }
+
       // broadcast change so other tabs refresh
       localStorage.setItem("kanban_sync", Date.now().toString());
     } catch (err) {
