@@ -9,6 +9,8 @@ import AllJob from "../components/AdminCompoments/AllJob";
 import AllCustomer from "../components/AdminCompoments/AllCustomer";
 import ViewDesginBoardPage from "../pages/ViewDesginBoardPage";
 import ViewPrintBoardPage from "../pages/ViewPrintBoardPage";
+import ViewBindBoardpage from "../pages/ViewBindBoardpage";
+import ViewFinishedBoardPage from "../pages/ViewFinishedBoardPage"
 import MenageJobCard from "../components/AdminCompoments/MenageJobCard";
 import PeymentStatus from "../components/AdminCompoments/PeymentStatus";
 import JobHistory from "../components/AdminCompoments/JobHistory";
@@ -67,9 +69,17 @@ const router = createBrowserRouter([
         path: "view-board/Printing",
         element: <ViewPrintBoardPage/>,
       },
-            {
+      {
         path: "view-board/Desgin",
         element: <ViewDesginBoardPage />,
+      },
+      {
+        path: "view-board/Other_work",
+        element: <ViewBindBoardpage />,
+      },
+      {
+        path: "view-board/Completed",
+        element: <ViewFinishedBoardPage />,
       },
     ],
   },

@@ -20,14 +20,14 @@ const boardIdToSubStatus = {
 const ViewDesginBoardPage = () => {
   const [boards, setBoards] = useState([]);
   const [targetCard, setTargetCard] = useState({ bid: "", cid: "" });
-   const user = useSelector((state) => state?.user?.user);
-   const navigate = useNavigate();
+  const user = useSelector((state) => state?.user?.user);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-      if (!user?.role) {
-        navigate("/login");
-      }
-    }, [user, navigate]);
+  useEffect(() => {
+    if (!user?.role) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   // ✅ Fetch All Jobs
   const fetchAllJob = async () => {
@@ -131,6 +131,86 @@ const ViewDesginBoardPage = () => {
   };
 
   // ✅ Drag End Handler with duplication fix
+  // const handleDragEnd = async (cid, bid) => {
+  //   const sourceBoardIndex = boards.findIndex((b) => b.id === bid);
+  //   const targetBoardIndex = boards.findIndex((b) => b.id === targetCard.bid);
+  //   if (sourceBoardIndex < 0 || targetBoardIndex < 0) return;
+
+  //   const sourceBoard = boards[sourceBoardIndex];
+  //   const targetBoard = boards[targetBoardIndex];
+
+  //   const sourceCardIndex = sourceBoard.cards.findIndex((c) => c._id === cid);
+  //   const targetCardIndex = targetBoard.cards.findIndex(
+  //     (c) => c._id === targetCard.cid
+  //   );
+
+  //   if (sourceCardIndex < 0) return;
+
+  //   const cardToMove = sourceBoard.cards[sourceCardIndex];
+
+  //   // ✅ Prevent dropping on the same board without changing order
+  //   if (sourceBoard.id === targetBoard.id) {
+  //     const isDroppingOnEmptySpace = targetCard.cid === "";
+  //     const isSameCard = targetCard.cid === cid;
+  //     const isSamePosition =
+  //       sourceCardIndex === targetCardIndex || targetCardIndex === -1;
+
+  //     if (isDroppingOnEmptySpace || isSameCard || isSamePosition) {
+  //       setTargetCard({ bid: "", cid: "" });
+  //       return;
+  //     }
+  //   }
+
+  //   const updatedSourceCards = [...sourceBoard.cards];
+  //   updatedSourceCards.splice(sourceCardIndex, 1);
+
+  //   const updatedTargetCards = [...targetBoard.cards];
+  //   if (targetCardIndex === -1) {
+  //     updatedTargetCards.push(cardToMove);
+  //   } else {
+  //     updatedTargetCards.splice(targetCardIndex, 0, cardToMove);
+  //   }
+
+  //   const updatedBoards = [...boards];
+  //   updatedBoards[sourceBoardIndex] = {
+  //     ...sourceBoard,
+  //     cards: updatedSourceCards,
+  //   };
+  //   updatedBoards[targetBoardIndex] = {
+  //     ...targetBoard,
+  //     cards: updatedTargetCards,
+  //   };
+
+  //   setBoards(updatedBoards);
+  //   setTargetCard({ bid: "", cid: "" });
+
+  //   // ✅ Backend Update
+  //   try {
+  //     const newSubStatus = boardIdToSubStatus[targetBoard.id] || "To Do";
+  //     const newStatus = newSubStatus === "Print" ? "Printing" : "Desgin";
+
+  //     await fetch(SummaryApi.upDateJob.url, {
+  //       method: SummaryApi.upDateJob.method,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: localStorage.getItem("token"),
+  //       },
+  //       body: JSON.stringify({
+  //         _id: cid.replace("-copy", ""),
+  //         job: {
+  //           ...cardToMove.job,
+  //           status: newStatus,
+  //           subStatus: newSubStatus,
+  //         },
+  //       }),
+  //     });
+
+  //     localStorage.setItem("kanban_sync", Date.now().toString());
+  //   } catch (err) {
+  //     console.error("Backend update failed", err);
+  //   }
+  // };
+
   const handleDragEnd = async (cid, bid) => {
     const sourceBoardIndex = boards.findIndex((b) => b.id === bid);
     const targetBoardIndex = boards.findIndex((b) => b.id === targetCard.bid);
@@ -186,7 +266,12 @@ const ViewDesginBoardPage = () => {
 
     // ✅ Backend Update
     try {
-      const newSubStatus = boardIdToSubStatus[targetBoard.id] || "To Do";
+      // ✅ Explicit handling for "to-do-board"
+      let newSubStatus = boardIdToSubStatus[targetBoard.id];
+      if (targetBoard.id === "to-do-board") {
+        newSubStatus = "To Do";
+      }
+
       const newStatus = newSubStatus === "Print" ? "Printing" : "Desgin";
 
       await fetch(SummaryApi.upDateJob.url, {

@@ -13,6 +13,7 @@ const DesginBoard = ({
   flex = "",
   hight = "",
   color = "",
+  text="",
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -25,9 +26,9 @@ const DesginBoard = ({
         className={` ${flex} ${color} rounded-md border-b border-slate-400 `}
       >
         <div className="flex justify-between items-center p-1 px-4 ">
-          <p className="flex-1 text-white text-center text-xl font-bold">
+          <p className={`flex-1 ${text}  text-center text-xl font-bold`}>
             {boards.title}
-            <span className="text-gray-100 text-md">
+            <span className={` text-gray-100 ${text}  text-md`}>
               {" "}
               {boards.cards.length}
             </span>

@@ -146,6 +146,13 @@ const MenageJobCard = () => {
         const newStatus = boardIdToStatus[target.bid] || "Pending";
         let newSubStatus = movedCard.job?.subStatus;
 
+        // ✅ If moved to Design board, set subStatus to "To Do"
+        if (newStatus === "Desgin") {
+          newSubStatus = "To Do";
+        }
+        if (newStatus === "Printing") {
+          newSubStatus = "print To Do";
+        }
         // ✅ Clear subStatus if moved out of "Other_work" (Binding)
         if (
           movedCard.job?.subStatus === "Binding" &&
