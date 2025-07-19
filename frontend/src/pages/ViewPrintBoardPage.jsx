@@ -8,7 +8,7 @@ import ROLE from "../common/role";
 
 // ✅ Map DOM board IDs to subStatus values
 const boardIdToSubStatus = {
-  "print-to-do-board": "print To Do",
+  "print-to-do-board": "print To Do", 
   "printer-1-board": "Printer 1",
   "printer-2-board": "Printer 2",
   "printer-3-board": "Printer 3",
@@ -148,18 +148,19 @@ const ViewPrintBoardPage = () => {
 
     const cardToMove = sourceBoard.cards[sourceCardIndex];
 
-    // ✅ Avoid unnecessary move
-    const isSameBoard = sourceBoard.id === targetBoard.id;
-    const isSamePosition =
-      (targetCardIndex === -1 && isSameBoard) ||
-      sourceCardIndex === targetCardIndex;
+    // ✅ Prevent dropping on the same board without changing order
+    if (sourceBoard.id === targetBoard.id) {
+      const isDroppingOnEmptySpace = targetCard.cid === "";
+      const isSameCard = targetCard.cid === cid;
+      const isSamePosition =
+        sourceCardIndex === targetCardIndex || targetCardIndex === -1;
 
-    if (isSameBoard && isSamePosition) {
-      setTargetCard({ bid: "", cid: "" });
-      return;
+      if (isDroppingOnEmptySpace || isSameCard || isSamePosition) {
+        setTargetCard({ bid: "", cid: "" });
+        return;
+      }
     }
 
-    // ✅ Update UI
     const updatedSourceCards = [...sourceBoard.cards];
     updatedSourceCards.splice(sourceCardIndex, 1);
 
@@ -183,28 +184,16 @@ const ViewPrintBoardPage = () => {
     setBoards(updatedBoards);
     setTargetCard({ bid: "", cid: "" });
 
-    // ✅ Prepare for backend update
+    // ✅ Backend Update
     try {
-      const realId = cid.replace("-copy", "");
-
-      let newSubStatus = boardIdToSubStatus[targetCard.bid] || "print To Do";
-      let newStatus = "Printing";
-
-      // ✅ If moved INTO Binding
-      if (newSubStatus === "Binding") {
-        newStatus = "Other_work";
+      // ✅ Explicit handling for "print-to-do-board"
+      let newSubStatus = boardIdToSubStatus[targetBoard.id];
+      if (targetBoard.id === "print-to-do-board") {
+        newSubStatus = "print To Do";
       }
 
-      // ✅ If moved OUT of Binding
-      if (
-        cardToMove.job?.subStatus === "Binding" &&
-        newSubStatus !== "Binding"
-      ) {
-        newSubStatus = "";
-        newStatus = "Printing";
-      }
+      const newStatus = newSubStatus === "Binding" ? "Other_work" : "Printing";
 
-      // ✅ Force correct status + subStatus update
       await fetch(SummaryApi.upDateJob.url, {
         method: SummaryApi.upDateJob.method,
         headers: {
@@ -212,7 +201,7 @@ const ViewPrintBoardPage = () => {
           Authorization: localStorage.getItem("token"),
         },
         body: JSON.stringify({
-          _id: realId,
+          _id: cid.replace("-copy", ""),
           job: {
             ...cardToMove.job,
             status: newStatus,
@@ -223,7 +212,7 @@ const ViewPrintBoardPage = () => {
 
       localStorage.setItem("kanban_sync", Date.now().toString());
     } catch (err) {
-      console.error("Failed to update job:", err);
+      console.error("Backend update failed", err);
     }
   };
 

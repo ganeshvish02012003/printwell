@@ -44,6 +44,12 @@ const MenageJobCard = () => {
       const res = await fetch(SummaryApi.allJob.url);
       const { data: allJobs = [] } = await res.json();
 
+          allJobs.forEach((job) => {
+      console.log("Job ID:", job?._id);
+      console.log("Status:", job?.job?.status);
+      console.log("SubStatus:", job?.job?.subStatus);
+    });
+
       const cards = allJobs.map((job) => {
         let boardId = statusToBoardId[job?.job?.status] || "To_Do";
 
@@ -153,13 +159,20 @@ const MenageJobCard = () => {
         if (newStatus === "Printing") {
           newSubStatus = "print To Do";
         }
-        // ✅ Clear subStatus if moved out of "Other_work" (Binding)
-        if (
-          movedCard.job?.subStatus === "Binding" &&
-          newStatus !== "Other_work"
-        ) {
-          newSubStatus = "";
+        if (newStatus === "Other_work") {
+          newSubStatus = "Bind To Do";
         }
+        if (newStatus === "Finished") {
+          newSubStatus = "Recant Recant Finished";
+        }
+
+        // ✅ Clear subStatus if moved out of "Other_work" (Binding)
+        // if (
+        //   movedCard.job?.subStatus === "Binding" &&
+        //   newStatus !== "Other_work"
+        // ) {
+        //   newSubStatus = "";
+        // }
 
         await fetch(SummaryApi.upDateJob.url, {
           method: SummaryApi.upDateJob.method,

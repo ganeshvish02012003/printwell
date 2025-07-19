@@ -26,7 +26,7 @@ const ViewFinishedBoardPage = () => {
     }
   }, [user, navigate]);
 
-  // ✅ Fetch jobs and map them to Finished-related boards
+  // ✅ Fetch All Jobs
   const fetchAllJob = async () => {
     try {
       const response = await fetch(SummaryApi.allJob.url);
@@ -34,7 +34,7 @@ const ViewFinishedBoardPage = () => {
       const jobs = dataResponse?.data || [];
 
       const statuses = [
-        "Recant Finished",
+        "Recant Recant Finished",
         "Draw Bill",
         "For Dispatch",
         "Store",
@@ -44,8 +44,22 @@ const ViewFinishedBoardPage = () => {
       const boardList = statuses.map((status) => {
         let cards = [];
 
-        if (status === "Recant Finished") {
-          const validSubStatuses = statuses.slice(1); // exclude "Recant Finished"
+        if (status === "finished") {
+          cards = jobs
+            .filter(
+              (job) =>
+                job.job?.status === "Finished" &&
+                job.job?.subStatus === "finished"
+            )
+            .map((job) => ({
+              _id: job._id,
+              title: job.job?.jobName || "Untitled",
+              job: job.job,
+              general: job.general,
+              createdAt: job.createdAt,
+            }));
+        } else if (status === "Recant Recant Finished") {
+          const validSubStatuses = statuses.slice(1);
           cards = jobs
             .filter(
               (job) =>
@@ -64,7 +78,8 @@ const ViewFinishedBoardPage = () => {
           cards = jobs
             .filter(
               (job) =>
-                job.job?.status === "Finished" && job.job?.subStatus === status
+                job.job?.status === "Finished" &&
+                job.job?.subStatus === status
             )
             .map((job) => ({
               _id: job._id,
@@ -84,19 +99,22 @@ const ViewFinishedBoardPage = () => {
 
       setBoards(boardList);
     } catch (err) {
-      console.error("Failed to fetch jobs:", err);
+      console.error("Error fetching jobs:", err);
     }
   };
 
+  // ✅ Throttle fetch function
   const throttledFetchJobs = useMemo(() => throttle(fetchAllJob, 1000), []);
 
   useEffect(() => {
     fetchAllJob();
+
     const onStorage = (e) => {
       if (e.key === "kanban_sync") {
         throttledFetchJobs();
       }
     };
+
     window.addEventListener("storage", onStorage);
     return () => {
       window.removeEventListener("storage", onStorage);
@@ -104,55 +122,68 @@ const ViewFinishedBoardPage = () => {
     };
   }, [throttledFetchJobs]);
 
+  // ✅ Drag Enter Handler
   const handleDragEnter = (cid, bid) => {
     setTargetCard({ cid, bid });
   };
 
   const handleDragEnd = async (cid, bid) => {
-    const sIndex = boards.findIndex((b) => b.id === bid);
-    const tIndex = boards.findIndex((b) => b.id === targetCard.bid);
-    if (sIndex < 0 || tIndex < 0) return;
+    const sourceBoardIndex = boards.findIndex((b) => b.id === bid);
+    const targetBoardIndex = boards.findIndex((b) => b.id === targetCard.bid);
+    if (sourceBoardIndex < 0 || targetBoardIndex < 0) return;
 
-    const sourceBoard = boards[sIndex];
-    const targetBoard = boards[tIndex];
+    const sourceBoard = boards[sourceBoardIndex];
+    const targetBoard = boards[targetBoardIndex];
 
-    const cIndex = sourceBoard.cards.findIndex((c) => c._id === cid);
-    const targetCIndex = targetBoard.cards.findIndex(
+    const sourceCardIndex = sourceBoard.cards.findIndex((c) => c._id === cid);
+    const targetCardIndex = targetBoard.cards.findIndex(
       (c) => c._id === targetCard.cid
     );
-    if (cIndex < 0) return;
 
-    const cardToMove = sourceBoard.cards[cIndex];
+    if (sourceCardIndex < 0) return;
 
-    const isSameBoard = sourceBoard.id === targetBoard.id;
-    const isSamePosition =
-      (targetCIndex === -1 && isSameBoard) || cIndex === targetCIndex;
+    const cardToMove = sourceBoard.cards[sourceCardIndex];
 
-    if (isSameBoard && isSamePosition) {
-      setTargetCard({ bid: "", cid: "" });
-      return;
+    // ✅ Prevent dropping on the same board without changing order
+    if (sourceBoard.id === targetBoard.id) {
+      const isDroppingOnEmptySpace = targetCard.cid === "";
+      const isSameCard = targetCard.cid === cid;
+      const isSamePosition =
+        sourceCardIndex === targetCardIndex || targetCardIndex === -1;
+
+      if (isDroppingOnEmptySpace || isSameCard || isSamePosition) {
+        setTargetCard({ bid: "", cid: "" });
+        return;
+      }
     }
 
     const updatedSourceCards = [...sourceBoard.cards];
-    updatedSourceCards.splice(cIndex, 1);
+    updatedSourceCards.splice(sourceCardIndex, 1);
 
     const updatedTargetCards = [...targetBoard.cards];
-    if (targetCIndex === -1) {
+    if (targetCardIndex === -1) {
       updatedTargetCards.push(cardToMove);
     } else {
-      updatedTargetCards.splice(targetCIndex, 0, cardToMove);
+      updatedTargetCards.splice(targetCardIndex, 0, cardToMove);
     }
 
     const updatedBoards = [...boards];
-    updatedBoards[sIndex] = { ...sourceBoard, cards: updatedSourceCards };
-    updatedBoards[tIndex] = { ...targetBoard, cards: updatedTargetCards };
+    updatedBoards[sourceBoardIndex] = {
+      ...sourceBoard,
+      cards: updatedSourceCards,
+    };
+    updatedBoards[targetBoardIndex] = {
+      ...targetBoard,
+      cards: updatedTargetCards,
+    };
+
     setBoards(updatedBoards);
     setTargetCard({ bid: "", cid: "" });
 
+    // ✅ Backend Update
     try {
-      const realId = cid.replace("-copy", "");
-      let newSubStatus =
-        boardIdToSubStatus[targetCard.bid] || "Recant Finished";
+      let newSubStatus = targetBoard.title; // <- use board title directly
+      let newStatus = newSubStatus === "finished" ? "Finished" : "Finished";
 
       await fetch(SummaryApi.upDateJob.url, {
         method: SummaryApi.upDateJob.method,
@@ -161,10 +192,10 @@ const ViewFinishedBoardPage = () => {
           Authorization: localStorage.getItem("token"),
         },
         body: JSON.stringify({
-          _id: realId,
+          _id: cid.replace("-copy", ""),
           job: {
             ...cardToMove.job,
-            status: "Finished",
+            status: newStatus,
             subStatus: newSubStatus,
           },
         }),
@@ -172,7 +203,7 @@ const ViewFinishedBoardPage = () => {
 
       localStorage.setItem("kanban_sync", Date.now().toString());
     } catch (err) {
-      console.error("Failed to update job:", err);
+      console.error("Backend update failed", err);
     }
   };
 

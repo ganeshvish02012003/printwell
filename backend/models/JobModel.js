@@ -37,6 +37,21 @@ const JobSchema = new mongoose.Schema(
           "Printer 4",
           "Printer 5",
           "Binding",
+
+          // Binding Flow
+          "Bind To Do",
+          "To Binding",
+          "Cutting",
+          "perfeting",
+          "Lamination",
+          "finished",
+
+          // Finished Flow
+          "Recant Finished",
+          "Draw Bill",
+          "For Dispatch",
+          "Store",
+          "Out_of_Stock",
         ],
         default: "",
       },
