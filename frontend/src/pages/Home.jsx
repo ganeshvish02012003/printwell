@@ -115,6 +115,13 @@ const Home = () => {
     (job) => job?.job?.subStatus === "Binding"
   ).length;
 
+  const Bind_Binding = allJobs.filter((job) => job?.job?.subStatus === "Binding").length;
+  const Bind_To_Binding = allJobs.filter((job) => job?.job?.subStatus === "To Binding").length;
+  const Bind_Cutting = allJobs.filter((job) => job?.job?.subStatus === "Cutting").length;
+  const Bind_perfeting = allJobs.filter((job) => job?.job?.subStatus === "perfeting").length;
+  const Bind_Lamination = allJobs.filter((job) => job?.job?.subStatus === "Lamination").length;
+  // const Bind_perfeting = allJobs.filter((job) => job?.job?.subStatus === "perfeting").length;
+
   const total_jobs =
     Admin_TO_DO + Admin_Desgin + Admin_Printing + Admin_Other_work;
   const total_ActiveJobs = Admin_Desgin + Admin_Printing + Admin_Other_work;
@@ -130,6 +137,13 @@ const Home = () => {
     print_Printer_3 +
     print_Printer_4 +
     print_Printer_5;
+
+  const Active_Bind =
+  Bind_To_Binding +
+  Bind_Cutting +
+  Bind_perfeting +
+  Bind_Lamination;
+
   const data = {
     labels: ["Active", "Pending"],
     datasets: [
@@ -157,6 +171,17 @@ const Home = () => {
     datasets: [
       {
         data: [Active_Print, print_To_Do],
+        backgroundColor: ["#42A5F5", "#FFA726"],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const Bind_data = {
+    labels: ["Active", "Pending"],
+    datasets: [
+      {
+        data: [Active_Bind, Bind_Binding],
         backgroundColor: ["#42A5F5", "#FFA726"],
         borderWidth: 1,
       },
@@ -228,23 +253,56 @@ const Home = () => {
   const monthlyJobs = getJobsPerMonth(allJobs, "createdAt");
 
   // ✅ Bar Chart: Ordered vs Completed Jobs (Mon–Sun)
-  const barData = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    datasets: [
-      {
-        label: "Ordered Jobs",
-        data: orderedJobsPerDay,
-        backgroundColor: "#42A5F5", // Blue
-        borderRadius: 5,
-      },
-      {
-        label: "Completed Jobs",
-        data: completedJobsPerDay,
-        backgroundColor: "#FFA726", // Orange
-        borderRadius: 5,
-      },
-    ],
-  };
+  // const barData = {
+  //   labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+  //   datasets: [
+  //     {
+  //       label: "Ordered Jobs",
+  //       data: orderedJobsPerDay,
+  //       backgroundColor: "#42A5F5", // Blue
+  //       borderRadius: 5,
+  //     },
+  //     {
+  //       label: "Completed Jobs",
+  //       data: completedJobsPerDay,
+  //       backgroundColor: "#FFA726", // Orange
+  //       borderRadius: 5,
+  //     },
+  //   ],
+  // };
+
+  // Generate last 7 days including today
+const getLast7Days = () => {
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const day = d.toLocaleDateString("en-US", { weekday: "short" }); // e.g., Mon
+    const date = d.getDate().toString().padStart(2, '0');
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    days.push(`${day} ${date}/${month}`); // Format: Mon 20/07
+  }
+  return days;
+};
+
+const barData = {
+  labels: getLast7Days(),
+  datasets: [
+    {
+      label: "Ordered Jobs",
+      data: orderedJobsPerDay,
+      backgroundColor: "#42A5F5", // Blue
+      borderRadius: 5,
+    },
+    {
+      label: "Completed Jobs",
+      data: completedJobsPerDay,
+      backgroundColor: "#FFA726", // Orange
+      borderRadius: 5,
+    },
+  ],
+};
+
 
   // ✅ Line Chart: Jobs Per Month
   const lineData = {
@@ -404,7 +462,7 @@ const Home = () => {
 
           <Link to="view-board/Printing">
             <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#03A9F4] to-[#B3E5FC] shadow-md flex flex-col items-center justify-center font-semibold text-blue-900">
-              <p className="text-3xl">{Admin_Printing - print_Binding}</p>
+              <p className="text-3xl">{Admin_Printing}</p>
               <div className="flex items-center gap-2">
                 <p>Printing</p>
                 <IoIosPrint className="text-xl" />
@@ -465,7 +523,7 @@ const Home = () => {
                   Binding Jobs
                 </p>
                 <div className="w-full h-full">
-                  <Pie data={data} options={donutOptions} />
+                  <Pie data={Bind_data} options={donutOptions} />
                 </div>
               </div>
             </div>
@@ -476,10 +534,11 @@ const Home = () => {
 
         <div className="flex gap-2">
           <div className="flex justify-around p-2 shadow-md bg-white rounded-lg ">
-            <div className="w-[490px] h-48  rounded-md relative">
+            <div className="w-[490px] h-48  rounded-md relative overflow-x-auto">
               <Bar data={barData} options={barOptions} />
             </div>
           </div>
+
           <div className="flex justify-around p-2 shadow-md bg-white rounded-lg ">
             <div className="w-[490px] h-48  rounded-md relative">
               <Line data={lineData} options={lineOptions} />

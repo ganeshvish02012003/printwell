@@ -6,7 +6,7 @@ const ViewFinishedBoardPage = () => {
     <ViewKanbanBoardPage
       mainStatus="Completed"
       subStatuses={[
-        "recant finished",
+        "recent_job_end",
         "Draw Bill",
         "For Dispatch",
         "Store",

@@ -47,7 +47,7 @@ const JobSchema = new mongoose.Schema(
           "finished",
 
           // Finished Flow
-          "recant finished",
+          "recent_job_end",
           "Draw Bill",
           "For Dispatch",
           "Store",
