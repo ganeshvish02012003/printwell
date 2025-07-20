@@ -44,15 +44,21 @@ const MenageJobCard = () => {
       const res = await fetch(SummaryApi.allJob.url);
       const { data: allJobs = [] } = await res.json();
 
-          allJobs.forEach((job) => {
-      console.log("Job ID:", job?._id);
-      console.log("Status:", job?.job?.status);
-      console.log("SubStatus:", job?.job?.subStatus);
-    });
+      allJobs.forEach((job) => {
+        console.log("Job ID:", job?._id);
+        console.log("Status:", job?.job?.status);
+        console.log("SubStatus:", job?.job?.subStatus);
+      });
 
       const cards = allJobs.map((job) => {
+        // ✅ Auto-update status to Completed if subStatus is Finished
+        // if (job?.job?.subStatus === "finished") {
+        if (job?.job?.subStatus?.toLowerCase() === "finished") {
+          job.job.status = "Completed";
+        }
+      
         let boardId = statusToBoardId[job?.job?.status] || "To_Do";
-
+      
         // ✅ Special case for Binding jobs under Printing
         if (
           job.job?.status === "Printing" &&
@@ -60,7 +66,7 @@ const MenageJobCard = () => {
         ) {
           boardId = "Other_work";
         }
-
+      
         return {
           _id: job._id,
           boardId,
@@ -74,6 +80,7 @@ const MenageJobCard = () => {
           finished: job.finished,
         };
       });
+      
 
       const temp = initialBoards.map((b) => ({ ...b, cards: [] }));
       cards.forEach((c) => {
@@ -149,30 +156,35 @@ const MenageJobCard = () => {
     /* ---- backend sync ---- */
     try {
       try {
-        const newStatus = boardIdToStatus[target.bid] || "Pending";
+        let newStatus = boardIdToStatus[target.bid] || "Pending";
         let newSubStatus = movedCard.job?.subStatus;
+        
+        // Set subStatus based on new status
+        switch (newStatus) {
+          case "Desgin":
+            newSubStatus = "To Do";
+            break;
+          case "Printing":
+            newSubStatus = "print To Do";
+            break;
+          case "Other_work":
+            newSubStatus = "Binding";
+            break;
+          case "Completed":
+            newSubStatus = "finished";
+            break;
+          default:
+            newSubStatus = movedCard.job?.subStatus || "";
+            break;
+        }
 
-        // ✅ If moved to Design board, set subStatus to "To Do"
-        if (newStatus === "Desgin") {
-          newSubStatus = "To Do";
-        }
-        if (newStatus === "Printing") {
-          newSubStatus = "print To Do";
-        }
-        if (newStatus === "Other_work") {
-          newSubStatus = "Bind To Do";
-        }
-        if (newStatus === "Finished") {
-          newSubStatus = "Recant Recant Finished";
-        }
 
-        // ✅ Clear subStatus if moved out of "Other_work" (Binding)
-        // if (
-        //   movedCard.job?.subStatus === "Binding" &&
-        //   newStatus !== "Other_work"
-        // ) {
-        //   newSubStatus = "";
-        // }
+
+        // console.log("🟡 Sending update:", {
+        //   _id: movedCard._id,
+        //   status: newStatus,
+        //   subStatus: newSubStatus,
+        // });
 
         await fetch(SummaryApi.upDateJob.url, {
           method: SummaryApi.upDateJob.method,

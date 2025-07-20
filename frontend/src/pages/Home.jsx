@@ -47,37 +47,89 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-  console.log("All Status values:", allJobs.map(job => job?.job?.status));
-  console.log("All subStatus values:", allJobs.map(job => job?.job?.subStatus));
-}, [allJobs]);
+    console.log(
+      "All Status values:",
+      allJobs.map((job) => job?.job?.status)
+    );
+    console.log(
+      "All subStatus values:",
+      allJobs.map((job) => job?.job?.subStatus)
+    );
+  }, [allJobs]);
 
   // ✅ Count Logic
-  const Admin_TO_DO = allJobs.filter((job) => job?.job?.status === "Pending").length;
-  const Admin_Desgin = allJobs.filter((job) => job?.job?.status === "Desgin").length;
-  const Admin_Printing = allJobs.filter((job) => job?.job?.status === "Printing").length;
-  const Admin_Other_work = allJobs.filter((job) => job?.job?.status === "Other_work").length;
-  const Admin_Completed = allJobs.filter((job) => job?.job?.status === "Completed").length;
+  const Admin_TO_DO = allJobs.filter(
+    (job) => job?.job?.status === "Pending"
+  ).length;
+  const Admin_Desgin = allJobs.filter(
+    (job) => job?.job?.status === "Desgin"
+  ).length;
+  const Admin_Printing = allJobs.filter(
+    (job) => job?.job?.status === "Printing"
+  ).length;
+  const Admin_Other_work = allJobs.filter(
+    (job) => job?.job?.status === "Other_work"
+  ).length;
+  const Admin_Completed = allJobs.filter(
+    (job) => job?.job?.status === "Completed"
+  ).length;
 
-  const Desgin_To_Do = allJobs.filter((job) => job?.job?.subStatus === "To Do").length;
-  const Desgin_Designer_1 = allJobs.filter((job) => job?.job?.subStatus === "Designer 1").length;
-  const Desgin_Designer_2 = allJobs.filter((job) => job?.job?.subStatus === "Designer 2").length;
-  const Desgin_Proof = allJobs.filter((job) => job?.job?.subStatus === "Proof").length;
-  const Desgin_Final = allJobs.filter((job) => job?.job?.subStatus === "Final").length;
-  const Desgin_send_to_print = allJobs.filter((job) => job?.job?.subStatus === "send to print").length;
+  const Desgin_To_Do = allJobs.filter(
+    (job) => job?.job?.subStatus === "To Do"
+  ).length;
+  const Desgin_Designer_1 = allJobs.filter(
+    (job) => job?.job?.subStatus === "Designer 1"
+  ).length;
+  const Desgin_Designer_2 = allJobs.filter(
+    (job) => job?.job?.subStatus === "Designer 2"
+  ).length;
+  const Desgin_Proof = allJobs.filter(
+    (job) => job?.job?.subStatus === "Proof"
+  ).length;
+  const Desgin_Final = allJobs.filter(
+    (job) => job?.job?.subStatus === "Final"
+  ).length;
+  const Desgin_send_to_print = allJobs.filter(
+    (job) => job?.job?.subStatus === "send to print"
+  ).length;
 
-  const print_To_Do = allJobs.filter((job) => job?.job?.subStatus === "print To Do").length;
-  const print_Printer_1 = allJobs.filter((job) => job?.job?.subStatus === "Printer 1").length;
-  const print_Printer_2 = allJobs.filter((job) => job?.job?.subStatus === "Printer 2").length;
-  const print_Printer_3 = allJobs.filter((job) => job?.job?.subStatus === "Printer 3").length;
-  const print_Printer_4 = allJobs.filter((job) => job?.job?.subStatus === "Printer 4").length;
-  const print_Printer_5 = allJobs.filter((job) => job?.job?.subStatus === "Printer 5").length;
-  const print_Binding = allJobs.filter((job) => job?.job?.subStatus === "Binding").length;
+  const print_To_Do = allJobs.filter(
+    (job) => job?.job?.subStatus === "Print"
+  ).length;
+  const print_Printer_1 = allJobs.filter(
+    (job) => job?.job?.subStatus === "Printer 1"
+  ).length;
+  const print_Printer_2 = allJobs.filter(
+    (job) => job?.job?.subStatus === "Printer 2"
+  ).length;
+  const print_Printer_3 = allJobs.filter(
+    (job) => job?.job?.subStatus === "Printer 3"
+  ).length;
+  const print_Printer_4 = allJobs.filter(
+    (job) => job?.job?.subStatus === "Printer 4"
+  ).length;
+  const print_Printer_5 = allJobs.filter(
+    (job) => job?.job?.subStatus === "Printer 5"
+  ).length;
+  const print_Binding = allJobs.filter(
+    (job) => job?.job?.subStatus === "Binding"
+  ).length;
 
-  const total_jobs =Admin_TO_DO + Admin_Desgin + Admin_Printing + Admin_Other_work;
+  const total_jobs =
+    Admin_TO_DO + Admin_Desgin + Admin_Printing + Admin_Other_work;
   const total_ActiveJobs = Admin_Desgin + Admin_Printing + Admin_Other_work;
-  const Active_Desgin = Desgin_Designer_1 + Desgin_Designer_2 + Desgin_Proof + Desgin_Final + Desgin_send_to_print;
-  const Active_Print = print_Printer_1 + print_Printer_2 + print_Printer_3 + print_Printer_4 + print_Printer_5;
-
+  const Active_Desgin =
+    Desgin_Designer_1 +
+    Desgin_Designer_2 +
+    Desgin_Proof +
+    Desgin_Final +
+    Desgin_send_to_print;
+  const Active_Print =
+    print_Printer_1 +
+    print_Printer_2 +
+    print_Printer_3 +
+    print_Printer_4 +
+    print_Printer_5;
   const data = {
     labels: ["Active", "Pending"],
     datasets: [
@@ -100,7 +152,7 @@ const Home = () => {
     ],
   };
 
-    const Print_data = {
+  const Print_data = {
     labels: ["Active", "Pending"],
     datasets: [
       {
@@ -110,8 +162,6 @@ const Home = () => {
       },
     ],
   };
-
-
 
   const simplePieOptions = {
     responsive: true,
@@ -146,74 +196,83 @@ const Home = () => {
     },
   };
 
-// 🔁 Helpers to group data
-const getJobsPerDay = (jobs, key = "createdAt") => {
-  const result = [0, 0, 0, 0, 0, 0, 0]; // Mon-Sun
-  jobs.forEach((job) => {
-    const date = new Date(job?.[key] || job?.createdAt);
-    const day = date.getDay(); // 0 (Sun) to 6 (Sat)
-    const index = day === 0 ? 6 : day - 1; // convert to 0=Mon, ..., 6=Sun
-    result[index]++;
-  });
-  return result;
-};
+  // 🔁 Helpers to group data
+  const getJobsPerDay = (jobs, key = "createdAt") => {
+    const result = [0, 0, 0, 0, 0, 0, 0]; // Mon-Sun
+    jobs.forEach((job) => {
+      const date = new Date(job?.[key] || job?.createdAt);
+      const day = date.getDay(); // 0 (Sun) to 6 (Sat)
+      const index = day === 0 ? 6 : day - 1; // convert to 0=Mon, ..., 6=Sun
+      result[index]++;
+    });
+    return result;
+  };
 
-const getJobsPerMonth = (jobs, key = "createdAt") => {
-  const result = Array(12).fill(0); // Jan - Dec
-  jobs.forEach((job) => {
-    const date = new Date(job?.[key] || job?.createdAt);
-    const month = date.getMonth(); // 0 - Jan, 11 - Dec
-    result[month]++;
-  });
-  return result;
-};
+  const getJobsPerMonth = (jobs, key = "createdAt") => {
+    const result = Array(12).fill(0); // Jan - Dec
+    jobs.forEach((job) => {
+      const date = new Date(job?.[key] || job?.createdAt);
+      const month = date.getMonth(); // 0 - Jan, 11 - Dec
+      result[month]++;
+    });
+    return result;
+  };
 
-// 🔁 Calculate real chart data
-const orderedJobsPerDay = getJobsPerDay(allJobs, "createdAt");
-const completedJobsPerDay = getJobsPerDay(
-  allJobs.filter((job) => job?.job?.status === "Completed"),
-  "job.updatedAt"
-);
+  // 🔁 Calculate real chart data
+  const orderedJobsPerDay = getJobsPerDay(allJobs, "createdAt");
+  const completedJobsPerDay = getJobsPerDay(
+    allJobs.filter((job) => job?.job?.status === "Completed"),
+    "job.updatedAt"
+  );
 
-const monthlyJobs = getJobsPerMonth(allJobs, "createdAt");
+  const monthlyJobs = getJobsPerMonth(allJobs, "createdAt");
 
-// ✅ Bar Chart: Ordered vs Completed Jobs (Mon–Sun)
-const barData = {
-  labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-  datasets: [
-    {
-      label: "Ordered Jobs",
-      data: orderedJobsPerDay,
-      backgroundColor: "#42A5F5", // Blue
-      borderRadius: 5,
-    },
-    {
-      label: "Completed Jobs",
-      data: completedJobsPerDay,
-      backgroundColor: "#FFA726", // Orange
-      borderRadius: 5,
-    },
-  ],
-};
+  // ✅ Bar Chart: Ordered vs Completed Jobs (Mon–Sun)
+  const barData = {
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    datasets: [
+      {
+        label: "Ordered Jobs",
+        data: orderedJobsPerDay,
+        backgroundColor: "#42A5F5", // Blue
+        borderRadius: 5,
+      },
+      {
+        label: "Completed Jobs",
+        data: completedJobsPerDay,
+        backgroundColor: "#FFA726", // Orange
+        borderRadius: 5,
+      },
+    ],
+  };
 
-// ✅ Line Chart: Jobs Per Month
-const lineData = {
-  labels: [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-  ],
-  datasets: [
-    {
-      label: "Jobs Per Month",
-      data: monthlyJobs,
-      borderColor: "#03A9F4",
-      backgroundColor: "rgba(156, 39, 176, 0.2)",
-      tension: 0.4,
-      fill: true,
-    },
-  ],
-};
-
+  // ✅ Line Chart: Jobs Per Month
+  const lineData = {
+    labels: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+    datasets: [
+      {
+        label: "Jobs Per Month",
+        data: monthlyJobs,
+        borderColor: "#03A9F4",
+        backgroundColor: "rgba(156, 39, 176, 0.2)",
+        tension: 0.4,
+        fill: true,
+      },
+    ],
+  };
 
   const donutOptions = {
     responsive: true,
@@ -345,7 +404,7 @@ const lineData = {
 
           <Link to="view-board/Printing">
             <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#03A9F4] to-[#B3E5FC] shadow-md flex flex-col items-center justify-center font-semibold text-blue-900">
-              <p className="text-3xl">{Admin_Printing}</p>
+              <p className="text-3xl">{Admin_Printing - print_Binding}</p>
               <div className="flex items-center gap-2">
                 <p>Printing</p>
                 <IoIosPrint className="text-xl" />
@@ -353,14 +412,14 @@ const lineData = {
             </div>
           </Link>
           <Link to="view-board/Other_work">
-          <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#FFD54F] to-[#FFF7B2] shadow-md flex flex-col items-center justify-center font-semibold text-yellow-900">
-            <p className="text-3xl">{print_Binding}</p>
-            <div className="flex items-center gap-2">
-              <p>Binding</p>
-              <FaBook className="text-xl" />
+            <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#FFD54F] to-[#FFF7B2] shadow-md flex flex-col items-center justify-center font-semibold text-yellow-900">
+              <p className="text-3xl">{Admin_Other_work}</p>
+              <div className="flex items-center gap-2">
+                <p>Binding</p>
+                <FaBook className="text-xl" />
+              </div>
             </div>
-          </div>
-          </Link >
+          </Link>
         </div>
 
         {/* =======================================Pie Chart ================================================= */}
@@ -434,13 +493,13 @@ const lineData = {
       <div className="bg-slate-200 p-2 rounded-md ml-1 h-full w-full">
         <div className="bg-white shadow-md rounded-md w-full h-full p-2">
           <Link to="view-board/Completed">
-          <div className="h-[70px] rounded-md bg-gradient-to-r from-[#66BB6A] to-[#C8E6C9] shadow-md flex flex-col items-center justify-center font-semibold text-green-900">
-            <p className="text-3xl">{Admin_Completed}</p>
-            <div className="flex items-center gap-2">
-              <p>Recent Completed Jobs</p>
-              <FaBook className="text-xl" />
+            <div className="h-[70px] rounded-md bg-gradient-to-r from-[#66BB6A] to-[#C8E6C9] shadow-md flex flex-col items-center justify-center font-semibold text-green-900">
+              <p className="text-3xl">{Admin_Completed}</p>
+              <div className="flex items-center gap-2">
+                <p>Recent Completed Jobs</p>
+                <FaBook className="text-xl" />
+              </div>
             </div>
-          </div>
           </Link>
 
           {/* Scrollable job list */}
