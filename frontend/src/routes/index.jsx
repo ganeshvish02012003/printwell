@@ -3,19 +3,18 @@ import App from "../App";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import SignUp from "../pages/signUp";
-import AdminPanal from "../pages/AdminPanel"
+import AdminPanal from "../pages/AdminPanel";
 import AllUser from "../components/AdminCompoments/AllUser";
 import AllJob from "../components/AdminCompoments/AllJob";
 import AllCustomer from "../components/AdminCompoments/AllCustomer";
 import ViewDesginBoardPage from "../pages/ViewDesginBoardPage";
 import ViewPrintBoardPage from "../pages/ViewPrintBoardPage";
 import ViewBindBoardpage from "../pages/ViewBindBoardpage";
-import ViewFinishedBoardPage from "../pages/ViewFinishedBoardPage"
+import ViewFinishedBoardPage from "../pages/ViewFinishedBoardPage";
 import MenageJobCard from "../components/AdminCompoments/MenageJobCard";
 import PeymentStatus from "../components/AdminCompoments/PeymentStatus";
 import JobHistory from "../components/AdminCompoments/JobHistory";
-
-
+import JobCategory from "../components/AdminCompoments/jobCategory";
 
 const router = createBrowserRouter([
   {
@@ -25,7 +24,6 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
-     
       },
       {
         path: "login",
@@ -37,8 +35,8 @@ const router = createBrowserRouter([
       },
       {
         path: "admin-panel",
-        element: <AdminPanal/>,
-        children: [
+        element: <AdminPanal />,
+        _children: [
           {
             path: "all-user",
             element: <AllUser />,
@@ -49,25 +47,35 @@ const router = createBrowserRouter([
           },
           {
             path: "all-customer",
-            element: <AllCustomer/>,
+            element: <AllCustomer />,
           },
           {
             path: "Menage-Job-Card",
-            element: <MenageJobCard/>
+            element: <MenageJobCard />,
           },
           {
             path: "Peyment-Status",
-            element: <PeymentStatus/>
+            element: <PeymentStatus />,
           },
-           {
+          {
             path: "Job-History",
-            element: <JobHistory/>
+            element: <JobHistory />,
+          },
+          {
+            path: "Job-Category",
+            element: <JobCategory />,
           },
         ],
+        get children() {
+          return this._children;
+        },
+        set children(value) {
+          this._children = value;
+        },
       },
-        {
+      {
         path: "view-board/Printing",
-        element: <ViewPrintBoardPage/>,
+        element: <ViewPrintBoardPage />,
       },
       {
         path: "view-board/Desgin",

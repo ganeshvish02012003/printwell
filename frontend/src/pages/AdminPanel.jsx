@@ -97,6 +97,17 @@ const AdminPanel = () => {
             >
               Job History
             </NavLink>
+
+            <NavLink
+              to="Job-Category"
+              className={({ isActive }) =>
+                `px-2 py-1 rounded hover:bg-slate-500 hover:text-white ${
+                  isActive ? "bg-slate-600 text-white font-semibold" : ""
+                }`
+              }
+            >
+              job Category
+            </NavLink>
           </nav>
         </div>
       </aside>

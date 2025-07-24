@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import JobCategory from "../../helpers/JobCategory";
 import { IoMdCloseCircle } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
@@ -14,15 +13,15 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
     jobStatus: "",
     category: "",
     quantity: "",
-    jobSize: "A4",
-    pages: "",
+    jobSize: "",
+    pages: "1",
     color: "",
     ink: "",
     paperName: "",
-    paperColor: "White",
+    paperColor: "",
     job_description: "",
     sampleImage: null,
-    PrintingSide:"SingleSide",
+    PrintingSide:"",
     When_to_give_goods:"",
     Time_of_give_goods:"",
   };
@@ -120,21 +119,24 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 id="jobName"
                 name="jobName"
                 value={data.jobName || ""}
+                placeholder="Enter Job Name"
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-4"
               />
               
               <input
-                type="text"
-                id="jobStatus"
-                name="jobStatus"
-                value={data.jobStatus || ""}
+                type="number"
+                id="jobCardId"
+                name="jobCardId"
+                value={data.jobCardId || ""}
                 onChange={handleInputChange}
+                placeholder="Job Id"
                 className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+                disabled
               />
             </div>
 
-             {/* Job Name */}
+             {/* Job Category */}
              <div className="grid grid-cols-6 mb-2">
              <label
                 htmlFor="category"
@@ -147,36 +149,23 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 id="category"
                 value={data.category || ""}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-3"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-5"
               >
                 <option value="" disabled>
                   Select a category
                 </option>
-                {JobCategory.map((el, index) => (
+                {/* {JobCategory.map((el, index) => (
                   <option value={el.value} key={el.value + index}>
                     {el.label}
                   </option>
-                ))}
+                ))} */}
               </select>
 
-              <label
-                htmlFor="quantity"
-                className="col-span-1 text-sm pl-1 mx-4 flex items-center"
-              >
-                Job No:
-              </label>
-              <input
-                type="number"
-                id="jobCardId"
-                name="jobCardId"
-                value={data.jobCardId || ""}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
-              />
+
               
             </div>
 
-            {/* Category & Quantity */}
+            {/* Quantity */}
             <div className="grid grid-cols-6 mb-2">
               <label
                 htmlFor="PrintingSide"
@@ -351,13 +340,13 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 htmlFor="When_to_give_goods"
                 className="col-span-1 text-sm  pl-1  flex items-center font-normal "
               >
-                When to give
+                Delivery Date
               </label>
               <input
                 type="date"
                 id="When_to_give_goods"
                 name="When_to_give_goods"
-                placeholder="When to give"
+                placeholder="Delivery Date"
                 value={data.When_to_give_goods}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
@@ -366,15 +355,15 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
 
               <label
                 htmlFor="Time_of_give_goods"
-                className="col-span-1 text-sm  px-4  flex items-center font-normal "
+                className="col-span-1 text-sm  px-8   flex items-center font-normal "
               >
-               time
+               Time
               </label>
               <input
                 type="time"
                 id="Time_of_give_goods"
                 name="Time_of_give_goods"
-                placeholder="Quantity of paper ordered"
+                placeholder="Delivery Time"
                 value={data.Time_of_give_goods}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"

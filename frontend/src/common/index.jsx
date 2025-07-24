@@ -60,6 +60,26 @@ const SummaryApi = {
     url: `${backendDomain}/api/all-customer`,
     method: "get",
   },
+
+  // jobcategory
+    addjobCategory: {
+      url: `${backendDomain}/api/jobcategory/add`,
+      method: "post",
+    },
+    updatejobCategory: (id) => ({
+      url: `${backendDomain}/api/jobcategory/update/${id}`,
+      method: "put",
+    }),
+    deletejobCategory: (id) => ({
+      url: `${backendDomain}/api/jobcategory/delete/${id}`,
+      method: "delete",
+    }),
+    alljobCategory: {
+      url: `${backendDomain}/api/jobcategory/all`,
+      method: "get",
+    },
+    
+
 };
 
 export default SummaryApi;

@@ -13,6 +13,7 @@ const UpdateJob = require("../controller/job/UpdateJob");
 const updateCustomer = require("../controller/customer/updateCustomer");
 const addCustomer = require("../controller/customer/addCustomer");
 const allCustomers = require("../controller/customer/allCustomers");
+const { AddJobCategory, AllJobCategory, UpdateJobCategory, DeleteJobCategory } = require("../controller/jobcategory/jobCategoryController");
 
 
 router.post("/signup", userSignUpController);
@@ -34,6 +35,13 @@ router.get("/get-job", getJobController);
 router.post("/add-customer", addCustomer);
 router.put("/update-customer/:customerId",   updateCustomer); 
 router.get("/all-customer",  allCustomers);
+
+// jobcategory
+router.post("/jobcategory/add", AddJobCategory);
+router.get("/jobcategory/all", AllJobCategory);
+router.put("/jobcategory/update/:id", UpdateJobCategory);
+router.delete("/jobcategory/delete/:id", DeleteJobCategory); 
+
 
 
 module.exports = router;
