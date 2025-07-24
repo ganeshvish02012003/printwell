@@ -29,6 +29,48 @@ const ViewKanbanBoardPage = ({
     }
   }, [user, navigate]);
 
+  const isCardBelongsToBoard = (job, mainStatus, subStatus) => {
+    const jobStatus = job?.job?.status;
+    const jobSubStatus = job?.job?.subStatus;
+
+    const normalize = (str) =>
+      str?.toLowerCase().replace(/\s+/g, "_").replace(/-/g, "_");
+
+    const nStatus = normalize(jobStatus);
+    const nSubStatus = normalize(jobSubStatus);
+    const nMain = normalize(mainStatus);
+    const nSub = normalize(subStatus);
+
+    // Binding shared between Printing and Other_work
+    if (
+      nSub === "binding" &&
+      nSubStatus === "binding" &&
+      (nStatus === "printing" || nStatus === "other_work")
+    ) {
+      return true;
+    }
+
+    // Finished shared between Other_work and Completed
+    if (
+      (nSub === "finished" || nSub === "recent_job_end") &&
+      nSubStatus === "finished" &&
+      (nStatus === "other_work" || nStatus === "completed")
+    ) {
+      return true;
+    }
+
+    // Print shared between Design and Printing
+    if (
+      nSub === "print" &&
+      nSubStatus === "print" &&
+      (nStatus === "desgin" || nStatus === "printing")
+    ) {
+      return true;
+    }
+
+    return nMain === nStatus && nSub === nSubStatus;
+  };
+
   const fetchAllJob = async () => {
     try {
       const response = await fetch(SummaryApi.allJob.url);
@@ -40,11 +82,7 @@ const ViewKanbanBoardPage = ({
 
         if (subStatus === printSubStatus) {
           cards = jobs
-            .filter(
-              (job) =>
-                job.job?.status === "Printing" &&
-                job.job?.subStatus === printSubStatus
-            )
+            .filter((job) => isCardBelongsToBoard(job, mainStatus, subStatus))
             .map((job) => ({
               _id: job._id,
               title: job.job?.jobName || "Untitled",
@@ -55,14 +93,9 @@ const ViewKanbanBoardPage = ({
         } else if (subStatus === "To Do") {
           const validSubStatuses = subStatuses.filter((s) => s !== "To Do");
           cards = jobs
-            .filter(
-              (job) =>
-                job.job?.status === mainStatus &&
-                (!job.job?.subStatus ||
-                  !validSubStatuses.includes(job.job?.subStatus))
-            )
+            .filter((job) => isCardBelongsToBoard(job, mainStatus, subStatus))
             .map((job) => ({
-              _id: job._id + "-copy",
+              _id: job._id,
               title: job.job?.jobName || "Untitled",
               job: job.job,
               general: job.general,
@@ -70,26 +103,7 @@ const ViewKanbanBoardPage = ({
             }));
         } else {
           cards = jobs
-            .filter((job) => {
-              const jobStatus = job.job?.status;
-              const jobSubStatus = job.job?.subStatus;
-
-              const isBindingInBothViews =
-                subStatus === "Binding" &&
-                jobSubStatus === "Binding" &&
-                (jobStatus === "Printing" || jobStatus === "Other_work");
-
-              const isFinishedCard =
-                subStatus.toLowerCase() === "finished" &&
-                jobStatus === "Completed" &&
-                jobSubStatus?.toLowerCase() === "finished";
-
-              return (
-                isBindingInBothViews ||
-                isFinishedCard ||
-                (jobStatus === mainStatus && jobSubStatus === subStatus)
-              );
-            })
+            .filter((job) => isCardBelongsToBoard(job, mainStatus, subStatus))
             .map((job) => ({
               _id: job._id,
               title: job.job?.jobName || "Untitled",
@@ -189,17 +203,37 @@ const ViewKanbanBoardPage = ({
         newSubStatus = "finished";
       }
 
-      let newStatus = mainStatus;
+      const getNewStatusFromSubStatus = (subStatus) => {
+        switch (subStatus?.toLowerCase()) {
+          case "binding":
+            return "Other_work";
+          case "finished":
+          case "recent_job_end":
+            return "Completed";
+          case "print":
+            return "Printing"; // 🔁 Treat `Print` as Printing side when dropped
+          case "printer 1":
+          case "printer 2":
+          case "printer 3":
+          case "printer 4":
+          case "printer 5":
+            return "Printing";
+          case "to binding":
+          case "cutting":
+          case "lamination":
+          case "perfeting":
+            return "Other_work";
+          case "draw bill":
+          case "for dispatch":
+          case "store":
+          case "out_of_stock":
+            return "Completed";
+          default:
+            return mainStatus;
+        }
+      };
 
-      if (newSubStatus?.toLowerCase() === "binding") {
-        newStatus = "Other_work";
-      } else if (newSubStatus?.toLowerCase() === "finished") {
-        // newStatus = "Completed";
-        newStatus =
-          cardToMove.job.status === "Completed" ? "Completed" : "Completed";
-      } else if (newSubStatus === printSubStatus) {
-        newStatus = "Printing";
-      }
+      let newStatus = getNewStatusFromSubStatus(newSubStatus);
 
       const cleanId = cid.replace("-copy", "");
       const payload = {

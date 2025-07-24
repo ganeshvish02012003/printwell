@@ -52,13 +52,20 @@ const MenageJobCard = () => {
 
       const cards = allJobs.map((job) => {
         // ✅ Auto-update status to Completed if subStatus is Finished
-        // if (job?.job?.subStatus === "finished") {
         if (job?.job?.subStatus?.toLowerCase() === "finished") {
           job.job.status = "Completed";
         }
-      
+
+        if (job?.job?.subStatus?.toLowerCase() === "print") {
+          job.job.status = "Printing";
+        }
+
+        if (job?.job?.subStatus?.toLowerCase() === "binding") {
+          job.job.status = "Other_work"; // prefer `Other_work` for UI consistency
+        }
+
         let boardId = statusToBoardId[job?.job?.status] || "To_Do";
-      
+
         // ✅ Special case for Binding jobs under Printing
         if (
           job.job?.status === "Printing" &&
@@ -66,7 +73,7 @@ const MenageJobCard = () => {
         ) {
           boardId = "Other_work";
         }
-      
+
         return {
           _id: job._id,
           boardId,
@@ -80,7 +87,6 @@ const MenageJobCard = () => {
           finished: job.finished,
         };
       });
-      
 
       const temp = initialBoards.map((b) => ({ ...b, cards: [] }));
       cards.forEach((c) => {
@@ -123,8 +129,6 @@ const MenageJobCard = () => {
   /* 4️⃣  HELPER CALLBACKS                                              */
   /* ------------------------------------------------------------------ */
 
-  // const handleDragEnter = (cid, bid) => setTarget({ cid: cid || null, bid });
-
   const handleDragEnter = (cid, bid) => {
     setTarget({ cid: cid || null, bid });
   };
@@ -158,7 +162,7 @@ const MenageJobCard = () => {
       try {
         let newStatus = boardIdToStatus[target.bid] || "Pending";
         let newSubStatus = movedCard.job?.subStatus;
-        
+
         // Set subStatus based on new status
         switch (newStatus) {
           case "Desgin":
@@ -177,8 +181,6 @@ const MenageJobCard = () => {
             newSubStatus = movedCard.job?.subStatus || "";
             break;
         }
-
-
 
         // console.log("🟡 Sending update:", {
         //   _id: movedCard._id,
