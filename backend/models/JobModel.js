@@ -3,8 +3,10 @@ const mongoose = require("mongoose");
 const JobSchema = new mongoose.Schema(
   {
     general: {
+      customerId: { type: String, default: "" },
       Customer_name: { type: String, default: "" },
       Mobile_number: { type: Number, default: "" },
+      WhatApp_number: { type: Number, default: "" },
       address: { type: String, default: "" },
       genral_description: { type: String, default: "" },
     },

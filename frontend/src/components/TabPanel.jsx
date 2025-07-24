@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tabs, Tab, Box, dialogClasses } from "@mui/material";
 import Genral_Details from "./form/Genral_Details";
 import Job_Details from "./form/Job_Details";
@@ -30,6 +30,7 @@ function TabPanel({ children, value, index }) {
 export default function FullWidthTabs({ onClose, fetchAllJob }) {
   const [value, setValue] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [allCustomers, setAllCustomers] = useState([]);
 
   // Persistent Form State
   const [formData, setFormData] = useState({
@@ -46,6 +47,28 @@ export default function FullWidthTabs({ onClose, fetchAllJob }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  // All customer fetch
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const res = await fetch(SummaryApi.allCustomer.url, {
+          method: SummaryApi.allCustomer.method,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await res.json();
+        if (data.success) {
+          setAllCustomers(data.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch customers:", err);
+      }
+    };
+
+    fetchCustomers();
+  }, []);
 
   // Update form data dynamically
   const handleFormDataChange = (section, data) => {
@@ -91,7 +114,7 @@ export default function FullWidthTabs({ onClose, fetchAllJob }) {
 
       if (response.ok) {
         toast.success(responseData?.message || "Form submitted successfully!");
-        fetchAllJob()
+        fetchAllJob();
 
         if (onClose) {
           onClose(); // Ensure it is defined before calling
@@ -173,6 +196,7 @@ export default function FullWidthTabs({ onClose, fetchAllJob }) {
                 <Genral_Details
                   onChange={(data) => handleFormDataChange("general", data)}
                   initialData={formData.general}
+                  customers={allCustomers}
                 />
               </TabPanel>
 

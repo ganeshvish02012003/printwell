@@ -158,8 +158,7 @@ const AllCustomer = () => {
           <table className="w-full table-auto border-collapse">
             <thead className="bg-slate-500 text-white sticky top-0 z-10">
               <tr>
-                <th className="border p-2">Sn.
-                </th>
+                <th className="border p-2">Sn.</th>
                 <th className="border py-2">
                   <input
                     type="text"
@@ -210,9 +209,7 @@ const AllCustomer = () => {
                     className=" p-1 min-w-40 text-sm text-center text-white placeholder-white bg-slate-500 rounded border"
                   />
                 </th>
-                <th className="border py-2">
-                Action
-                </th>
+                <th className="border py-2">Action</th>
               </tr>
             </thead>
 
@@ -236,7 +233,7 @@ const AllCustomer = () => {
                       <td className="border border-slate-100 py-1">
                         {c.mobile}
                       </td>
-                        <td className="border border-slate-100 py-1">
+                      <td className="border border-slate-100 py-1">
                         {c.whatsapp}
                       </td>
                       <td className="border border-slate-100 py-1">
