@@ -212,11 +212,15 @@ const ViewKanbanBoardPage = ({
             return "Completed";
           case "print":
             return "Printing"; // 🔁 Treat `Print` as Printing side when dropped
-          case "printer 1":
-          case "printer 2":
-          case "printer 3":
-          case "printer 4":
-          case "printer 5":
+          case "SWIFT 1":
+          case "SWIFT 2":
+          case "SWIFT 3":
+          case "SAHIL":
+          case "RULLING":
+          case "SCREEN":
+          case "RISO":
+          case "RISO COM COLOR":
+          case "KONICA MINOLTA":
             return "Printing";
           case "to binding":
           case "cutting":

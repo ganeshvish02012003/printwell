@@ -8,11 +8,15 @@ const ViewPrintBoardPage = () => {
       subStatuses={[
         // "print To Do",
         "Print",
-        "Printer 1",
-        "Printer 2",
-        "Printer 3",
-        "Printer 4",
-        "Printer 5",
+        "SWIFT 1",
+        "SWIFT 2",
+        "SWIFT 3",
+        "SAHIL",
+        "RULLING",
+        "SCREEN",
+        "RISO",
+        "RISO COM COLOR",
+        "KONICA MINOLTA",
         "Binding",
       ]}
       printSubStatus="Binding"

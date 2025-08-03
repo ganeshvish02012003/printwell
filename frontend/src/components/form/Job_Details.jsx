@@ -4,9 +4,13 @@ import { MdDeleteForever } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import "react-medium-image-zoom/dist/styles.css";
 import { FaDownload } from "react-icons/fa";
+import CustomSizeModal from "../../helpers/CustomSizeModal"; // adjust path
 
-
-const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
+const Job_Details = ({
+  onChange = () => {},
+  initialData = {},
+  jobCategories = [],
+}) => {
   const defaultData = {
     jobName: "",
     jobCardId: "",
@@ -14,22 +18,29 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
     category: "",
     quantity: "",
     jobSize: "",
+    customWidth: "",
+    customHeight: "",
+    unit: "mm",
+    binding_type: "",
+    paper_GSM: "",
+    Machine_name: "",
     pages: "1",
-    color: "",
-    ink: "",
+    color: "singleColor",
+    ink: "black",
     paperName: "",
-    paperColor: "",
+    paperColor: "White",
     job_description: "",
     sampleImage: null,
-    PrintingSide:"",
-    When_to_give_goods:"",
-    Time_of_give_goods:"",
+    PrintingSide: "",
+    When_to_give_goods: "",
+    Time_of_give_goods: "",
   };
 
   const [previewFile, setPreviewFile] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [data, setData] = useState({ ...defaultData, ...initialData });
   const [viewMode, setViewMode] = useState("fit");
+  const [showCustomSizeModal, setShowCustomSizeModal] = useState(false);
 
   useEffect(() => {
     setData({ ...defaultData, ...initialData });
@@ -58,6 +69,10 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
     const { name, value } = e.target;
     let updatedData = { ...data, [name]: value };
 
+    if (name === "jobSize" && value === "Custom") {
+      setShowCustomSizeModal(true); // show modal
+    }
+
     if (name === "color") {
       if (value === "MultiColor") {
         updatedData.ink = "multi";
@@ -68,6 +83,14 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
 
     setData(updatedData);
     onChange(updatedData);
+  };
+
+  const handleConfirm = () => {
+    setShowCustomSizeModal(false);
+    setData((prev) => ({
+      ...prev,
+      jobSize: "Custom",
+    }));
   };
 
   const handleUploadJob = (e) => {
@@ -123,7 +146,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-4"
               />
-              
+
               <input
                 type="number"
                 id="jobCardId"
@@ -136,9 +159,9 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               />
             </div>
 
-             {/* Job Category */}
-             <div className="grid grid-cols-6 mb-2">
-             <label
+            {/* Job Category */}
+            <div className="grid grid-cols-6 mb-2">
+              <label
                 htmlFor="category"
                 className="col-span-1 text-sm pl-1 flex items-center"
               >
@@ -149,45 +172,50 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 id="category"
                 value={data.category || ""}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-5"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               >
                 <option value="" disabled>
                   Select a category
                 </option>
-                {/* {JobCategory.map((el, index) => (
-                  <option value={el.value} key={el.value + index}>
+                {jobCategories.map((el, index) => (
+                  <option value={el.value} key={el._id || index}>
                     {el.label}
                   </option>
-                ))} */}
+                ))}
               </select>
 
-
-              
+              <label
+                htmlFor="binding_type"
+                className="col-span-1 text-sm pl-1 flex items-center"
+              >
+                Binding Type
+              </label>
+              <select
+                name="binding_type"
+                id="binding_type"
+                value={data.binding_type || ""}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+              >
+                <option value="" disabled>
+                  Select Binding Type
+                </option>
+                <option value="Saddle Stitching">Saddle Stitching</option>
+                <option value="Perfect Binding">Perfect Binding</option>
+                <option value="Hard Cover">Hard Cover (Case Binding)</option>
+                <option value="Spiral Binding">Spiral Binding</option>
+                <option value="Wiro Binding">Wiro Binding</option>
+                <option value="Section Sewn">Section Sewn (Smyth Sewn)</option>
+                <option value="Center Pin">Center Pin / Center Stitch</option>
+                <option value="Comb Binding">Comb Binding</option>
+              </select>
             </div>
 
             {/* Quantity */}
             <div className="grid grid-cols-6 mb-2">
               <label
-                htmlFor="PrintingSide"
-                className="col-span-1 text-sm pl-1 flex items-center"
-              >
-                Print side:
-              </label>
-              <select
-                name="PrintingSide"
-                id="PrintingSide"
-                value={data.PrintingSide || ""}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-              >
-                <option value="SingleSide">Single side</option>  
-                <option value="BothSide">Both side</option>
-
-              </select>
-
-              <label
                 htmlFor="quantity"
-                className="col-span-1 text-sm pl-1 mx-4 flex items-center"
+                className="col-span-1 text-sm pl-1  flex items-center"
               >
                 Quantity:
               </label>
@@ -199,34 +227,6 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               />
-            </div>
-
-            {/* Job Size & Pages */}
-            <div className="grid grid-cols-6 mb-2">
-              <label
-                htmlFor="jobSize"
-                className="col-span-1 text-sm pl-1 flex items-center"
-              >
-                Job Size:
-              </label>
-              <select
-                name="jobSize"
-                id="jobSize"
-                value={data.jobSize || ""}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-              >
-                <option value="" disabled>
-                  Select Job Size
-                </option>
-                <option value="A5">A5</option>
-                <option value="A4">A4</option>
-                <option value="A3">A3</option>
-                <option value="demi1/8">Demi 1/8</option>
-                <option value="demi1/4">Demi 1/4</option>
-                <option value="demi1/2">Demi 1/2</option>
-                <option value="12X18 inch">12X18 inch</option>
-              </select>
 
               <label
                 htmlFor="pages"
@@ -242,6 +242,83 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               />
+            </div>
+
+            {/* Job Size & Pages */}
+            <div className="grid grid-cols-6 mb-2">
+              <label
+                htmlFor="jobSize"
+                className="col-span-1 text-sm pl-1 flex items-center"
+              >
+                Job Size
+              </label>
+              <select
+                name="jobSize"
+                id="jobSize"
+                value={data.jobSize || ""}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+              >
+                <option value="" disabled>
+                  Select Job Size
+                </option>
+
+                {/* 📏 ISO Standard Sizes */}
+                <option value="A6">A6 (105 × 148 mm)</option>
+                <option value="A5">A5 (148 × 210 mm)</option>
+                <option value="A4">A4 (210 × 297 mm)</option>
+                <option value="A3">A3 (297 × 420 mm)</option>
+                <option value="A2">A2 (420 × 594 mm)</option>
+                <option value="A1">A1 (594 × 841 mm)</option>
+                <option value="A0">A0 (841 × 1189 mm)</option>
+
+                {/* 🧾 Demy / Indian Paper Sizes */}
+                <option value="Demy 1/8">Demy 1/8 (5.5" × 8.5")</option>
+                <option value="Demy 1/4">Demy 1/4 (8.5" × 11")</option>
+                <option value="Demy 1/2">Demy 1/2 (11" × 17")</option>
+
+                {/* 🖨️ Commercial Printing Sizes */}
+                <option value="8.5x11 inch">8.5 × 11 inch (Letter)</option>
+                <option value="11x17 inch">11 × 17 inch (Tabloid)</option>
+                <option value="12x18 inch">12 × 18 inch</option>
+                <option value="13x19 inch">13 × 19 inch</option>
+                <option value="17x22 inch">17 × 22 inch</option>
+                <option value="19x25 inch">
+                  19 × 25 inch (Offset sheet size)
+                </option>
+                <option value="23x36 inch">23 × 36 inch</option>
+                <option value="25x38 inch">25 × 38 inch</option>
+                <option value="SRA3">SRA3 (320 × 450 mm)</option>
+
+                {/* 🖼️ Custom */}
+
+                {data.jobSize === "Custom" &&
+                  data.customWidth &&
+                  data.customHeight && (
+                    <option value="Custom">
+                      Custom Size ({data.customWidth} × {data.customHeight}{" "}
+                      {data.unit})
+                    </option>
+                  )}
+                <option value="Custom">🛠️ Custom Size</option>
+              </select>
+
+              <label
+                htmlFor="PrintingSide"
+                className="col-span-1 text-sm pl-1 flex items-center"
+              >
+                Print side:
+              </label>
+              <select
+                name="PrintingSide"
+                id="PrintingSide"
+                value={data.PrintingSide || ""}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+              >
+                <option value="SingleSide">Single side</option>
+                <option value="BothSide">Both side</option>
+              </select>
             </div>
 
             {/* Color & Ink */}
@@ -287,7 +364,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               </select>
             </div>
 
-            {/* Paper & Description */}
+            {/* Paper & Paper GSM*/}
             <div className="grid grid-cols-6 mb-2">
               <label
                 htmlFor="paperName"
@@ -303,14 +380,66 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               >
                 <option value="" disabled>
-                  Select Paper
+                  Select Paper Type
                 </option>
-                <option value="Simple_paper">Simple Paper</option>
-                <option value="Hanuman">Hanuman</option>
-                <option value="Sirpur">Sirpur</option>
-                <option value="Art">Art</option>
-                <option value="Sticker">Sticker</option>
-                <option value="Transparent_sticker">Transparent Sticker</option>
+                <option value="Maplitho">Maplitho</option>
+                <option value="Art Paper (Gloss)">Art Paper (Gloss)</option>
+                <option value="Art Paper (Matt)">Art Paper (Matt)</option>
+                <option value="Bond">Bond Paper</option>
+                <option value="Kraft">Kraft Paper</option>
+                <option value="Ivory">Ivory / Bristol Board</option>
+                <option value="Duplex">Duplex Board</option>
+                <option value="Chrome">Chrome Paper</option>
+                <option value="Art Card">Art Card</option>
+                <option value="Newsprint">Newsprint</option>
+              </select>
+
+              <label
+                htmlFor="paper_GSM"
+                className="col-span-1 text-sm pl-1 ml-2 flex items-center font-normal "
+              >
+                Paper GSM
+              </label>
+              <input
+                type="number"
+                id="paper_GSM"
+                name="paper_GSM"
+                placeholder="GSM (Grams per Square Meter)"
+                value={data.paper_GSM}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                required
+              />
+            </div>
+
+            {/* Machine & Paper Color*/}
+            <div className="grid grid-cols-6 mb-2">
+              <label
+                htmlFor="Machine_name"
+                className="col-span-1 text-sm pl-1  flex items-center font-normal"
+              >
+                Printer
+              </label>
+              <select
+                name="Machine_name"
+                id="Machine_name"
+                value={data.Machine_name}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+              >
+                <option value="" disabled>
+                  Select Printer
+                </option>
+                <option value="Print_outside">Print outside</option>
+                <option value="SWIFT_1">SWIFT 1</option>
+                <option value="SWIFT_2">SWIFT 2</option>
+                <option value="SWIFT_3">SWIFT 3</option>
+                <option value="SAHIL">SAHIL</option>
+                <option value="RULLING">RULLING</option>
+                <option value="SCREEN">SCREEN</option>
+                <option value="RISO">RISO</option>
+                <option value="RISO_COM_COLOR">RISO COM COLOR</option>
+                <option value="KONICA_MINOLTA">KONICA MINOLTA</option>
               </select>
 
               <label
@@ -335,6 +464,7 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
               </select>
             </div>
 
+            {/* Delivery Date and time */}
             <div className="grid grid-cols-6 mb-2 justify-center">
               <label
                 htmlFor="When_to_give_goods"
@@ -350,14 +480,13 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 value={data.When_to_give_goods}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-               
               />
 
               <label
                 htmlFor="Time_of_give_goods"
                 className="col-span-1 text-sm  px-8   flex items-center font-normal "
               >
-               Time
+                Time
               </label>
               <input
                 type="time"
@@ -367,12 +496,11 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 value={data.Time_of_give_goods}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                
               />
             </div>
 
             {/* Job Description */}
-            <div className="grid grid-cols-6 mb-2">
+            <div className="grid grid-cols-6 ">
               <label
                 htmlFor="job_description"
                 className="col-span-1 text-sm pl-1 flex items-start"
@@ -388,7 +516,6 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
                 rows={1}
               />
             </div>
-    
           </div>
         </div>
 
@@ -470,6 +597,17 @@ const Job_Details = ({ onChange = () => {}, initialData = {} }) => {
           </div>
         </div>
       </div>
+
+      {/* show CustomSize Modal */}
+      <CustomSizeModal
+        isOpen={showCustomSizeModal}
+        onClose={() => setShowCustomSizeModal(false)}
+        onConfirm={handleConfirm}
+        width={data.customWidth}
+        height={data.customHeight}
+        unit={data.unit}
+        onChange={handleInputChange}
+      />
 
       {/* Fullscreen Modal Preview */}
       {modalOpen && (

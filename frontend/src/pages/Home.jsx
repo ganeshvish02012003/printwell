@@ -97,19 +97,31 @@ const Home = () => {
     (job) => job?.job?.subStatus === "Print"
   ).length;
   const print_Printer_1 = allJobs.filter(
-    (job) => job?.job?.subStatus === "Printer 1"
+    (job) => job?.job?.subStatus === "SWIFT 1"
   ).length;
   const print_Printer_2 = allJobs.filter(
-    (job) => job?.job?.subStatus === "Printer 2"
+    (job) => job?.job?.subStatus === "SWIFT 2"
   ).length;
   const print_Printer_3 = allJobs.filter(
-    (job) => job?.job?.subStatus === "Printer 3"
+    (job) => job?.job?.subStatus === "SWIFT 3"
   ).length;
   const print_Printer_4 = allJobs.filter(
-    (job) => job?.job?.subStatus === "Printer 4"
+    (job) => job?.job?.subStatus === "SAHIL"
   ).length;
   const print_Printer_5 = allJobs.filter(
-    (job) => job?.job?.subStatus === "Printer 5"
+    (job) => job?.job?.subStatus === "RULLING"
+  ).length;
+    const print_Printer_6 = allJobs.filter(
+    (job) => job?.job?.subStatus === "SCREEN"
+  ).length;
+    const print_Printer_7 = allJobs.filter(
+    (job) => job?.job?.subStatus === "RISO"
+  ).length;
+    const print_Printer_8 = allJobs.filter(
+    (job) => job?.job?.subStatus === "RISO COM COLOR"
+  ).length;
+      const print_Printer_9 = allJobs.filter(
+    (job) => job?.job?.subStatus === "KONICA MINOLTA"
   ).length;
   const print_Binding = allJobs.filter(
     (job) => job?.job?.subStatus === "Binding"
@@ -136,7 +148,11 @@ const Home = () => {
     print_Printer_2 +
     print_Printer_3 +
     print_Printer_4 +
-    print_Printer_5;
+    print_Printer_5 +
+    print_Printer_6 +
+    print_Printer_7 +
+    print_Printer_8 +
+    print_Printer_9;
 
   const Active_Bind =
   Bind_To_Binding +

@@ -33,11 +33,15 @@ const JobSchema = new mongoose.Schema(
 
           // Print Flow
           "print To Do",
-          "Printer 1",
-          "Printer 2",
-          "Printer 3",
-          "Printer 4",
-          "Printer 5",
+          "SWIFT 1",
+          "SWIFT 2",
+          "SWIFT 3",
+          "SAHIL",
+          "RULLING",
+          "SCREEN",
+          "RISO",
+          "RISO COM COLOR",
+          "KONICA MINOLTA",
           "Binding",
 
           // Binding Flow
@@ -58,6 +62,7 @@ const JobSchema = new mongoose.Schema(
         default: "",
       },
       category: { type: String, default: "" },
+      binding_type: { type: String, default: "" },
       quantity: { type: Number, default: "" },
       jobSize: { type: String, default: "" },
       pages: { type: Number, default: "" },
@@ -70,6 +75,8 @@ const JobSchema = new mongoose.Schema(
       PrintingSide: { type: String, default: "" },
       When_to_give_goods: { type: String, default: "" },
       Time_of_give_goods: { type: String, default: "" },
+      Machine_name: { type: String, default: "" },
+      paper_GSM: { type: String, default: "" },
     },
     composing: {
       jobName: { type: String, default: "" },

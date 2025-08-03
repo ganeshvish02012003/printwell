@@ -129,7 +129,7 @@ const handleSubmit = async (e) => {
         <table className="w-full table-auto border-collapse">
           <thead className="bg-slate-500 text-white sticky top-0">
             <tr>
-              <th className="border p-2">Sn.</th>
+              <th className="border p-2">Sn.</th> 
               <th className="border p-2">Label</th>
               <th className="border p-2">Value</th>
               <th className="border p-2">Action</th>

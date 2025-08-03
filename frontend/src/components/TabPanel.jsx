@@ -31,6 +31,7 @@ export default function FullWidthTabs({ onClose, fetchAllJob }) {
   const [value, setValue] = useState(0);
   const [loading, setLoading] = useState(false);
   const [allCustomers, setAllCustomers] = useState([]);
+  const [jobCategories, setJobCategories] = useState([]);
 
   // Persistent Form State
   const [formData, setFormData] = useState({
@@ -69,6 +70,28 @@ export default function FullWidthTabs({ onClose, fetchAllJob }) {
 
     fetchCustomers();
   }, []);
+
+  // fetch categories
+useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch(SummaryApi.alljobCategory.url, {
+        method: SummaryApi.alljobCategory.method,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await res.json();
+      if (data.success) {
+        setJobCategories(data.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch job categories:", err);
+    }
+  };
+
+  fetchCategories();
+}, []);
 
   // Update form data dynamically
   const handleFormDataChange = (section, data) => {
@@ -145,7 +168,7 @@ export default function FullWidthTabs({ onClose, fetchAllJob }) {
 
   return (
     <div className=" z-10 fixed w-full h-full backdrop-blur-sm top-0 bottom-0 left-0 right-0 flex justify-center items-center">
-      <div className="bg-slate-50 p-4 rounded w-full h-full max-w-4xl max-h-[90%] overflow-hidden">
+      <div className="bg-slate-50 p-4 rounded w-full h-full max-w-4xl max-h-[95%] overflow-hidden">
         <div>
           <div className="flex justify-between items-center pb-3">
             <h2 className="font-bold text-lg">Add Jobs</h2>
@@ -204,6 +227,7 @@ export default function FullWidthTabs({ onClose, fetchAllJob }) {
                 <Job_Details
                   onChange={(data) => handleFormDataChange("job", data)}
                   initialData={formData.job}
+                  jobCategories={jobCategories}
                 />
               </TabPanel>
 
@@ -244,7 +268,7 @@ export default function FullWidthTabs({ onClose, fetchAllJob }) {
 
               <button
                 type="submit"
-                className="px-4 my-4 py-2 w-full bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="px-4 my-2 py-2 w-full bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 disabled={loading}
               >
                 {loading ? "Submitting..." : "Submit"}
