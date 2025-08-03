@@ -15,6 +15,7 @@ import MenageJobCard from "../components/AdminCompoments/MenageJobCard";
 import PeymentStatus from "../components/AdminCompoments/PeymentStatus";
 import JobHistory from "../components/AdminCompoments/JobHistory";
 import JobCategory from "../components/AdminCompoments/jobCategory";
+import WellComePage from "../pages/WellComePage";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,11 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "",
+        path: "/",
+        element: <WellComePage/>,
+      },
+      {
+        path: "/Home",
         element: <Home />,
       },
       {
@@ -34,7 +39,7 @@ const router = createBrowserRouter([
         element: <SignUp />,
       },
       {
-        path: "admin-panel",
+        path: "Home/admin-panel",
         element: <AdminPanal />,
         _children: [
           {
@@ -74,19 +79,19 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: "view-board/Printing",
+        path: "Home/view-board/Printing",
         element: <ViewPrintBoardPage />,
       },
       {
-        path: "view-board/Desgin",
+        path: "Home/view-board/Desgin",
         element: <ViewDesginBoardPage />,
       },
       {
-        path: "view-board/Other_work",
+        path: "Home/view-board/Other_work",
         element: <ViewBindBoardpage />,
       },
       {
-        path: "view-board/Completed",
+        path: "Home/view-board/Completed",
         element: <ViewFinishedBoardPage />,
       },
     ],

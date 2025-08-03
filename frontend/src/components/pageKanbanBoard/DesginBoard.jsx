@@ -28,7 +28,7 @@ const DesginBoard = ({
         <div className="flex justify-between items-center p-1 px-4 ">
           <p className={`flex-1 ${text}  text-center text-xl font-bold`}>
             {boards.title}
-            <span className={` text-gray-100 ${text}  text-md`}>
+            <span className={` text-white  text-md`}>
               {" "}
               {boards.cards.length}
             </span>

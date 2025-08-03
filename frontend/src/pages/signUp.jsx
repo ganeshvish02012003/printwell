@@ -80,9 +80,10 @@ const SignUp = () => {
 
 
   return (
-    <div className="flex justify-center pt-2">
+        <div className=" bg-slate-400 h-[calc(88vh)] p-2 mx-1 rounded-md">
+      <div className="flex bg-slate-200 h-full justify-center py-12">
       <div className="w-auto  bg-slate-400 rounded-lg pt-2">
-        <h1 className="text-center text-3xl font-semibold">SignUp</h1>
+        <h1 className="text-center text-3xl text-white font-semibold">SignUp</h1>
 
         <form action="" >
           <div className="p-4">
@@ -216,6 +217,7 @@ const SignUp = () => {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 };

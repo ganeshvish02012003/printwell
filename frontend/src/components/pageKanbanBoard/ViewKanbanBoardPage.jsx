@@ -9,6 +9,8 @@ const ViewKanbanBoardPage = ({
   mainStatus,
   subStatuses = [],
   printSubStatus = null,
+  color = "bg-gradient-to-r from-[#9C27B0] to-[#E1BEE7]", // default fallback color
+  text="text-black"
 }) => {
   const [boards, setBoards] = useState([]);
   const [targetCard, setTargetCard] = useState({ bid: "", cid: "" });
@@ -285,7 +287,8 @@ const ViewKanbanBoardPage = ({
                 handleDragEnd={handleDragEnd}
                 handleDragEnter={handleDragEnter}
                 fetchAllJob={fetchAllJob}
-                color="bg-gradient-to-r from-[#9C27B0] to-[#E1BEE7]"
+                color={color}
+                text={text}
               />
             ))}
         </div>
@@ -306,7 +309,8 @@ const ViewKanbanBoardPage = ({
                   fetchAllJob={fetchAllJob}
                   flex="flex"
                   hight="h-[calc(100vh-525px)] py-0 w-screen"
-                  color="bg-gradient-to-r from-[#9C27B0] to-[#E1BEE7]"
+                  color={color}
+                  text={text}
                 />
               ))}
           </div>

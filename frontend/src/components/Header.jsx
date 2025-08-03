@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdLogin } from "react-icons/md";
 import { MdLogout } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "../store/userSlice";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
 import ROLE from "../common/role";
+import { FaRegCircleUser } from "react-icons/fa6";
 
 const Header = () => {
   const user = useSelector((state) => state?.user?.user);
   const [menuDisplay, setMenuDisplay] = useState(false);
   // console.log("user header", user);
   const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      if (!user?.role) {
+        navigate("/");
+      }
+    }, [user, navigate]);
+
 
   const handleLogout = async () => {
     const fetchData = await fetch(SummaryApi.logout_user.url, {
@@ -24,6 +33,7 @@ const Header = () => {
     if (data.success) {
       toast.success(data.message);
       dispatch(setUserDetails(null));
+      navigate("/")
     }
 
     if (data.error) {
@@ -61,7 +71,7 @@ const Header = () => {
                 </label>
               </div>
               <div className="flex px-2 justify-center lg:justify-start">
-                <Link to={"/"} className="text-2xl font-bold lg:text-3xl ">
+                <Link to={"/Home"} className="text-2xl font-bold lg:text-3xl ">
                   GPCI Maneger
                 </Link>
               </div>
@@ -109,7 +119,7 @@ const Header = () => {
                       <nav>
                         {user?.role === ROLE.ADMIN && (
                           <Link
-                            to={"/admin-panel/Menage-Job-Card"} 
+                            to={"/Home/admin-panel/Menage-Job-Card"} 
                             className="whitespace-nowrap shadow-lg bg-white  hover:bg-slate-100 p-2 hidden md:block "
                           >
                             {" "}

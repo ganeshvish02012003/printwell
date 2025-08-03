@@ -8,6 +8,9 @@ import { Line } from "react-chartjs-2";
 import { LineElement, PointElement } from "chart.js";
 import { Link } from "react-router-dom";
 import SummaryApi from "../common"; // ✅ import your API
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import ROLE from "../common/role";
 
 import {
   Chart as ChartJS,
@@ -31,6 +34,8 @@ ChartJS.register(LineElement, PointElement);
 
 const Home = () => {
   const [allJobs, setAllJobs] = useState([]);
+  const user = useSelector((state) => state?.user?.user);
+  const navigate = useNavigate();
 
   const fetchAllJobs = async () => {
     try {
@@ -43,8 +48,11 @@ const Home = () => {
   };
 
   useEffect(() => {
+    if (user?.role !== ROLE.ADMIN && user?.role !== ROLE.EMPLOYEE) {
+      navigate("/");
+    }
     fetchAllJobs();
-  }, []);
+  }, [user, navigate]);
 
   useEffect(() => {
     console.log(
@@ -111,27 +119,37 @@ const Home = () => {
   const print_Printer_5 = allJobs.filter(
     (job) => job?.job?.subStatus === "RULLING"
   ).length;
-    const print_Printer_6 = allJobs.filter(
+  const print_Printer_6 = allJobs.filter(
     (job) => job?.job?.subStatus === "SCREEN"
   ).length;
-    const print_Printer_7 = allJobs.filter(
+  const print_Printer_7 = allJobs.filter(
     (job) => job?.job?.subStatus === "RISO"
   ).length;
-    const print_Printer_8 = allJobs.filter(
+  const print_Printer_8 = allJobs.filter(
     (job) => job?.job?.subStatus === "RISO COM COLOR"
   ).length;
-      const print_Printer_9 = allJobs.filter(
+  const print_Printer_9 = allJobs.filter(
     (job) => job?.job?.subStatus === "KONICA MINOLTA"
   ).length;
   const print_Binding = allJobs.filter(
     (job) => job?.job?.subStatus === "Binding"
   ).length;
 
-  const Bind_Binding = allJobs.filter((job) => job?.job?.subStatus === "Binding").length;
-  const Bind_To_Binding = allJobs.filter((job) => job?.job?.subStatus === "To Binding").length;
-  const Bind_Cutting = allJobs.filter((job) => job?.job?.subStatus === "Cutting").length;
-  const Bind_perfeting = allJobs.filter((job) => job?.job?.subStatus === "perfeting").length;
-  const Bind_Lamination = allJobs.filter((job) => job?.job?.subStatus === "Lamination").length;
+  const Bind_Binding = allJobs.filter(
+    (job) => job?.job?.subStatus === "Binding"
+  ).length;
+  const Bind_To_Binding = allJobs.filter(
+    (job) => job?.job?.subStatus === "To Binding"
+  ).length;
+  const Bind_Cutting = allJobs.filter(
+    (job) => job?.job?.subStatus === "Cutting"
+  ).length;
+  const Bind_perfeting = allJobs.filter(
+    (job) => job?.job?.subStatus === "perfeting"
+  ).length;
+  const Bind_Lamination = allJobs.filter(
+    (job) => job?.job?.subStatus === "Lamination"
+  ).length;
   // const Bind_perfeting = allJobs.filter((job) => job?.job?.subStatus === "perfeting").length;
 
   const total_jobs =
@@ -155,10 +173,7 @@ const Home = () => {
     print_Printer_9;
 
   const Active_Bind =
-  Bind_To_Binding +
-  Bind_Cutting +
-  Bind_perfeting +
-  Bind_Lamination;
+    Bind_To_Binding + Bind_Cutting + Bind_perfeting + Bind_Lamination;
 
   const data = {
     labels: ["Active", "Pending"],
@@ -288,37 +303,36 @@ const Home = () => {
   // };
 
   // Generate last 7 days including today
-const getLast7Days = () => {
-  const days = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    const day = d.toLocaleDateString("en-US", { weekday: "short" }); // e.g., Mon
-    const date = d.getDate().toString().padStart(2, '0');
-    const month = (d.getMonth() + 1).toString().padStart(2, '0');
-    days.push(`${day} ${date}/${month}`); // Format: Mon 20/07
-  }
-  return days;
-};
+  const getLast7Days = () => {
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const day = d.toLocaleDateString("en-US", { weekday: "short" }); // e.g., Mon
+      const date = d.getDate().toString().padStart(2, "0");
+      const month = (d.getMonth() + 1).toString().padStart(2, "0");
+      days.push(`${day} ${date}/${month}`); // Format: Mon 20/07
+    }
+    return days;
+  };
 
-const barData = {
-  labels: getLast7Days(),
-  datasets: [
-    {
-      label: "Ordered Jobs",
-      data: orderedJobsPerDay,
-      backgroundColor: "#42A5F5", // Blue
-      borderRadius: 5,
-    },
-    {
-      label: "Completed Jobs",
-      data: completedJobsPerDay,
-      backgroundColor: "#FFA726", // Orange
-      borderRadius: 5,
-    },
-  ],
-};
-
+  const barData = {
+    labels: getLast7Days(),
+    datasets: [
+      {
+        label: "Ordered Jobs",
+        data: orderedJobsPerDay,
+        backgroundColor: "#42A5F5", // Blue
+        borderRadius: 5,
+      },
+      {
+        label: "Completed Jobs",
+        data: completedJobsPerDay,
+        backgroundColor: "#FFA726", // Orange
+        borderRadius: 5,
+      },
+    ],
+  };
 
   // ✅ Line Chart: Jobs Per Month
   const lineData = {
