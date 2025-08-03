@@ -79,14 +79,31 @@ const JobSchema = new mongoose.Schema(
       paper_GSM: { type: String, default: "" },
     },
     composing: {
-      jobName: { type: String, default: "" },
-      category: { type: String, default: "" },
-      quantity: { type: Number, default: 1 },
-      description: { type: String, default: "" },
-      proofs: {
-        type: [{ id: Number, status: String }],
-        default: [{ id: 1, status: null }],
+      proofChecklist: {
+        design: { type: Boolean, default: false },
+        setting: { type: Boolean, default: false },
+        typing: { type: Boolean, default: false },
+        master: { type: Boolean, default: false },
+        butter: { type: Boolean, default: false },
       },
+      proofs: {
+        type: [
+          {
+            id: { type: Number },
+            status: { type: String, default: null },
+          },
+        ],
+        default: [
+          { id: 1, status: null },
+          { id: 2, status: null },
+          { id: 3, status: null },
+          { id: 4, status: null },
+          { id: 5, status: null },
+        ],
+      },
+      finalDesignPath: { type: String, default: "" },
+
+      description: { type: String, default: "" },
       finalImage: { type: String, default: null },
     },
     paper: {

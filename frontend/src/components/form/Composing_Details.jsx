@@ -7,14 +7,18 @@ import { FaDownload } from "react-icons/fa";
 
 const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
   const defaultData = {
-    jobName: "",
-    category: "",
-    quantity: 1,
-    description: "",
+    proofChecklist: {
+      design: false,
+      setting: false,
+      typing: false,
+      master: false,
+      butter: false,
+    },
     proofs: [{ id: 1, status: null }],
+    finalDesignPath: "",
+    description: "",
     finalImage: null,
   };
-
 
   const [previewFile, setPreviewFile] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -79,15 +83,19 @@ const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
     document.body.removeChild(link);
   };
 
-  // const handleStatusChange = (index, status) => {
-  //   const updatedProofs = (data.proofs ?? []).map((proof, index) =>
-  //     i === index ? { ...proof, status } : proof
-  //   );
-  //   setData((prev) => ({ ...prev, proofs: updatedProofs }));
-  //   if (onChange) {
-  //     onChange({ ...data, proofs: updatedProofs });
-  //   }
-  // };
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    const updatedChecklist = {
+      ...data.proofChecklist,
+      [name]: checked,
+    };
+    const updatedData = {
+      ...data,
+      proofChecklist: updatedChecklist,
+    };
+    setData(updatedData);
+    onChange(updatedData);
+  };
 
   return (
     <div>
@@ -97,106 +105,118 @@ const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
       <div className="flex">
         <div className="w-3/4 p-2">
           <div className="rounded-xl">
-            <div className="grid grid-cols-6 mb-2">
-              <label
-                htmlFor="jobName"
-                className="col-span-1 text-sm pl-1 flex items-center"
-              >
-                Job Name:
-              </label>
-              <input
-                type="text"
-                id="jobName"
-                name="jobName"
-                placeholder="Job Name"
-                value={data.jobName ||""}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-5"
-              />
+            <div className="mb-3 grid grid-cols-6">
+              <p className="text-sm  mb-1 pl-1 col-span-1">Task</p>
+              <div className="col-span-5 grid grid-cols-1 md:grid-cols-3 gap-2">
+                {["design", "setting", "typing", "master", "butter"].map(
+                  (item) => (
+                    <div
+                      key={item}
+                      className="bg-slate-50 rounded flex justify-between items-center p-2 py-1"
+                    >
+                      <label
+                        htmlFor={item}
+                        className="flex-1 flex justify-between"
+                      >
+                        <span className="px-2 text-sm font-normal">
+                          {item.replace("_", " ")}
+                        </span>
+                        <input
+                          type="checkbox"
+                          name={item}
+                          id={item}
+                          checked={data.proofChecklist[item]}
+                          onChange={handleCheckboxChange}
+                          className="h-4 w-4"
+                        />
+                      </label>
+                    </div>
+                  )
+                )}
+              </div>
             </div>
-
-            <div className="grid grid-cols-6 mb-2 justify-center">
-              <label
-                htmlFor="Mobile_number"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal"
-              >
-                WhatApp No. :
-              </label>
-              <input
-                type="text"
-                id="Mobile_number"
-                name="Mobile_number"
-                placeholder="WhatApp for Proof"
-                value={data.Mobile_number || ""}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-5"
-                required
-              />
-            </div>
-            <div className="grid grid-cols-6 mb-2 justify-center">
-              <label
-                htmlFor="Mobile_number"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal"
-              >
-                Email :
-              </label>
-              <input
-                type="text"
-                id="Mobile_number"
-                name="Mobile_number"
-                placeholder="Mail for Proof"
-                value={data.Mobile_number || ""}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-5"
-                required
-              />
-            </div>
-
 
             <div className="grid grid-cols-6 mb-2">
               <h2 className="col-span-1 pl-1 text-sm flex items-start">
-                Proof Check 
+                Proof Check
               </h2>
-              {/* <div className="p-2 text-sm border rounded col-span-5">
-                <div className="grid grid-cols-1 md:grid-cols-6 gap-1">
-                  {data.proofs.map((proof, index) => (
-                    <button
-                      key={proof.id}
-                      onClick={() =>
-                        handleStatusChange(
-                          index,
-                          proof.status === "rejected" ? null : "rejected"
-                        )
-                      }
-                      onDoubleClick={() =>
-                        handleStatusChange(index, "approved")
-                      }
-                      className="p-1 rounded-md text-sm"
-                    >
-                      <div
-                        className={`h-14 rounded-md transition-all duration-300 ${
-                          proof.status === "approved"
-                            ? "bg-green-500"
-                            : proof.status === "rejected"
-                            ? "bg-red-500"
-                            : "bg-slate-50"
-                        }`}
-                      >
-                        <p className="text-sm p-1 pb-0 font-medium">
-                          Proof {index + 1}
-                        </p>
-                        <div className="flex justify-center text-xl">
-                          {proof.status === "approved"
-                            ? "✅"
-                            : proof.status === "rejected"
-                            ? "❌"
-                            : ""}
-                        </div>
+              <div className="p-2 text-sm border rounded col-span-5">
+                <div className="flex gap-2 flex-wrap">
+                  {[1, 2, 3, 4, 5].map((num, index) => {
+                    const proof = data.proofs[index] || {
+                      id: num,
+                      status: null,
+                    };
+                    const status = proof.status;
+
+                    let color = "bg-slate-200",
+                      label = "Pending";
+                    if (status === "send")
+                      (color = "bg-yellow-300"), (label = "Send");
+                    else if (status === "modified")
+                      (color = "bg-purple-400"), (label = "Modified");
+                    else if (status === "approved")
+                      (color = "bg-green-500"), (label = "Approved");
+
+                    const handleClick = () => {
+                      let newStatus = "send";
+                      if (status === "send") newStatus = "modified";
+                      const updatedProofs = [...data.proofs];
+                      updatedProofs[index] = { id: num, status: newStatus };
+                      setData({ ...data, proofs: updatedProofs });
+                      onChange({ ...data, proofs: updatedProofs });
+                    };
+
+                    const handleDoubleClick = () => {
+                      const updatedProofs = [...data.proofs];
+                      const currentProof = updatedProofs[index] || {
+                        id: num,
+                        status: null,
+                      };
+                      const currentStatus = currentProof.status;
+
+                      const newStatus =
+                        currentStatus === "approved" ? null : "approved";
+                      updatedProofs[index] = { id: num, status: newStatus };
+
+                      setData({ ...data, proofs: updatedProofs });
+                      onChange({ ...data, proofs: updatedProofs });
+                    };
+
+                    return (
+                      <div key={num} className="relative">
+                        <button
+                          type="button"
+                          onClick={handleClick}
+                          onDoubleClick={handleDoubleClick}
+                          className={`p-1 rounded-md text-sm text-white ${color} w-[80px]`}
+                          title="Click once for Send, again for Correction, double-click for Approval (or reset)"
+                        >
+                          <div className="h-14 flex flex-col justify-center items-center rounded-md">
+                            <p className="text-sm font-medium">Proof {num}</p>
+                            <span className="text-xs">{label}</span>
+                          </div>
+                        </button>
                       </div>
-                    </button>
-                  ))}
+                    );
+                  })}
                 </div>
-              </div> */}
+              </div>
+            </div>
+
+            {/* Final Design File Path */}
+            <div className="grid grid-cols-6 mb-2">
+              <label className="col-span-1 text-sm pl-1 flex items-center">
+                Design Path:
+              </label>
+              <input
+                type="text"
+                name="finalDesignPath"
+                value={data.finalDesignPath}
+                placeholder="e.g., /uploads/final_design.pdf"
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-5"
+              />
             </div>
 
             <div className="grid grid-cols-6 mb-2">
@@ -221,85 +241,84 @@ const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
 
         {/* final image */}
         <div className="w-1/4 px-2 pt-1">
-        <label htmlFor="sampleFile" className="block">
-        Final File
-        </label>
-        <input
-          type="file"
-          id="sampleFile"
-          accept="image/*,application/pdf"
-          onChange={handleUploadJob}
-          className="hidden"
-        />
-        <div
-          className="p-2 bg-slate-100 border rounded h-64 w-full flex justify-center items-center cursor-pointer overflow-hidden relative"
-          onClick={() => document.getElementById("sampleFile").click()}
-        >
-          {previewFile ? (
-            <>
-              {previewFile.endsWith(".pdf") ? (
-                <iframe
-                  src={previewFile}
-                  className="h-full w-full object-contain "
-                  title="PDF preview"
-                />
-              ) : (
-                <img
-                  src={previewFile}
-                  alt="Sample Preview"
-                  className="object-contain max-h-full max-w-full"
-                />
-              )}
-              <div className="absolute top-1 right-1 flex space-x-1">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent file input from opening
-                    handleDownloadFile();
-                  }}
-                  className="bg-white p-1 rounded shadow hover:bg-green-200"
-                  title="Download"
-                >
-                  <FaDownload size={16} />
-                </button>
+          <label htmlFor="sampleFile" className="block">
+            Final File
+          </label>
+          <input
+            type="file"
+            id="sampleFile"
+            accept="image/*,application/pdf"
+            onChange={handleUploadJob}
+            className="hidden"
+          />
+          <div
+            className="p-2 bg-slate-100 border rounded h-64 w-full flex justify-center items-center cursor-pointer overflow-hidden relative"
+            onClick={() => document.getElementById("sampleFile").click()}
+          >
+            {previewFile ? (
+              <>
+                {previewFile.endsWith(".pdf") ? (
+                  <iframe
+                    src={previewFile}
+                    className="h-full w-full object-contain "
+                    title="PDF preview"
+                  />
+                ) : (
+                  <img
+                    src={previewFile}
+                    alt="Sample Preview"
+                    className="object-contain max-h-full max-w-full"
+                  />
+                )}
+                <div className="absolute top-1 right-1 flex space-x-1">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent file input from opening
+                      handleDownloadFile();
+                    }}
+                    className="bg-white p-1 rounded shadow hover:bg-green-200"
+                    title="Download"
+                  >
+                    <FaDownload size={16} />
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation(); // <-- prevent file input from opening
-                    openModal();
-                  }}
-                  className="bg-white p-1 rounded shadow hover:bg-slate-200"
-                  title="Preview"
-                >
-                  <FaEye size={16} />
-                </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation(); // <-- prevent file input from opening
+                      openModal();
+                    }}
+                    className="bg-white p-1 rounded shadow hover:bg-slate-200"
+                    title="Preview"
+                  >
+                    <FaEye size={16} />
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation(); // <-- prevent file input from opening
-                    handleDeleteFile();
-                  }}
-                  className="bg-white p-1 rounded shadow hover:bg-red-200"
-                  title="Delete"
-                >
-                  <MdDeleteForever size={16} />
-                </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation(); // <-- prevent file input from opening
+                      handleDeleteFile();
+                    }}
+                    className="bg-white p-1 rounded shadow hover:bg-red-200"
+                    title="Delete"
+                  >
+                    <MdDeleteForever size={16} />
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="text-slate-500 flex flex-col items-center gap-2">
+                <span className="text-4xl">📤</span>
+                <p>Upload Image or PDF</p>
               </div>
-            </>
-          ) : (
-            <div className="text-slate-500 flex flex-col items-center gap-2">
-              <span className="text-4xl">📤</span>
-              <p>Upload Image or PDF</p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
       </div>
 
       {/* Preview Section */}
-     
 
       {/* Fullscreen Modal Preview */}
       {modalOpen && (
