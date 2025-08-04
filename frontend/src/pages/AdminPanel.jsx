@@ -64,7 +64,7 @@ const AdminPanel = () => {
                 }`
               }
             >
-              All Jobs
+              Active Jobs
             </NavLink>
             <NavLink
               to="Menage-Job-Card"

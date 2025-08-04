@@ -222,7 +222,7 @@ const AllCustomer = () => {
                       : "bg-slate-200";
 
                   return (
-                    <tr key={c._id} className={`text-center ${rowBg}`}>
+                    <tr key={c._id} className={`text-center hover:bg-gray-400 ${rowBg}`}>
                       <td className="border border-slate-100 py-1">
                         {c.customerId}
                       </td>

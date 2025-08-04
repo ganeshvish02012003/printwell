@@ -52,7 +52,7 @@ const Board = ({
                     className="text-center rounded-md hover:bg-slate-400 hover:text-white cursor-pointer"
                     onClick={() => {
                       setShowDropdown(false);
-                      navigate(`/view-board/${boards.id}`);
+                      navigate(`/Home/view-board/${boards.id}`);
                     }}
                   >
                     View Board
