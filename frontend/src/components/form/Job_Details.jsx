@@ -385,11 +385,11 @@ const Job_Details = ({
                 <option value="Maplitho">Maplitho</option>
                 <option value="Art Paper (Gloss)">Art Paper (Gloss)</option>
                 <option value="Art Paper (Matt)">Art Paper (Matt)</option>
-                <option value="Bond">Bond Paper</option>
-                <option value="Kraft">Kraft Paper</option>
-                <option value="Ivory">Ivory / Bristol Board</option>
-                <option value="Duplex">Duplex Board</option>
-                <option value="Chrome">Chrome Paper</option>
+                <option value="Bond Paper">Bond Paper</option>
+                <option value="Kraft Paper">Kraft Paper</option>
+                <option value="Ivory / Bristol Board">Ivory / Bristol Board</option>
+                <option value="Duplex Board">Duplex Board</option>
+                <option value="Chrome Paper">Chrome Paper</option>
                 <option value="Art Card">Art Card</option>
                 <option value="Newsprint">Newsprint</option>
               </select>

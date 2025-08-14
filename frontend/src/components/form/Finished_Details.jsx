@@ -1,40 +1,75 @@
 import React, { useEffect, useState } from "react";
 
-const Finished_Details = ({ initialData, onChange }) => {
-
-const defaultData = {
-
-  Finished_goods_no: "",
-  Finished_goods_pkt: "",
-  Previous_rate: "",
-  Update_Rate: "",
-  Challan_no: "",
-  Bill_no: "",
-  Transmission: "",
-  Transmission_date: "",
-  HSN_Code: "",
-  Tax_Rate: "",
-  finished_description: "",
- 
+const Finished_Details = ({
+  initialData,
+  onChange,
+  jobData = {},
+  jobCategories = [],
+}) => {
+  const defaultData = {
+    Finished_goods_no: "",
+    Finished_goods_pkt: "",
+    Rate: "",
+    rate_unit: "",
+    Peyment_Status: "Pending",
+    Peyment_Mode: "Pending",
+    Total_Amount: "0",
+    Advance: "0",
+    Delivery_Charge: "0",
+    Discount: "0",
+    Due_Amount: "0",
+    Challan_no: "",
+    Bill_no: "",
+    Transmission: "",
+    Transmission_date: "",
+    HSN_Code: "",
+    Tax_Rate: "",
+    finished_description: "",
   };
 
   const [data, setData] = useState({ ...defaultData, ...initialData });
 
   useEffect(() => {
-    if (JSON.stringify(data) !== JSON.stringify({ ...defaultData, ...initialData })) {
+    if (jobData && jobData.quantity !== undefined) {
+      console.log("Job Quantity:", jobData.quantity);
+    }
+  }, [jobData]);
+
+  useEffect(() => {
+    if (
+      JSON.stringify(data) !==
+      JSON.stringify({ ...defaultData, ...initialData })
+    ) {
       setData((prevData) => ({ ...prevData, ...initialData }));
     }
   }, [initialData]); // Runs only when initialData changes
 
- 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const updatedData = { ...data, [name]: value };
+    let updatedData = { ...data, [name]: value };
+
+    // Convert safely to numbers
+    const rate = parseFloat(updatedData.Rate) || 0;
+    const qty = parseFloat(jobData.quantity) || 0;
+    const discount = parseFloat(updatedData.Discount) || 0;
+    const delivery = parseFloat(updatedData.Delivery_Charge) || 0;
+    const taxRate = parseFloat(updatedData.Tax_Rate) || 0;
+    const advance = parseFloat(updatedData.Advance) || 0;
+
+    // 1️⃣ Calculate Total Amount only from Rate × Quantity
+    let totalAmount = rate * qty;
+    updatedData.Total_Amount = totalAmount.toFixed(2);
+
+    // 2️⃣ Calculate Due Amount with extra fields
+    let due = totalAmount - advance - discount + delivery;
+    if (taxRate > 0) {
+      due += (due * taxRate) / 100;
+    }
+    updatedData.Due_Amount = due.toFixed(2);
+
     setData(updatedData);
     onChange(updatedData);
   };
-
 
   return (
     <div>
@@ -42,7 +77,7 @@ const defaultData = {
         Finished Details
       </p>
       <div className="flex">
-        <div className="bg  w-3/4 p-2"> 
+        <div className="bg  w-3/4 p-2">
           <div className="   rounded-xl">
             <div className="grid grid-cols-6 mb-2 justify-center">
               <label
@@ -59,7 +94,6 @@ const defaultData = {
                 value={data.Finished_goods_no}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                
               />
 
               <label
@@ -76,43 +110,172 @@ const defaultData = {
                 value={data.Finished_goods_pkt}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-               
               />
             </div>
 
             <div className="grid grid-cols-6 mb-2 justify-center">
               <label
-                htmlFor="Previous_rate"
+                htmlFor="Rate"
                 className="col-span-1 text-sm pl-1 flex items-center font-normal "
               >
-                Prev. Rate
+                Rate
               </label>
               <input
                 type="text"
-                id="Previous_rate"
-                name="Previous_rate"
-                placeholder="Previous Rate"
-                value={data.Previous_rate}
+                id="Rate"
+                name="Rate"
+                placeholder="Rate"
+                value={data.Rate}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                required
+                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+              />
+              <select
+                name="Rate_unit"
+                id="Rate_unit"
+                value={data.Rate_unit}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+              >
+                <option value="" disabled>
+                  Per unit
+                </option>
+                {jobCategories.map((el, index) => (
+                  <option value={el.value} key={el._id || index}>
+                    {el.label}
+                  </option>
+                ))}
+              </select>
+
+              <label
+                htmlFor="Peyment_Status"
+                className="col-span-1 text-sm pl-1 mx-2 flex items-center font-normal "
+              >
+                Peyment
+              </label>
+              <select
+                name="Peyment_Status"
+                id="Peyment_Status"
+                value={data.Peyment_Status}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border  text-sm rounded col-span-1"
+              >
+                <option value="Pending" disabled>
+                  Status
+                </option>
+                <option value="Semi_Paid">Semi Paid</option>
+                <option value="Paid">Paid</option>
+                <option value="Overdue">Overdue</option>
+              </select>
+              <select
+                name="Peyment_Mode"
+                id="Peyment_Mode"
+                value={data.Peyment_Mode}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+              >
+                <option value="Pending">Mode</option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="UPI">UPI</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="Cheque">Cheque</option>
+              </select>
+            </div>
+
+            <div className="grid grid-cols-6 mb-2 justify-center">
+              <label
+                htmlFor="Total_Amount"
+                className="col-span-1 text-sm pl-1 flex items-center font-normal "
+              >
+                Total Amount
+              </label>
+
+              <input
+                type="text"
+                id="Total_Amount"
+                name="Total_Amount"
+                placeholder="Total_Amount"
+                value={data.Total_Amount}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-1 font-bold"
+              />
+
+              <input
+                type="text"
+                id="Advance"
+                name="Advance"
+                placeholder="Advance"
+                value={data.Advance}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
               />
 
               <label
-                htmlFor="Update_Rate"
-                className="col-span-1 text-sm pl-1 mx-2 flex items-center font-normal "
+                htmlFor="Delivery_Charge"
+                className="col-span-1 text-sm pl-1 flex items-center font-normal "
               >
-                Update Rate
+                Other Amount
               </label>
               <input
                 type="text"
-                id="Update_Rate"
-                name="Update_Rate"
-                placeholder="Update Rate"
-                value={data.Update_Rate}
+                name="Delivery_Charge"
+                placeholder="Delivery Charge"
+                value={data.Delivery_Charge}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                required
+                className="p-0 bg-slate-50 border text-sm rounded col-span-1"
+              />
+              <input
+                type="text"
+                id="Discount"
+                name="Discount"
+                placeholder="Discount "
+                value={data.Discount}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+              />
+            </div>
+
+            <div className="grid grid-cols-6 mb-2 justify-center">
+              <label
+                htmlFor="Due_Amount"
+                className="col-span-1 text-sm pl-1 flex items-center font-normal "
+              >
+                Due Amount
+              </label>
+
+              <input
+                type="text"
+                id="Due_Amount"
+                name="Due_Amount"
+                placeholder="Due Amount"
+                value={data.Due_Amount}
+                readOnly
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2 font-bold"
+              />
+
+              <label
+                htmlFor="Transmission"
+                className="col-span-1 text-sm pl-1 mx-2 flex items-center font-normal "
+              >
+                Transmission
+              </label>
+              <input
+                type="text"
+                id="Transmission"
+                name="Transmission"
+                placeholder="Mode"
+                value={data.Transmission}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+              />
+              <input
+                type="Date"
+                id="Transmission_date"
+                name="Transmission_date"
+                placeholder="date"
+                value={data.Transmission_date}
+                onChange={handleInputChange}
+                className="p-1 px-0 bg-slate-50 border text-sm rounded col-span-1"
               />
             </div>
 
@@ -131,7 +294,6 @@ const defaultData = {
                 value={data.Challan_no}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                required
               />
 
               <label
@@ -148,43 +310,6 @@ const defaultData = {
                 value={data.Bill_no}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-6 mb-2 justify-center">
-              <label
-                htmlFor="Transmission"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal "
-              >
-                Transmission
-              </label>
-              <input
-                type="text"
-                id="Transmission"
-                name="Transmission"
-                placeholder="Mode of Transmission "
-                value={data.Transmission}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                required
-              />
-
-              <label
-                htmlFor="Transmission_date"
-                className="col-span-1 text-sm pl-1 mx-2 flex items-center font-normal "
-              >
-                Date
-              </label>
-              <input
-                type="text"
-                id="Transmission_date"
-                name="Transmission_date"
-                placeholder="Transmission date"
-                value={data.Transmission_date}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-               
               />
             </div>
 
@@ -203,7 +328,6 @@ const defaultData = {
                 value={data.HSN_Code}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                
               />
 
               <label
@@ -220,7 +344,6 @@ const defaultData = {
                 value={data.Tax_Rate}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                
               />
             </div>
 
@@ -243,7 +366,7 @@ const defaultData = {
             </div>
           </div>
         </div>
- 
+
         {/* Preview image */}
         <div className=" w-1/4  px-2 pt-1">
           <label htmlFor="Final_Image" className="mt-3 p-1 pb-2">

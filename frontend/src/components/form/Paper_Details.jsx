@@ -1,35 +1,81 @@
-import React, { useEffect,  useState } from "react";
+import React, { useEffect, useState } from "react";
+import CustomSizeModal from "../../helpers/CustomSizeModal";
 
-const Paper_Details = ({ initialData, onChange }) => {
+const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
   const defaultData = {
-    Paper_name: "",
-    Paper_color: "",
-    paper_size: "A4",
-    paper_GSM: "70 GSM",
+    Paper_name: jobData.paperName || "", // ✅ Pull from jobData
+    Paper_color: jobData.paperColor || "", // ✅ Pull from jobData
+    paper_size: "",
+    customSize: { width: "", height: "", unit: "" },
+    paper_GSM: jobData.paper_GSM || "70 GSM", // ✅ Pull from jobData
     required_paper: "",
     Ordered_paper: "",
     DM_Challan_no: "",
     DM_Challan_date: "",
     Paper_description: "",
-    
   };
 
   const [data, setData] = useState({ ...defaultData, ...initialData });
-
-  useEffect(() => {
-    if (JSON.stringify(data) !== JSON.stringify({ ...defaultData, ...initialData })) {
-      setData((prevData) => ({ ...prevData, ...initialData }));
-    }
-  }, [initialData]); // Runs only when initialData changes
-
- 
+  const [showCustomSizeModal, setShowCustomSizeModal] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const updatedData = { ...data, [name]: value };
+    if (name === "paper_size" && value.startsWith("Custom")) {
+      setShowCustomSizeModal(true);
+    }
+
     setData(updatedData);
     onChange(updatedData);
   };
+
+  // const handleCustomSizeChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setData((prev) => ({
+  //     ...prev,
+  //     customSize: {
+  //       ...prev.customSize,
+  //       [name.replace("custom", "").toLowerCase()]: value, // customWidth -> width
+  //     },
+  //   }));
+  // };
+
+  const handleCustomSizeChange = (e) => {
+    const { name, value } = e.target;
+    setData((prev) => {
+      const newCustomSize = {
+        ...prev.customSize,
+        [name.replace("custom", "").toLowerCase()]: value,
+      };
+
+      return {
+        ...prev,
+        customSize: newCustomSize,
+        paper_size: `Custom (${newCustomSize.width} × ${newCustomSize.height} ${newCustomSize.unit})`, // 👈 live update
+      };
+    });
+  };
+
+  const handleConfirm = () => {
+    setShowCustomSizeModal(false);
+    const updatedData = {
+      ...data,
+      paper_size: `Custom (${data.customSize.width} × ${data.customSize.height} ${data.customSize.unit})`,
+    };
+    setData(updatedData);
+    onChange(updatedData); // ✅ send to parent for DB saving
+  };
+
+
+  useEffect(() => {
+    setData((prevData) => ({
+      ...prevData,
+      Paper_name: jobData.paperName || prevData.Paper_name,
+      Paper_color: jobData.paperColor || prevData.Paper_color,
+      paper_GSM: jobData.paper_GSM || prevData.paper_GSM,
+      ...initialData,
+    }));
+  }, [initialData, jobData]);
 
   return (
     <div>
@@ -49,20 +95,14 @@ const Paper_Details = ({ initialData, onChange }) => {
               <select
                 name="Paper_name"
                 id="Paper_name"
-                value={data.Paper_name}
+                value={data.paperName}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                required
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2 cursor-not-allowed"
+                disabled
               >
-               
-
-                
-                <option value="Normal_paper">Normal-paper</option>
-                <option value="Hanuman">Hanuman</option>
-                <option value="Sirpur">Sirpur</option>
-                <option value="Art">Art</option>
-                <option value="Sticker">Sticker</option>
-                <option value="Transprant_stikcer">Transprant stikcer</option>
+                <option value={`${jobData.paperName}`}>
+                  {jobData.paperName}
+                </option>
               </select>
 
               <label
@@ -74,17 +114,14 @@ const Paper_Details = ({ initialData, onChange }) => {
               <select
                 name="Paper_color"
                 id="Paper_color"
-                value={data.Paper_color}
+                value={data.paperColor}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-              > 
-
-                <option value="White">White</option>
-                <option value="Yollow">Yollow</option>
-                <option value="Pink">Pink</option>
-                <option value="Blue">Blue</option>
-                <option value="Green">Green</option>
-                <option value="Laser">Laser</option>
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2 cursor-not-allowed"
+                disabled
+              >
+                <option value={`${jobData.paperColor}`}>
+                  {jobData.paperColor}
+                </option>
               </select>
             </div>
 
@@ -101,20 +138,61 @@ const Paper_Details = ({ initialData, onChange }) => {
                 value={data.paper_size}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                required
               >
-                <option value="" >
-                  {" "}
-                  Select Paper Size{" "}
+                <option value="" disabled>
+                  Select Job Size
                 </option>
 
-                <option value="A5">A5</option>
-                <option value="A4">A4</option>
-                <option value="A3">A3</option>
-                <option value="demi1/8">demi 1/8</option>
-                <option value="demi1/4">demi 1/4</option>
-                <option value="demi1/2">demi 1/2</option>
-                <option value="12X18 inch">12X18 inch</option>
+                {/* 📏 ISO Standard Sizes */}
+                <option value="A6">A6 (105 × 148 mm)</option>
+                <option value="A5">A5 (148 × 210 mm)</option>
+                <option value="A4">A4 (210 × 297 mm)</option>
+                <option value="A3">A3 (297 × 420 mm)</option>
+                <option value="A2">A2 (420 × 594 mm)</option>
+                <option value="A1">A1 (594 × 841 mm)</option>
+                <option value="A0">A0 (841 × 1189 mm)</option>
+
+                {/* 🧾 Demy / Indian Paper Sizes */}
+                <option value="Demy 1/8">Demy 1/8 (5.5" × 8.5")</option>
+                <option value="Demy 1/4">Demy 1/4 (8.5" × 11")</option>
+                <option value="Demy 1/2">Demy 1/2 (11" × 17")</option>
+                <option value="Demy Full">Demy Full (17.5" × 22.5")</option>
+                <option value="Double Demy Full">
+                  Double Demy Full (22.5" × 35")
+                </option>
+
+                {/* 🧾 DFC (Double Foolscap) Sizes */}
+                <option value="DFC 1/8">DFC 1/8 (6.75" × 8.5")</option>
+                <option value="DFC 1/4">DFC 1/4 (8.5" × 13.5")</option>
+                <option value="DFC 1/2">DFC 1/2 (13.5" × 17")</option>
+                <option value="DFC Full">DFC Full (17" × 27")</option>
+
+                {/* 🖨️ Commercial Printing Sizes */}
+                <option value="Ledger">Ledger (17" × 11")</option>
+                <option value="Legal">Legal (8.5" × 14")</option>
+                <option value="8.5x11 inch">8.5 × 11 inch (Letter)</option>
+                <option value="11x17 inch">11 × 17 inch (Tabloid)</option>
+                <option value="12x18 inch">
+                  12 × 18 inch (Extra Tabloid){" "}
+                </option>
+                <option value="13x19 inch">13 × 19 inch</option>
+                <option value="17x22 inch">17 × 22 inch</option>
+                <option value="19x25 inch">
+                  19 × 25 inch (Offset sheet size)
+                </option>
+                <option value="23x36 inch">23 × 36 inch</option>
+                <option value="25x38 inch">25 × 38 inch</option>
+                <option value="SRA3">SRA3 (320 × 450 mm)</option>
+
+                {/* 🖼️ Custom */}
+                <option
+                  value={`Custom (${data.customSize.width} × ${data.customSize.height} ${data.customSize.unit})`}
+                >
+                  {data.customSize.width && data.customSize.height
+                    ? `Custom (${data.customSize.width} × ${data.customSize.height} ${data.customSize.unit})`
+                    : "🛠️ Custom Size"}
+                </option>
+
               </select>
 
               <label
@@ -127,11 +205,11 @@ const Paper_Details = ({ initialData, onChange }) => {
                 type="number"
                 id="paper_GSM"
                 name="paper_GSM"
-                placeholder="Paper GSM"
-                value={data.paper_GSM}
+                placeholder={`${jobData.paper_GSM}`}
+                value={jobData.paper_GSM}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                required
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2 cursor-not-allowed"
+                disabled
               />
             </div>
 
@@ -150,7 +228,6 @@ const Paper_Details = ({ initialData, onChange }) => {
                 value={data.required_paper}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-               
               />
 
               <label
@@ -167,7 +244,6 @@ const Paper_Details = ({ initialData, onChange }) => {
                 value={data.Ordered_paper}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                
               />
             </div>
 
@@ -186,7 +262,6 @@ const Paper_Details = ({ initialData, onChange }) => {
                 value={data.DM_Challan_no}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                
               />
 
               <label
@@ -203,7 +278,6 @@ const Paper_Details = ({ initialData, onChange }) => {
                 value={data.DM_Challan_date}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                
               />
             </div>
 
@@ -223,12 +297,23 @@ const Paper_Details = ({ initialData, onChange }) => {
                 className="p-1 bg-slate-50 text-sm border rounded col-span-5 "
                 rows={3}
               ></textarea>
-            </div> 
+            </div>
           </div>
         </div>
 
-          {/* Preview image */}
-          <div className=" w-1/4  px-2 pt-1">
+        {/* show CustomSize Modal */}
+        <CustomSizeModal
+          isOpen={showCustomSizeModal}
+          onClose={() => setShowCustomSizeModal(false)}
+          onConfirm={handleConfirm}
+          width={data.customSize.width}
+          height={data.customSize.height}
+          unit={data.customSize.unit}
+          onChange={handleCustomSizeChange} // ✅ pass handler
+        />
+
+        {/* Preview image */}
+        <div className=" w-1/4  px-2 pt-1">
           <label htmlFor="Final_Image" className="mt-3 p-1 pb-2">
             Preview :
           </label>

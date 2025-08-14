@@ -241,6 +241,7 @@ useEffect(() => {
               <TabPanel value={value} index={3}>
                 <Paper_Details
                   initialData={formData.paper}
+                  jobData={formData.job} 
                   onChange={(data) => handleFormDataChange("paper", data)}
                 />
               </TabPanel>
@@ -248,6 +249,7 @@ useEffect(() => {
               <TabPanel value={value} index={4}>
                 <Printing_Details
                   initialData={formData.printing}
+                  jobData={formData.job} 
                   onChange={(data) => handleFormDataChange("printing", data)}
                 />
               </TabPanel>
@@ -262,6 +264,8 @@ useEffect(() => {
               <TabPanel value={value} index={6}>
                 <Finished_Details
                   initialData={formData.finished}
+                  jobData={formData.job} 
+                  jobCategories={jobCategories}
                   onChange={(data) => handleFormDataChange("finished", data)}
                 />
               </TabPanel>

@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from "react";
 
-const Printing_Details = ({ initialData , onChange = () => {} }) => {
+const Printing_Details = ({ initialData ,jobData = {}, onChange = () => {} }) => {
 
   const defaultData = {
-    Machine_name: "",
+    Machine_name: jobData.Machine_name || "",
     Operator_name: "",
     Total_set_of_print: "",
     print_no_per_set: "",
     Start_date_of_print: "",
     Start_time_of_print: "",
     End_date_of_print: "",
+    End_time_of_print: "", 
     printing_description: "",
   
   };
 
   const [data, setData] = useState({ ...defaultData, ...initialData });
 
-  useEffect(() => {
-    if (JSON.stringify(data) !== JSON.stringify({ ...defaultData, ...initialData })) {
-      setData((prevData) => ({ ...prevData, ...initialData }));
-    }
-  }, [initialData]); // Runs only when initialData changes
+  // useEffect(() => {
+  //   if (JSON.stringify(data) !== JSON.stringify({ ...defaultData, ...initialData })) {
+  //     setData((prevData) => ({ ...prevData, ...initialData }));
+  //   }
+  // }, [initialData]); // Runs only when initialData changes
 
- 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,6 +31,12 @@ const Printing_Details = ({ initialData , onChange = () => {} }) => {
     onChange(updatedData);
   };
 
+useEffect(() => {
+  setData(prev => ({
+    ...prev,
+    Machine_name: jobData.Machine_name ||data.Machine_name || ""
+  }));
+}, [jobData.Machine_name]);
 
 
   return (
@@ -51,18 +57,25 @@ const Printing_Details = ({ initialData , onChange = () => {} }) => {
               <select
                 name="Machine_name"
                 id="Machine_name"
-                value={data.Machine_name}
+                value={jobData.Machine_name ||data.Machine_name|| ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
                 
+                
               >
-                <option value="Riso_hall">Riso hall</option>
-                <option value="Riso_Com_color">Riso Com color</option>
-                <option value="Konika">Konika</option>
-                <option value="Screen">Screen</option>
-                <option value="Swift_1">Swift 1</option>
-                <option value="Swift_2">Swift 2</option>
-                <option value="Swift_3">Swift 3</option>
+                 <option value={`${jobData.Machine_name}`} disabled>
+                  {jobData.Machine_name}
+                </option>
+                <option value="Print_outside">Print outside</option>
+                <option value="SWIFT_1">SWIFT 1</option>
+                <option value="SWIFT_2">SWIFT 2</option>
+                <option value="SWIFT_3">SWIFT 3</option>
+                <option value="SAHIL">SAHIL</option>
+                <option value="RULLING">RULLING</option>
+                <option value="SCREEN">SCREEN</option>
+                <option value="RISO">RISO</option>
+                <option value="RISO_COM_COLOR">RISO COM COLOR</option>
+                <option value="KONICA_MINOLTA">KONICA MINOLTA</option>
               </select>
 
               <label

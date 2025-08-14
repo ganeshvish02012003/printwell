@@ -22,7 +22,7 @@ const Genral_Details = ({ onChange, initialData, customers = [] }) => {
       const customer = selectedOption.value;
       const updatedData = {
         ...data,
-        Customer_name: customer.name,
+        Customer_name: customer.name || "",
         Mobile_number: customer.mobile || "",
         WhatApp_number: customer.whatsapp || "",
         address: customer.address || "",
@@ -107,7 +107,7 @@ const Genral_Details = ({ onChange, initialData, customers = [] }) => {
                 id="Customer_name"
                 name="Customer_name"
                 placeholder="Enter Customer name"
-                value={data.Customer_name}
+                value={data.Customer_name ?? ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-4"
                 required
@@ -117,7 +117,7 @@ const Genral_Details = ({ onChange, initialData, customers = [] }) => {
                 id="customerId"
                 name="customerId"
                 placeholder="Customer Id"
-                value={data.customerId}
+                value={data.customerId ?? ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-1"
                 required
@@ -137,7 +137,7 @@ const Genral_Details = ({ onChange, initialData, customers = [] }) => {
                 name="address"
                 id="address"
                 placeholder="Enter Address"
-                value={data.address}
+                value={data.address ?? ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 text-sm border rounded col-span-5"
                 rows={1}
@@ -157,7 +157,7 @@ const Genral_Details = ({ onChange, initialData, customers = [] }) => {
                 id="Mobile_number"
                 name="Mobile_number"
                 placeholder="Enter Mobile Number"
-                value={data.Mobile_number}
+                value={data.Mobile_number ?? ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-5"
                 required
@@ -177,7 +177,7 @@ const Genral_Details = ({ onChange, initialData, customers = [] }) => {
                 id="WhatApp_number"
                 name="WhatApp_number"
                 placeholder="Enter WhatsApp Number"
-                value={data.WhatApp_number}
+                value={data.WhatApp_number ?? ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-5"
               />
@@ -195,7 +195,7 @@ const Genral_Details = ({ onChange, initialData, customers = [] }) => {
                 name="genral_description"
                 id="genral_description"
                 placeholder="Enter Description"
-                value={data.genral_description}
+                value={data.genral_description ?? ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 text-sm border rounded col-span-5"
                 rows={3}

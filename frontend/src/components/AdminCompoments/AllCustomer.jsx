@@ -55,6 +55,7 @@ const AllCustomer = () => {
       c[key]?.toLowerCase().includes(val)
     )
   );
+   const totalCustomers = filteredCustomers.length;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -135,6 +136,12 @@ const AllCustomer = () => {
     <div className="p-2">
       <div className="w-full px-4 h-12 bg-slate-500 rounded-md flex justify-between items-center mb-1">
         <h2 className="font-bold text-white text-lg">All Customers</h2>
+        <div>
+          <span className="text-white p-4 font-semibold">Total Customers</span>
+          <span className="text-black bg-slate-100 px-8 py-1 rounded-md font-semibold">
+            {totalCustomers}
+          </span>
+        </div>
         <button
           className="border-2 px-3 py-1 border-green-400 text-green-400 hover:bg-green-400 hover:text-white transition-all rounded-full"
           onClick={() => {

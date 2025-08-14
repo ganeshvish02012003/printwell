@@ -57,16 +57,6 @@ const AdminPanel = () => {
               All Customers
             </NavLink>
             <NavLink
-              to="all-job"
-              className={({ isActive }) =>
-                `px-2 py-1 rounded hover:bg-slate-500 hover:text-white ${
-                  isActive ? "bg-slate-600 text-white font-semibold" : ""
-                }`
-              }
-            >
-              Active Jobs
-            </NavLink>
-            <NavLink
               to="Menage-Job-Card"
               className={({ isActive }) =>
                 `px-2 py-1 rounded hover:bg-slate-500 hover:text-white ${
@@ -76,6 +66,17 @@ const AdminPanel = () => {
             >
               Menage Job 
             </NavLink>
+            <NavLink
+              to="all-job"
+              className={({ isActive }) =>
+                `px-2 py-1 rounded hover:bg-slate-500 hover:text-white ${
+                  isActive ? "bg-slate-600 text-white font-semibold" : ""
+                }`
+              }
+            >
+              Active Jobs
+            </NavLink>
+
 
             <NavLink
               to="Peyment-Status"
