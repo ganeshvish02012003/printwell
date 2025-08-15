@@ -11,6 +11,7 @@ import SummaryApi from "../common"; // ✅ import your API
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ROLE from "../common/role";
+import { AiFillCheckCircle } from "react-icons/ai";
 
 import {
   Chart as ChartJS,
@@ -54,16 +55,16 @@ const Home = () => {
     fetchAllJobs();
   }, [user, navigate]);
 
-  useEffect(() => {
-    console.log(
-      "All Status values:",
-      allJobs.map((job) => job?.job?.status)
-    );
-    console.log(
-      "All subStatus values:",
-      allJobs.map((job) => job?.job?.subStatus)
-    );
-  }, [allJobs]);
+  // useEffect(() => {
+  //   console.log(
+  //     "All Status values:",
+  //     allJobs.map((job) => job?.job?.status)
+  //   );
+  //   console.log(
+  //     "All subStatus values:",
+  //     allJobs.map((job) => job?.job?.subStatus)
+  //   );
+  // }, [allJobs]);
 
   // ✅ Count Logic
   const Admin_TO_DO = allJobs.filter(
@@ -150,7 +151,10 @@ const Home = () => {
   const Bind_Lamination = allJobs.filter(
     (job) => job?.job?.subStatus === "Lamination"
   ).length;
-  // const Bind_perfeting = allJobs.filter((job) => job?.job?.subStatus === "perfeting").length;
+
+  const Out_of_Stock = allJobs.filter(
+    (job) => job?.job?.subStatus === "Out_of_Stock"
+  ).length;
 
   const total_jobs =
     Admin_TO_DO + Admin_Desgin + Admin_Printing + Admin_Other_work;
@@ -174,6 +178,8 @@ const Home = () => {
 
   const Active_Bind =
     Bind_To_Binding + Bind_Cutting + Bind_perfeting + Bind_Lamination;
+
+  const Active_finished = Admin_Completed - Out_of_Stock;
 
   const data = {
     labels: ["Active", "Pending"],
@@ -467,7 +473,7 @@ const Home = () => {
   };
 
   return (
-    <div className="h-[calc(86vh)] flex bg-slate-400 p-2 mx-1 rounded-md ">
+    <div className="h-[calc(88vh)] flex bg-slate-400 p-2 mx-1 rounded-md ">
       <div className="bg-slate-200 p-2 rounded-md h-full">
         {/*=================== count lable ==================================*/}
         <div className="flex justify-around mb-2 p-2 shadow-md bg-white max-w-5xl rounded-lg ">
@@ -564,13 +570,13 @@ const Home = () => {
 
         <div className="flex gap-2">
           <div className="flex justify-around p-2 shadow-md bg-white rounded-lg ">
-            <div className="w-[490px] h-48  rounded-md relative overflow-x-auto">
+            <div className="w-[490px] h-52  rounded-md relative overflow-x-auto">
               <Bar data={barData} options={barOptions} />
             </div>
           </div>
 
           <div className="flex justify-around p-2 shadow-md bg-white rounded-lg ">
-            <div className="w-[490px] h-48  rounded-md relative">
+            <div className="w-[490px] h-52  rounded-md relative">
               <Line data={lineData} options={lineOptions} />
             </div>
           </div>
@@ -582,31 +588,53 @@ const Home = () => {
       <div className="bg-slate-200 p-2 rounded-md ml-1 h-full w-full">
         <div className="bg-white shadow-md rounded-md w-full h-full p-2">
           <Link to="view-board/Completed">
-            <div className="h-[70px] rounded-md bg-gradient-to-r from-[#66BB6A] to-[#C8E6C9] shadow-md flex flex-col items-center justify-center font-semibold text-green-900">
-              <p className="text-3xl">{Admin_Completed}</p>
+            <div className="h-[70px] mb-2 rounded-md bg-gradient-to-r from-[#66BB6A] to-[#C8E6C9] shadow-md flex flex-col items-center justify-center font-semibold text-green-900">
+              <p className="text-3xl">{Active_finished}</p>
               <div className="flex items-center gap-2">
                 <p>Recent Completed Jobs</p>
-                <FaBook className="text-xl" />
+                <AiFillCheckCircle className="text-green-800 text-3xl" />
               </div>
             </div>
           </Link>
 
           {/* Scrollable job list */}
-          <div className="overflow-y-auto h-[430px] pr-1">
-            {/* Job Card */}
-            <div className="group bg-slate-100 shadow-md p-2 rounded mb-2 transition-all duration-300 hover:bg-slate-200 cursor-pointer">
-              <p>Customer Name</p>
-              <p className="flex justify-between">
-                Job Name <span>Quantity</span>
-              </p>
-
-              {/* Hidden details shown on hover */}
-              <div className="mt-2 text-sm text-gray-600 hidden group-hover:block">
-                <p>Job Size: A4</p>
-                <p>Paper Type: Glossy</p>
-                <p>Completed On: 2025-07-04</p>
-              </div>
-            </div>
+          <div className="overflow-y-auto h-[430px]  pr-1">
+            {allJobs
+              ?.filter(
+                (job) =>
+                  job?.job?.status === "Completed" &&
+                  job?.job?.subStatus !== "Out_of_Stock"
+              )
+              .map((job, index) => (
+                <div
+                  key={index}
+                  className="group bg-slate-100 shadow-md p-2 rounded mt-2 transition-all duration-300 hover:bg-slate-200 cursor-pointer"
+                >
+                  <p className="flex justify-between">
+                    {job?.general?.Customer_name}{" "}
+                    <span>{job?.job?.jobCardId}</span>
+                  </p>
+                  <p className="flex ">
+                    {job?.job?.quantity}{" "}
+                    <span className="px-4">{job?.job?.category}</span>
+                  </p>
+                  <p className="flex justify-between">
+                    Peyment
+                    <span
+                      className={
+                        job?.finished?.Peyment_Status === "Paid"
+                          ? "text-green-400"
+                          : job?.finished?.Peyment_Status === "Semi_Paid"
+                          ? "text-orange-500"
+                          : "text-black"
+                      }
+                    >
+                      {" "}
+                      {job?.finished?.Peyment_Status}
+                    </span>
+                  </p>
+                </div>
+              ))}
           </div>
         </div>
       </div>

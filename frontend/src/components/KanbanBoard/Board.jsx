@@ -19,12 +19,25 @@ const Board = ({
 
   const navigate = useNavigate();
 
-  // Mock child boards
-  const childBoards = Array.from({ length: 4 }).map((_, i) => ({
-    id: `${boards.id}-child-${i + 1}`,
-    title: `Sub Board ${i + 1}`,
-    cards: [],
-  }));
+  // Define the priority order
+  const priorityOrder = {
+    Urgent: 1,
+    High: 2,
+    Normal: 3,
+    block_away: 9999,
+  };
+
+  // Sort the cards before rendering
+  const sortedCards = [...boards.cards].sort((a, b) => {
+    const priorityA = priorityOrder[a.job?.priority] || priorityOrder.Normal;
+    const priorityB = priorityOrder[b.job?.priority] || priorityOrder.Normal;
+    return priorityA - priorityB;
+  });
+
+  // Calculate count excluding "Out_of_Stock"
+  const validCardCount = boards.cards.filter(
+    (card) => card?.job?.subStatus !== "Out_of_Stock"
+  ).length;
 
   return (
     <div className="min-w-[290px] ">
@@ -32,10 +45,7 @@ const Board = ({
         <div className="flex justify-between items-center p-1 pb-0">
           <p className="flex-1 text-center text-xl font-bold">
             {boards.title}
-            <span className="text-gray-500 text-base">
-              {" "}
-              {boards.cards.length}
-            </span>
+            <span className="text-gray-500 text-base"> {validCardCount}</span>
           </p>
           <div
             className="relative hover:cursor-pointer"
@@ -67,16 +77,18 @@ const Board = ({
           className="bg-slate-50 h-[calc(100vh-175px)] rounded-md p-2 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-100"
           onDragEnter={() => handleDragEnter(null, boards.id)}
         >
-          {boards.cards.map((card, index) => (
-            <KanbanCard
-              key={card._id || card.id || `${boards.id}-${index}`}
-              card={card}
-              boardId={boards.id}
-              handleDragEnd={handleDragEnd}
-              handleDragEnter={handleDragEnter}
-              fetchAllJob={fetchAllJob}
-            />
-          ))}
+          {sortedCards
+            ?.filter((job) => job?.job?.subStatus !== "Out_of_Stock")
+            .map((card, index) => (
+              <KanbanCard
+                key={card._id || card.id || `${boards.id}-${index}`}
+                card={card}
+                boardId={boards.id}
+                handleDragEnd={handleDragEnd}
+                handleDragEnter={handleDragEnter}
+                fetchAllJob={fetchAllJob}
+              />
+            ))}
         </div>
       </div>
     </div>

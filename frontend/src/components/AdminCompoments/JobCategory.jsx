@@ -125,7 +125,7 @@ const handleSubmit = async (e) => {
         className="w-full p-2 border mb-2 rounded"
       />
 
-      <div className="border border-slate-300 overflow-hidden">
+      <div className="border border-slate-300 overflow-y-auto h-[calc(100vh-192px)]">
         <table className="w-full table-auto border-collapse">
           <thead className="bg-slate-500 text-white sticky top-0">
             <tr>
@@ -142,7 +142,8 @@ const handleSubmit = async (e) => {
                   key={cat._id}
                   className={i % 2 === 0 ? "bg-slate-200" : "bg-slate-300"}
                 >
-                  <td className="border py-2 text-center">{i + 1}</td>
+                  {/* <td className="border py-2 text-center">{i + 1}</td> */}
+                  <td className="border py-2 text-center">{filteredCategories.length- i}</td>
                   <td className="border py-2 text-center">{cat.label}</td>
                   <td className="border py-2 text-center">{cat.value}</td>
                   <td className="border py-2 text-center">

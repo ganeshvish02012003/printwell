@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import SummaryApi from "../../common";
-import DesginBoard from "./desginBoard";
+import DesginBoard from "./DesginBoard";
 import { throttle } from "lodash";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ const ViewKanbanBoardPage = ({
   subStatuses = [],
   printSubStatus = null,
   color = "bg-gradient-to-r from-[#9C27B0] to-[#E1BEE7]", // default fallback color
-  text="text-black"
+  text = "text-black",
 }) => {
   const [boards, setBoards] = useState([]);
   const [targetCard, setTargetCard] = useState({ bid: "", cid: "" });

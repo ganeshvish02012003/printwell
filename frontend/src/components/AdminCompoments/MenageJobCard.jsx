@@ -234,15 +234,17 @@ const MenageJobCard = () => {
       </div>
       <div className="flex-1  overflow-x-scroll scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-400 ">
         <div className=" flex gap-1">
-          {boards.map((board) => (
-            <Board
-              key={board.id}
-              boards={board}
-              handleDragEnd={handleDragEnd}
-              handleDragEnter={handleDragEnter}
-              fetchAllJob={fetchAllJob}
-            />
-          ))}
+          {boards
+            ?.filter((job) => job?.job?.subStatus !== "Out_of_Stock")
+            .map((board) => (
+              <Board
+                key={board.id}
+                boards={board}
+                handleDragEnd={handleDragEnd}
+                handleDragEnter={handleDragEnter}
+                fetchAllJob={fetchAllJob}
+              />
+            ))}
         </div>
       </div>
 

@@ -75,6 +75,7 @@ const JobSchema = new mongoose.Schema(
       PrintingSide: { type: String, default: "" },
       When_to_give_goods: { type: String, default: "" },
       Time_of_give_goods: { type: String, default: "" },
+      priority: { type: String, default: "" },
       Machine_name: { type: String, default: "" },
       paper_GSM: { type: String, default: "" },
     },
@@ -83,8 +84,13 @@ const JobSchema = new mongoose.Schema(
         design: { type: Boolean, default: false },
         setting: { type: Boolean, default: false },
         typing: { type: Boolean, default: false },
+        PrintOut: { type: Boolean, default: false },
+        pdf: { type: Boolean, default: false },
         master: { type: Boolean, default: false },
         butter: { type: Boolean, default: false },
+        OldPlate: { type: Boolean, default: false },
+        NewPlate: { type: Boolean, default: false },
+
       },
       proofs: {
         type: [

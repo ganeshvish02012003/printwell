@@ -15,6 +15,7 @@ const Job_Details = ({
     jobName: "",
     jobCardId: "",
     jobStatus: "",
+    priority: "",
     category: "",
     quantity: "",
     jobSize: "",
@@ -31,7 +32,7 @@ const Job_Details = ({
     paperColor: "White",
     job_description: "",
     sampleImage: null,
-    PrintingSide: "",
+    PrintingSide: "SingleSide",
     When_to_give_goods: "",
     Time_of_give_goods: "",
   };
@@ -145,6 +146,7 @@ const Job_Details = ({
                 placeholder="Enter Job Name"
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-4"
+                required
               />
 
               <input
@@ -173,6 +175,7 @@ const Job_Details = ({
                 value={data.category || ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                required
               >
                 <option value="" disabled>
                   Select a category
@@ -226,6 +229,7 @@ const Job_Details = ({
                 value={data.quantity || ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                required
               />
 
               <label
@@ -387,7 +391,9 @@ const Job_Details = ({
                 <option value="Art Paper (Matt)">Art Paper (Matt)</option>
                 <option value="Bond Paper">Bond Paper</option>
                 <option value="Kraft Paper">Kraft Paper</option>
-                <option value="Ivory / Bristol Board">Ivory / Bristol Board</option>
+                <option value="Ivory / Bristol Board">
+                  Ivory / Bristol Board
+                </option>
                 <option value="Duplex Board">Duplex Board</option>
                 <option value="Chrome Paper">Chrome Paper</option>
                 <option value="Art Card">Art Card</option>
@@ -408,7 +414,7 @@ const Job_Details = ({
                 value={data.paper_GSM}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                required
+                
               />
             </div>
 
@@ -479,15 +485,8 @@ const Job_Details = ({
                 placeholder="Delivery Date"
                 value={data.When_to_give_goods}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded px-0 col-span-1 "
               />
-
-              <label
-                htmlFor="Time_of_give_goods"
-                className="col-span-1 text-sm  px-8   flex items-center font-normal "
-              >
-                Time
-              </label>
               <input
                 type="time"
                 id="Time_of_give_goods"
@@ -495,8 +494,28 @@ const Job_Details = ({
                 placeholder="Delivery Time"
                 value={data.Time_of_give_goods}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-1 "
               />
+
+              <label
+                htmlFor="priority"
+                className="col-span-1 text-sm pl-1 flex items-center"
+              >
+                Priority:
+              </label>
+              <select
+                name="priority"
+                id="priority"
+                value={data.priority || "Medium"}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+              >
+
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Urgent">Urgent</option>
+                <option value="block_away">block away</option>
+              </select>
             </div>
 
             {/* Job Description */}

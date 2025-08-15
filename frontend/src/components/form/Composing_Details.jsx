@@ -11,8 +11,12 @@ const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
       design: false,
       setting: false,
       typing: false,
+      PrintOut :false,
+      pdf: false,
       master: false,
       butter: false,
+      OldPlate: false,
+      NewPlate: false
     },
     proofs: [{ id: 1, status: null }],
     finalDesignPath: "",
@@ -108,7 +112,7 @@ const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
             <div className="mb-3 grid grid-cols-6">
               <p className="text-sm  mb-1 pl-1 col-span-1">Task</p>
               <div className="col-span-5 grid grid-cols-1 md:grid-cols-3 gap-2">
-                {["design", "setting", "typing", "master", "butter"].map(
+                {["design", "setting", "typing", "PrintOut", "master","OldPlate" ,"pdf","butter" , "NewPlate" ].map(
                   (item) => (
                     <div
                       key={item}

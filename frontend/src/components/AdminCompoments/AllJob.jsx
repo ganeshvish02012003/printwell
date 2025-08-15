@@ -312,7 +312,7 @@ const filteredJobs = allJob
                 <th className="border px-1 py-2">
                   <input
                     type="text"
-                    name="status"
+                    name="subStatus"
                     value={searchQuery.subStatus}
                     onChange={handleSearchChange}
                     placeholder="SubStatus"
