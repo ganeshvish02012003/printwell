@@ -14,7 +14,7 @@ import ViewFinishedBoardPage from "../pages/ViewFinishedBoardPage";
 import MenageJobCard from "../components/AdminCompoments/MenageJobCard";
 import PeymentStatus from "../components/AdminCompoments/PeymentStatus";
 import JobHistory from "../components/AdminCompoments/JobHistory";
-import JobCategory from "../components/AdminCompoments/jobCategory";
+import JobCategory from "../components/AdminComponents/JobCategory";
 import WellComePage from "../pages/WellComePage";
 
 const router = createBrowserRouter([
