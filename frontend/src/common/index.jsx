@@ -1,6 +1,4 @@
-// const backendDomain = process.env.REACT_APP_BACKEND_DOMAIN;
-const backendDomain = "http://localhost:8080";
-// const backendDomain = "https://printwell.onrender.com";
+const backendDomain = import.meta.env.VITE_BACKEND_DOMAIN;
 
 const SummaryApi = {
   // Auth

@@ -5,35 +5,34 @@ import { setUserDetails } from "../store/userSlice";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
 
-
 const WellComePage = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state?.user?.user);
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-      if (!user?.role) {
-        navigate("/");
-      }
-    }, [user, navigate]);
+  useEffect(() => {
+    if (!user?.role) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
-    const handleLogout = async () => {
-      const fetchData = await fetch(SummaryApi.logout_user.url, {
-        method: SummaryApi.logout_user.method,
-        credentials: "include",
-      });
-      const data = await fetchData.json();
-  
-      if (data.success) {
-        toast.success(data.message);
-        dispatch(setUserDetails(null));
-        navigate("/");
-      }
-  
-      if (data.error) {
-        toast.error(data.message);
-      }
-    };
+  const handleLogout = async () => {
+    const fetchData = await fetch(SummaryApi.logout_user.url, {
+      method: SummaryApi.logout_user.method,
+      credentials: "include",
+    });
+    const data = await fetchData.json();
+
+    if (data.success) {
+      toast.success(data.message);
+      dispatch(setUserDetails(null));
+      navigate("/");
+    }
+
+    if (data.error) {
+      toast.error(data.message);
+    }
+  };
 
   const handleWelcomeClick = () => {
     navigate("/Home");
@@ -128,12 +127,14 @@ const dispatch = useDispatch();
 
         {/* Welcome Button + Tooltip + Note */}
         <div className="mt-8 flex flex-col items-center space-y-2 relative group">
-          <button
-            onClick={handleWelcomeClick}
-            className="bg-slate-700 hover:bg-slate-800 text-white font-semibold py-2 px-10  rounded-lg transition-all duration-200"
-          >
-            🙏 Welcome 🙏
-          </button>
+          {(user?.role === "ADMIN" || user?.role === "EMPLOYEE") && (
+            <button
+              onClick={handleWelcomeClick}
+              className="bg-slate-700 hover:bg-slate-800 text-white font-semibold py-2 px-10  rounded-lg transition-all duration-200"
+            >
+              🙏 Welcome 🙏
+            </button>
+          )}
 
           {/* Tooltip (only visible on hover) */}
           <div className="absolute -top-8 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">

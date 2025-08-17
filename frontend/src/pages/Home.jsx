@@ -477,15 +477,26 @@ const Home = () => {
       <div className="bg-slate-200 p-2 rounded-md h-full">
         {/*=================== count lable ==================================*/}
         <div className="flex justify-around mb-2 p-2 shadow-md bg-white max-w-5xl rounded-lg ">
-          <Link to="admin-panel/Menage-Job-Card">
-            <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#E91E63] to-[#F8BBD0] text-pink-900 shadow-md flex flex-col items-center justify-center font-semibold">
-              <p className="text-3xl"> {total_jobs}</p>
+          {user?.role === "ADMIN" ? (
+            <Link to="admin-panel/Menage-Job-Card">
+              <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#E91E63] to-[#F8BBD0] text-pink-900 shadow-md flex flex-col items-center justify-center font-semibold cursor-pointer hover:shadow-lg transition">
+                <p className="text-3xl">{total_jobs}</p>
+                <div className="flex items-center gap-2">
+                  <p>Total jobs</p>
+                  <AiOutlineFire className="text-2xl" />
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#E91E63] to-[#F8BBD0] text-pink-900 shadow-md flex flex-col items-center justify-center font-semibold opacity-80 cursor-not-allowed">
+              <p className="text-3xl">{total_jobs}</p>
               <div className="flex items-center gap-2">
                 <p>Total jobs</p>
                 <AiOutlineFire className="text-2xl" />
               </div>
             </div>
-          </Link>
+          )}
+
           <Link to="view-board/Desgin">
             <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#9C27B0] to-[#E1BEE7] shadow-md flex flex-col items-center justify-center font-semibold text-white">
               <p className="text-3xl">{Admin_Desgin}</p>
