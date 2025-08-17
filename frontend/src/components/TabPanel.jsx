@@ -12,6 +12,7 @@ import uploadSampleImage from "../helpers/uploadSampleImage";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
 import { IoCloseSharp } from "react-icons/io5";
+import Loading from "../middleware/Loading";
 
 function TabPanel({ children, value, index }) {
   return (
@@ -72,26 +73,26 @@ export default function FullWidthTabs({ onClose, fetchAllJob }) {
   }, []);
 
   // fetch categories
-useEffect(() => {
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch(SummaryApi.alljobCategory.url, {
-        method: SummaryApi.alljobCategory.method,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await res.json();
-      if (data.success) {
-        setJobCategories(data.data);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(SummaryApi.alljobCategory.url, {
+          method: SummaryApi.alljobCategory.method,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await res.json();
+        if (data.success) {
+          setJobCategories(data.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch job categories:", err);
       }
-    } catch (err) {
-      console.error("Failed to fetch job categories:", err);
-    }
-  };
+    };
 
-  fetchCategories();
-}, []);
+    fetchCategories();
+  }, []);
 
   // Update form data dynamically
   const handleFormDataChange = (section, data) => {
@@ -168,6 +169,11 @@ useEffect(() => {
 
   return (
     <div className=" z-10 fixed w-full h-full backdrop-blur-sm top-0 bottom-0 left-0 right-0 flex justify-center items-center">
+      {loading && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+          <Loading />
+        </div>
+      )}
       <div className="bg-slate-50 p-4 rounded w-full h-full max-w-4xl max-h-[95%] overflow-hidden">
         <div>
           <div className="flex justify-between items-center pb-3">
@@ -249,7 +255,7 @@ useEffect(() => {
               <TabPanel value={value} index={4}>
                 <Printing_Details
                   initialData={formData.printing}
-                  jobData={formData.job} 
+                  jobData={formData.job}
                   onChange={(data) => handleFormDataChange("printing", data)}
                 />
               </TabPanel>

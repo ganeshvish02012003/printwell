@@ -386,18 +386,24 @@ const Job_Details = ({
                 <option value="" disabled>
                   Select Paper Type
                 </option>
+                <option value="Oriant">Oriant</option>
+                <option value="Sirpur">Sirpur</option>
+                <option value="Hanuman">Hanuman</option>
                 <option value="Maplitho">Maplitho</option>
+                <option value="Bond Paper">Bond Paper</option>
                 <option value="Art Paper (Gloss)">Art Paper (Gloss)</option>
                 <option value="Art Paper (Matt)">Art Paper (Matt)</option>
-                <option value="Bond Paper">Bond Paper</option>
-                <option value="Kraft Paper">Kraft Paper</option>
+                <option value="Taxture paper">Taxture paper</option>
+                <option value="Sticker">Sticker</option>
+                <option value="NT Sticker">NT Sticker</option>
+                <option value="NT Transperent Sticker">NT Transperent Sticker</option>
+                <option value="Golden Sticker">Golden Sticker</option>
+                <option value="Silvar Sticker">Silvar Sticker</option>
                 <option value="Ivory / Bristol Board">
                   Ivory / Bristol Board
                 </option>
-                <option value="Duplex Board">Duplex Board</option>
-                <option value="Chrome Paper">Chrome Paper</option>
                 <option value="Art Card">Art Card</option>
-                <option value="Newsprint">Newsprint</option>
+              
               </select>
 
               <label

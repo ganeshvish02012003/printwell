@@ -12,6 +12,7 @@ import uploadSampleImage from "../helpers/uploadSampleImage";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
 import { IoCloseSharp } from "react-icons/io5";
+import Loading from "../middleware/Loading";
 
 function TabPanel({ children, value, index }) {
   return (
@@ -151,6 +152,11 @@ useEffect(() => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 backdrop-blur-sm top-0 z-10">
+      {loading && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+          <Loading/>
+        </div>
+      )}
       <div className=" z-10 fixed w-full h-full bg-opacity-75 top-0 bottom-0 left-0 right-0 flex justify-center items-center">
       <div className="bg-slate-50 p-4 rounded w-full h-full max-w-4xl max-h-[95%] overflow-hidden">
           <div>

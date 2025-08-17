@@ -136,8 +136,8 @@ const Finished_Details = ({
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-1"
               >
-                <option value="" disabled>
-                  Per unit
+                <option value={`${jobData.category}`} >
+                  {`${jobData.category}`}
                 </option>
                 {jobCategories.map((el, index) => (
                   <option value={el.value} key={el._id || index}>
