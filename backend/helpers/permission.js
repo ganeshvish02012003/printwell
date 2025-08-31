@@ -13,7 +13,7 @@ const uploadJobPermission = async (userId) => {
         return false;
     }
 
-    if (user.role !== "ADMIN") {
+    if (user.role !== "ADMIN" && user.role !== "EMPLOYEE") {
         return false;
     }
 

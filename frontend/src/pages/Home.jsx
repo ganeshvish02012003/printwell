@@ -40,7 +40,11 @@ const Home = () => {
 
   const fetchAllJobs = async () => {
     try {
-      const response = await fetch(SummaryApi.allJob.url);
+      const response = await fetch(SummaryApi.allJob.url, {
+        method: SummaryApi.allJob.method,
+        credentials: "include",
+      });
+
       const data = await response.json();
       setAllJobs(data?.data || []);
     } catch (error) {

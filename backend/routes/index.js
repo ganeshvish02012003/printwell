@@ -27,18 +27,17 @@ router.post("/update-user", authToken, updateUser);
 
 //Job
 router.post("/upload-job", authToken, UploadJob); 
-// router.post("/update-job", authToken, UpdateJob )
-router.post("/update-job", UpdateJob )
-router.get("/get-job", getJobController);
+router.post("/update-job",  UpdateJob )
+router.get("/get-job",authToken, getJobController);
 
 // Customer
 router.post("/add-customer", addCustomer);
 router.put("/update-customer/:customerId",   updateCustomer); 
-router.get("/all-customer",  allCustomers);
+router.get("/all-customer",authToken,  allCustomers);
 
 // jobcategory
 router.post("/jobcategory/add", AddJobCategory);
-router.get("/jobcategory/all", AllJobCategory);
+router.get("/jobcategory/all",authToken, AllJobCategory);
 router.put("/jobcategory/update/:id", UpdateJobCategory);
 router.delete("/jobcategory/delete/:id", DeleteJobCategory); 
 

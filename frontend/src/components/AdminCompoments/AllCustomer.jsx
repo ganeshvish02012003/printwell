@@ -19,9 +19,7 @@ const AllCustomer = () => {
     try {
       const res = await fetch(SummaryApi.allCustomer.url, {
         method: SummaryApi.allCustomer.method,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        credentials: "include",
       });
       const data = await res.json();
       if (data.success) setCustomers(data.data.reverse()); // reverse for newest first
@@ -55,7 +53,7 @@ const AllCustomer = () => {
       c[key]?.toLowerCase().includes(val)
     )
   );
-   const totalCustomers = filteredCustomers.length;
+  const totalCustomers = filteredCustomers.length;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -70,7 +68,7 @@ const AllCustomer = () => {
 
     try {
       const token = localStorage.getItem("token");
-      console.log("Submitting data:", formData);
+      // console.log("Submitting data:", formData);
 
       if (editingId) {
         // Update existing customer
@@ -121,7 +119,7 @@ const AllCustomer = () => {
       setShowModal(false);
       setEditingId(null);
     } catch (err) {
-      console.error("Error submitting form:", err);
+      // console.error("Error submitting form:", err);
       toast.error("An error occurred while saving the customer");
     }
   };
@@ -229,7 +227,10 @@ const AllCustomer = () => {
                       : "bg-slate-200";
 
                   return (
-                    <tr key={c._id} className={`text-center hover:bg-gray-400 ${rowBg}`}>
+                    <tr
+                      key={c._id}
+                      className={`text-center hover:bg-gray-400 ${rowBg}`}
+                    >
                       <td className="border border-slate-100 py-1">
                         {c.customerId}
                       </td>

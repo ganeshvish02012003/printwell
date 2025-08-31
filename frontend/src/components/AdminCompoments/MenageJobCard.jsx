@@ -41,14 +41,17 @@ const MenageJobCard = () => {
   /* ------------------------------------------------------------------ */
   const fetchAllJob = useCallback(async () => {
     try {
-      const res = await fetch(SummaryApi.allJob.url);
+      const res = await fetch(SummaryApi.allJob.url, {
+        method: SummaryApi.allJob.method,
+        credentials: "include",
+      });
       const { data: allJobs = [] } = await res.json();
 
-      allJobs.forEach((job) => {
-        console.log("Job ID:", job?._id);
-        console.log("Status:", job?.job?.status);
-        console.log("SubStatus:", job?.job?.subStatus);
-      });
+      // allJobs.forEach((job) => {
+      //   console.log("Job ID:", job?._id);
+      //   console.log("Status:", job?.job?.status);
+      //   console.log("SubStatus:", job?.job?.subStatus);
+      // });
 
       const cards = allJobs.map((job) => {
         // ✅ Auto-update status to Completed if subStatus is Finished

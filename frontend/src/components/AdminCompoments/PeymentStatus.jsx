@@ -22,7 +22,10 @@ const PeymentStatus = () => {
 
   const fetchAllJob = async () => {
     try {
-      const response = await fetch(SummaryApi.allJob.url);
+      const response = await fetch(SummaryApi.allJob.url, {
+        method: SummaryApi.allJob.method,
+        credentials: "include",
+      });
       const dataResponse = await response.json();
       setAllJob(dataResponse?.data || []);
     } catch (error) {
@@ -72,7 +75,7 @@ const PeymentStatus = () => {
         Due_Amount.toLowerCase().includes(searchQuery.Due_Amount) &&
         Peyment_Status.toLowerCase().includes(searchQuery.Peyment_Status) &&
         Peyment_Mode.toLowerCase().includes(searchQuery.Peyment_Mode) &&
-        addedDate.includes(searchQuery.addedJob) 
+        addedDate.includes(searchQuery.addedJob)
       );
     });
 

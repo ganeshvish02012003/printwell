@@ -75,7 +75,10 @@ const ViewKanbanBoardPage = ({
 
   const fetchAllJob = async () => {
     try {
-      const response = await fetch(SummaryApi.allJob.url);
+      const response = await fetch(SummaryApi.allJob.url, {
+        method: SummaryApi.allJob.method,
+        credentials: "include",
+      });
       const dataResponse = await response.json();
       const jobs = dataResponse?.data || [];
 
@@ -251,14 +254,12 @@ const ViewKanbanBoardPage = ({
         },
       };
 
-      console.log("Sending update-job request:", payload);
+      // console.log("Sending update-job request:", payload);
 
       const res = await fetch(SummaryApi.upDateJob.url, {
         method: SummaryApi.upDateJob.method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 

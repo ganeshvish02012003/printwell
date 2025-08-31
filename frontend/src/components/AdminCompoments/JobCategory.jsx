@@ -13,9 +13,7 @@ const JobCategory = () => {
     try {
       const res = await fetch(SummaryApi.alljobCategory.url, {
         method: SummaryApi.alljobCategory.method,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        credentials: "include", 
       });
       const data = await res.json();
       if (data.success) setCategories(data.data.reverse());
@@ -37,14 +35,14 @@ const JobCategory = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
       const method = editingId
         ? SummaryApi.updatejobCategory(editingId)
         : SummaryApi.addjobCategory;
-  
+
       const res = await fetch(method.url, {
         method: method.method,
         headers: {
@@ -53,14 +51,14 @@ const handleSubmit = async (e) => {
         },
         body: JSON.stringify(formData),
       });
-  
+
       const data = await res.json();
       if (res.ok && data.success) {
         toast.success(data.message || "Saved successfully");
         setFormData({ label: "", value: "" });
         setEditingId(null);
         setShowModal(false);
-        fetchCategories(); 
+        fetchCategories();
       } else {
         toast.error(data.message || "Failed to save category");
       }
@@ -69,7 +67,6 @@ const handleSubmit = async (e) => {
       toast.error("Failed to save category");
     }
   };
-  
 
   const handleEdit = (cat) => {
     setFormData({ label: cat.label, value: cat.value });
@@ -78,7 +75,8 @@ const handleSubmit = async (e) => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this category?")) return;
+    if (!window.confirm("Are you sure you want to delete this category?"))
+      return;
 
     try {
       const res = await fetch(SummaryApi.deletejobCategory(id).url, {
@@ -129,7 +127,7 @@ const handleSubmit = async (e) => {
         <table className="w-full table-auto border-collapse">
           <thead className="bg-slate-500 text-white sticky top-0">
             <tr>
-              <th className="border p-2">Sn.</th> 
+              <th className="border p-2">Sn.</th>
               <th className="border p-2">Label</th>
               <th className="border p-2">Value</th>
               <th className="border p-2">Action</th>
@@ -143,7 +141,9 @@ const handleSubmit = async (e) => {
                   className={i % 2 === 0 ? "bg-slate-200" : "bg-slate-300"}
                 >
                   {/* <td className="border py-2 text-center">{i + 1}</td> */}
-                  <td className="border py-2 text-center">{filteredCategories.length- i}</td>
+                  <td className="border py-2 text-center">
+                    {filteredCategories.length - i}
+                  </td>
                   <td className="border py-2 text-center">{cat.label}</td>
                   <td className="border py-2 text-center">{cat.value}</td>
                   <td className="border py-2 text-center">

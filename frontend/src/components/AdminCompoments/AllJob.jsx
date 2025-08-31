@@ -13,13 +13,17 @@ const AllJob = () => {
     mobile: "",
     addedJob: "",
     status: "",
-    subStatus:"",
-    Peyment_Status:""
+    subStatus: "",
+    Peyment_Status: "",
   });
 
   const fetchAllJob = async () => {
     try {
-      const response = await fetch(SummaryApi.allJob.url);
+      const response = await fetch(SummaryApi.allJob.url, {
+        method: SummaryApi.allJob.method,
+        credentials: "include",
+      });
+
       const dataResponse = await response.json();
       setAllJob(dataResponse?.data || []);
     } catch (error) {
@@ -38,7 +42,6 @@ const AllJob = () => {
       [name]: value.toLowerCase(),
     }));
   };
-
 
   const Admin_TO_DO = allJob.filter(
     (job) => job?.job?.status === "Pending"
@@ -125,7 +128,7 @@ const AllJob = () => {
     (job) => job?.job?.subStatus === "Lamination"
   ).length;
 
-    const recent_job_end = allJob.filter(
+  const recent_job_end = allJob.filter(
     (job) => job?.job?.subStatus === "recent_job_end"
   ).length;
   const Draw_Bill = allJob.filter(
@@ -134,13 +137,10 @@ const AllJob = () => {
   const For_Dispatch = allJob.filter(
     (job) => job?.job?.subStatus === "For Dispatch"
   ).length;
-  const Store = allJob.filter(
-    (job) => job?.job?.subStatus === "Store"
-  ).length;
+  const Store = allJob.filter((job) => job?.job?.subStatus === "Store").length;
   const Out_of_Stock = allJob.filter(
     (job) => job?.job?.subStatus === "Out_of_Stock"
   ).length;
-
 
   const Active_Desgin =
     Desgin_To_Do +
@@ -150,7 +150,7 @@ const AllJob = () => {
     Desgin_Final +
     Desgin_send_to_print;
   const Active_Print =
-  print_To_Do +
+    print_To_Do +
     print_Printer_1 +
     print_Printer_2 +
     print_Printer_3 +
@@ -164,85 +164,87 @@ const AllJob = () => {
   const Active_Bind =
     Bind_To_Binding + Bind_Cutting + Bind_perfeting + Bind_Lamination;
 
-  const finished  = recent_job_end + Draw_Bill + For_Dispatch + Store
+  const finished = recent_job_end + Draw_Bill + For_Dispatch + Store;
   const total_jobs =
-    Admin_TO_DO + Admin_Desgin + Admin_Printing + Admin_Other_work + finished ;
-  const total_ActiveJobs = Admin_Desgin + Admin_Printing + Admin_Other_work + finished ;
+    Admin_TO_DO + Admin_Desgin + Admin_Printing + Admin_Other_work + finished;
+  const total_ActiveJobs =
+    Admin_Desgin + Admin_Printing + Admin_Other_work + finished;
 
-const filteredJobs = allJob
-  .filter(job => {
-    const status = job?.job?.status?.toLowerCase() || "";
-    const subStatus = job?.job?.subStatus?.toLowerCase() || "";
-    return !(status === "completed" && subStatus === "out_of_stock");
-  })
-  .filter((job) => {
-    const jobName = job?.job?.jobName?.toLowerCase() || "";
-    const customerName = job?.general?.Customer_name?.toLowerCase() || "";
-    const mobileOrAddress =
-      (job?.general?.Mobile_number || "") + " " + (job?.general?.address || "");
-    const addedDate = job?.createdAt
-      ? moment(job.createdAt).format("L LT").toLowerCase()
-      : "";
-    const status = job?.job?.status?.toLowerCase() || "";
-    const subStatus = job?.job?.subStatus?.toLowerCase() || "";
-    const Peyment_Status = job?.finished?.Peyment_Status?.toLowerCase() || "";
+  const filteredJobs = allJob
+    .filter((job) => {
+      const status = job?.job?.status?.toLowerCase() || "";
+      const subStatus = job?.job?.subStatus?.toLowerCase() || "";
+      return !(status === "completed" && subStatus === "out_of_stock");
+    })
+    .filter((job) => {
+      const jobName = job?.job?.jobName?.toLowerCase() || "";
+      const customerName = job?.general?.Customer_name?.toLowerCase() || "";
+      const mobileOrAddress =
+        (job?.general?.Mobile_number || "") +
+        " " +
+        (job?.general?.address || "");
+      const addedDate = job?.createdAt
+        ? moment(job.createdAt).format("L LT").toLowerCase()
+        : "";
+      const status = job?.job?.status?.toLowerCase() || "";
+      const subStatus = job?.job?.subStatus?.toLowerCase() || "";
+      const Peyment_Status = job?.finished?.Peyment_Status?.toLowerCase() || "";
 
-    return (
-      jobName.includes(searchQuery.jobName) &&
-      customerName.includes(searchQuery.customer) &&
-      mobileOrAddress.toLowerCase().includes(searchQuery.mobile) &&
-      addedDate.includes(searchQuery.addedJob) &&
-      status.includes(searchQuery.status) &&
-      subStatus.includes(searchQuery.subStatus) &&
-      Peyment_Status.includes(searchQuery.Peyment_Status) 
-    );
-  });
-
+      return (
+        jobName.includes(searchQuery.jobName) &&
+        customerName.includes(searchQuery.customer) &&
+        mobileOrAddress.toLowerCase().includes(searchQuery.mobile) &&
+        addedDate.includes(searchQuery.addedJob) &&
+        status.includes(searchQuery.status) &&
+        subStatus.includes(searchQuery.subStatus) &&
+        Peyment_Status.includes(searchQuery.Peyment_Status)
+      );
+    });
 
   return (
     <div className="p-2">
       <div className="bg-slate-500 px-4 py-2 rounded-md flex justify-between items-center mb-1">
         {/* <h2 className="font-bold text-white text-lg">All Jobs</h2> */}
-         <div>
+        <div>
           <span className="text-white p-2 font-semibold text-lg">Total</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
-             {/* count of total jobs */} {total_jobs}
+            {/* count of total jobs */} {total_jobs}
           </span>
         </div>
-         <div>
+        <div>
           <span className="text-white p-2 font-semibold text-lg">Active</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
-             {/* count of total jobs */} {total_ActiveJobs}
+            {/* count of total jobs */} {total_ActiveJobs}
           </span>
         </div>
         <div>
           <span className="text-white p-2 font-semibold text-lg">Pending</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
-             {/* count of total jobs */} {Admin_TO_DO}
+            {/* count of total jobs */} {Admin_TO_DO}
           </span>
         </div>
         <div>
           <span className="text-white p-2 font-semibold">Desgin</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
-             {/* whose status is Desgin */} {Active_Desgin}
+            {/* whose status is Desgin */} {Active_Desgin}
           </span>
         </div>
         <div>
           <span className="text-white p-2 font-semibold">Print</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
-            {/* whose status is Printing */}  {Active_Print}
+            {/* whose status is Printing */} {Active_Print}
           </span>
         </div>
         <div>
           <span className="text-white p-2 px-2 font-semibold">Binding</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
-             {/* whose status is Other_work */} {Admin_Other_work}
+            {/* whose status is Other_work */} {Admin_Other_work}
           </span>
         </div>
         <div>
           <span className="text-white p-2 font-semibold">Complete</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
-             {/* whose status is Other_work */} {finished}
+            {/* whose status is Other_work */} {finished}
           </span>
         </div>
         <button

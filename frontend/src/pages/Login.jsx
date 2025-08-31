@@ -1,35 +1,45 @@
-import React, { useContext } from "react";
-import { useState } from "react";
-
-import { FaEye } from "react-icons/fa";
-import { FaEyeSlash } from "react-icons/fa";
+import React, { useContext, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
-
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode"; // ⬅️ NEW
 import SummaryApi from "../common";
 import Context from "../context";
+import { useDispatch } from "react-redux"; // ⬅️ NEW
+import { setUserDetails } from "../store/userSlice"; // ⬅️ NEW
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-  });
+  const [data, setData] = useState({ email: "", password: "" });
 
   const navigate = useNavigate();
   const { fatchUserDetails } = useContext(Context);
+  const dispatch = useDispatch(); // ⬅️ NEW
 
-  const handleOnChange = async (e) => {
+  const handleOnChange = (e) => {
     const { name, value } = e.target;
+    setData((prev) => ({ ...prev, [name]: value }));
+  };
 
-    setData((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
+  // ⬅️ NEW: helper to auto logout after token expiry
+  const startAutoLogout = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+      const exp = decoded.exp * 1000; // expiry in ms
+      const timeout = exp - Date.now();
+
+      if (timeout > 0) {
+        setTimeout(() => {
+          toast.error("Session expired. Please login again.");
+          dispatch(setUserDetails(null));
+          navigate("/login");
+        }, timeout);
+      }
+    } catch (err) {
+      console.error("Error decoding token", err);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -39,27 +49,25 @@ const Login = () => {
       const dataResponse = await fetch(SummaryApi.signIn.url, {
         method: SummaryApi.signIn.method,
         credentials: "include",
-        headers: {
-          "content-type": "application/json",
-        },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify(data),
       });
 
-      // Try to parse JSON only if response has body
       let dataApi;
       const text = await dataResponse.text();
       try {
         dataApi = JSON.parse(text);
-      } catch (err) {
-        throw new Error(
-          "Server did not return valid JSON. Raw response: " + text
-        );
+      } catch {
+        throw new Error("Server did not return valid JSON. Raw response: " + text);
       }
 
       if (dataApi.success) {
         toast.success(dataApi.message);
         navigate("/");
         fatchUserDetails();
+
+        // ⬅️ NEW: start auto logout
+        if (dataApi.data) startAutoLogout(dataApi.data);
       } else if (dataApi.error) {
         toast.error(dataApi.message);
       }
@@ -125,10 +133,7 @@ const Login = () => {
 
           <p className="mt-4 text-center text-sm sm:text-base text-slate-700">
             Don&apos;t have an account?{" "}
-            <Link
-              to={"/signUp"}
-              className="text-slate-900 hover:underline font-medium"
-            >
+            <Link to={"/signUp"} className="text-slate-900 hover:underline font-medium">
               Sign Up
             </Link>
           </p>
@@ -139,3 +144,4 @@ const Login = () => {
 };
 
 export default Login;
+
