@@ -76,24 +76,24 @@ const KanbanCard = ({
           </div>
 
           <div className="flex justify-between items-center p-1  max-w-[230px] truncate">
-            <p className="flex-1 text-sm leading-none opacity-70  text-center  max-w-[220px] truncate ">
+            <p className="flex-1 text-sm leading-none text-center  max-w-[220px] truncate ">
               {card.createdAt
                 ? moment(card.createdAt).format("DD/MM/YYYY ")
                 : "Order date"}
             </p>
-            <p className="flex-1 text-sm leading-none opacity-70 text-center  max-w-[110px] truncate">
+            <p className="flex-1 text-sm leading-none text-center  max-w-[110px] truncate">
               {card.job?.When_to_give_goods
                 ? moment(card.job?.When_to_give_goods).format("DD/MM/YYYY ")
                 : "Submit date"}
             </p>
           </div>
           <div className="flex justify-between items-center  max-w-[230px] truncate">
-            <p className="flex-1 text-xs leading-none opacity-70  text-center  max-w-[220px] truncate ">
+            <p className="flex-1 text-xs leading-none   text-center  max-w-[220px] truncate ">
               {card.createdAt
                 ? moment(card.createdAt).format("hh:mm A")
                 : "Time"}
             </p>
-            <p className="flex-1 text-sm leading-none  opacity-70 text-center  max-w-[110px] truncate">
+            <p className="flex-1 text-sm leading-none text-center  max-w-[110px] truncate">
               {card.job?.When_to_give_goods
                 ? moment(card.job?.When_to_give_goods).format("hh:mm A")
                 : "Time"}

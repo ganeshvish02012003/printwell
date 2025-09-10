@@ -54,7 +54,8 @@ async function userSignInController(req, res) {
     }
   } catch (err) {
     res.json({
-      message: err.message,
+      // message: err.message,
+      message:  "check Internet Connection" || err.message ,
       error: true,
       success: false,
     });

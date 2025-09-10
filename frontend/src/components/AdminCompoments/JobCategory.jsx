@@ -123,7 +123,7 @@ const JobCategory = () => {
         className="w-full p-2 border mb-2 rounded"
       />
 
-      <div className="border border-slate-300 overflow-y-auto h-[calc(100vh-192px)]">
+      <div className="border border-slate-300 overflow-y-auto relative z-0 h-[calc(100vh-192px)]">
         <table className="w-full table-auto border-collapse">
           <thead className="bg-slate-500 text-white sticky top-0">
             <tr>

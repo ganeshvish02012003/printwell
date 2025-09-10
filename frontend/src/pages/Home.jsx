@@ -477,13 +477,14 @@ const Home = () => {
   };
 
   return (
-    <div className="h-[calc(88vh)] flex bg-slate-400 p-2 mx-1 rounded-md ">
-      <div className="bg-slate-200 p-2 rounded-md h-full">
-        {/*=================== count lable ==================================*/}
-        <div className="flex justify-around mb-2 p-2 shadow-md bg-white max-w-5xl rounded-lg ">
+    <div className="lg:h-[calc(100vh-12vh)] flex flex-col lg:flex-row bg-slate-400 p-1 mx-1 rounded-md gap-1">
+      {/* ================= Left Side ================= */}
+      <div className="bg-slate-200 p-2 rounded-md h-full w-full lg:w-[75%] flex flex-col ">
+        {/* Count lable */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-2 p-2 shadow-md bg-white rounded-lg">
           {user?.role === "ADMIN" ? (
             <Link to="admin-panel/Menage-Job-Card">
-              <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#E91E63] to-[#F8BBD0] text-pink-900 shadow-md flex flex-col items-center justify-center font-semibold cursor-pointer hover:shadow-lg transition">
+              <div className=" h-[70px] rounded-md bg-gradient-to-r from-[#E91E63] to-[#F8BBD0] text-pink-900 shadow-md flex flex-col items-center justify-center font-semibold cursor-pointer hover:shadow-lg transition">
                 <p className="text-3xl">{total_jobs}</p>
                 <div className="flex items-center gap-2">
                   <p>Total jobs</p>
@@ -492,7 +493,7 @@ const Home = () => {
               </div>
             </Link>
           ) : (
-            <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#E91E63] to-[#F8BBD0] text-pink-900 shadow-md flex flex-col items-center justify-center font-semibold opacity-80 cursor-not-allowed">
+            <div className=" h-[70px] rounded-md bg-gradient-to-r from-[#E91E63] to-[#F8BBD0] text-pink-900 shadow-md flex flex-col items-center justify-center font-semibold opacity-80 cursor-not-allowed">
               <p className="text-3xl">{total_jobs}</p>
               <div className="flex items-center gap-2">
                 <p>Total jobs</p>
@@ -502,7 +503,7 @@ const Home = () => {
           )}
 
           <Link to="view-board/Desgin">
-            <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#9C27B0] to-[#E1BEE7] shadow-md flex flex-col items-center justify-center font-semibold text-white">
+            <div className=" h-[70px] rounded-md bg-gradient-to-r from-[#9C27B0] to-[#E1BEE7] shadow-md flex flex-col items-center justify-center font-semibold text-white">
               <p className="text-3xl">{Admin_Desgin}</p>
               <div className="flex items-center gap-2">
                 <p>Desgin</p>
@@ -512,7 +513,7 @@ const Home = () => {
           </Link>
 
           <Link to="view-board/Printing">
-            <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#03A9F4] to-[#B3E5FC] shadow-md flex flex-col items-center justify-center font-semibold text-blue-900">
+            <div className=" h-[70px] rounded-md bg-gradient-to-r from-[#03A9F4] to-[#B3E5FC] shadow-md flex flex-col items-center justify-center font-semibold text-blue-900">
               <p className="text-3xl">{Admin_Printing}</p>
               <div className="flex items-center gap-2">
                 <p>Printing</p>
@@ -521,7 +522,7 @@ const Home = () => {
             </div>
           </Link>
           <Link to="view-board/Other_work">
-            <div className="w-60 h-[70px] rounded-md bg-gradient-to-r from-[#FFD54F] to-[#FFF7B2] shadow-md flex flex-col items-center justify-center font-semibold text-yellow-900">
+            <div className=" h-[70px] rounded-md bg-gradient-to-r from-[#FFD54F] to-[#FFF7B2] shadow-md flex flex-col items-center justify-center font-semibold text-yellow-900">
               <p className="text-3xl">{Admin_Other_work}</p>
               <div className="flex items-center gap-2">
                 <p>Binding</p>
@@ -530,77 +531,64 @@ const Home = () => {
             </div>
           </Link>
         </div>
-
-        {/* =======================================Pie Chart ================================================= */}
-
-        <div className="flex gap-2 mb-2">
-          <div className="flex justify-around p-2 shadow-md bg-white  rounded-lg ">
-            <div className="">
-              <div className="w-[242px] h-48 bg-slate-50 rounded-md p-2 flex flex-col items-center">
-                <p className="text-center font-semibold mb-1 text-[#E91E63] ">
-                  Total Jobs
-                </p>
-                <div className="w-full h-full">
-                  <Pie data={data} options={simplePieOptions} />
-                </div>
-              </div>
+        {/* Pie Chart */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-2 p-2 shadow-md bg-white rounded-lg">
+          <div className="h-48 bg-slate-50 rounded-md p-2 flex flex-col items-center">
+            <p className="text-center font-semibold mb-1 text-[#E91E63]">
+              Total Jobs
+            </p>
+            <div className="w-full h-full">
+              <Pie data={data} options={simplePieOptions} />
             </div>
           </div>
 
-          <div className="flex justify-around p-2 shadow-md bg-white rounded-lg ">
-            <div className="mr-2">
-              <div className="w-[242px] h-48 bg-slate-50 rounded-md p-2 flex flex-col items-center">
-                <p className="text-center font-semibold mb-1 text-[#9C27B0] ">
-                  Desgin Jobs
-                </p>
-                <div className="w-full h-full">
-                  <Pie data={Desgin_data} options={donutOptions} />
-                </div>
-              </div>
+          <div className="h-48 bg-slate-50 rounded-md p-2 flex flex-col items-center">
+            <p className="text-center font-semibold mb-1 text-[#9C27B0]">
+              Design Jobs
+            </p>
+            <div className="w-full h-full">
+              <Pie data={Desgin_data} options={donutOptions} />
             </div>
-            <div className="mr-2">
-              <div className="w-[242px] h-48 bg-slate-50 rounded-md p-2 flex flex-col items-center">
-                <p className="text-center font-semibold mb-1 text-[#03A9F4] ">
-                  Printing Jobs
-                </p>
-                <div className="w-full h-full">
-                  <Pie data={Print_data} options={donutOptions} />
-                </div>
-              </div>
+          </div>
+
+          <div className="h-48 bg-slate-50 rounded-md p-2 flex flex-col items-center">
+            <p className="text-center font-semibold mb-1 text-[#03A9F4]">
+              Printing Jobs
+            </p>
+            <div className="w-full h-full">
+              <Pie data={Print_data} options={donutOptions} />
             </div>
-            <div>
-              <div className="w-[242px] h-48 bg-slate-50 rounded-md p-2 flex flex-col items-center">
-                <p className="text-center font-semibold mb-1 text-yellow-900 ">
-                  Binding Jobs
-                </p>
-                <div className="w-full h-full">
-                  <Pie data={Bind_data} options={donutOptions} />
-                </div>
-              </div>
+          </div>
+
+          <div className="h-48 bg-slate-50 rounded-md p-2 flex flex-col items-center">
+            <p className="text-center font-semibold mb-1 text-yellow-900">
+              Binding Jobs
+            </p>
+            <div className="w-full h-full">
+              <Pie data={Bind_data} options={donutOptions} />
             </div>
           </div>
         </div>
 
-        {/* =======================================Bar Chart ================================================= */}
-
-        <div className="flex gap-2">
-          <div className="flex justify-around p-2 shadow-md bg-white rounded-lg ">
-            <div className="w-[490px] h-52  rounded-md relative overflow-x-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+          {/* Bar Chart */}
+          <div className="p-2 shadow-md bg-white rounded-lg">
+            <div className="w-full h-52 rounded-md">
               <Bar data={barData} options={barOptions} />
             </div>
           </div>
 
-          <div className="flex justify-around p-2 shadow-md bg-white rounded-lg ">
-            <div className="w-[490px] h-52  rounded-md relative">
+          {/* Line Chart */}
+          <div className="p-2 shadow-md bg-white rounded-lg">
+            <div className="w-full h-52 rounded-md">
               <Line data={lineData} options={lineOptions} />
             </div>
           </div>
         </div>
       </div>
 
-      {/*========================= Recent Completed Jobs =======================  */}
-
-      <div className="bg-slate-200 p-2 rounded-md ml-1 h-full w-full">
+      {/* ================= Right Side ================= */}
+      <div className="bg-slate-200 p-2 rounded-md h-full w-full lg:w-[25%]">
         <div className="bg-white shadow-md rounded-md w-full h-full p-2">
           <Link to="view-board/Completed">
             <div className="h-[70px] mb-2 rounded-md bg-gradient-to-r from-[#66BB6A] to-[#C8E6C9] shadow-md flex flex-col items-center justify-center font-semibold text-green-900">
@@ -613,7 +601,7 @@ const Home = () => {
           </Link>
 
           {/* Scrollable job list */}
-          <div className="overflow-y-auto h-[430px]  pr-1">
+          <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-white h-[430px]  pr-1">
             {allJobs
               ?.filter(
                 (job) =>

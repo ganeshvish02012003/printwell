@@ -225,7 +225,7 @@ const MenageJobCard = () => {
   if (!user?.role) return <Login />;
 
   return (
-    <div className="h-[calc(88vh)] w-[84vw]   rounded-md p-2 pb-0 flex flex-col gap-1">
+    <div className="h-[calc(100vh-75px)] max-w-[84vw] min-w-full  mx-auto flex flex-col">
       <div className="w-full px-4 h-10 bg-slate-500 rounded-md flex justify-between items-center ">
         <h2 className="font-bold text-white text-lg">Menage Jobs</h2>
         <button
@@ -235,9 +235,9 @@ const MenageJobCard = () => {
           Add Job
         </button>
       </div>
-      <div className="flex-1  overflow-x-scroll scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-400 ">
-        <div className=" flex gap-1">
-          {boards
+            <div className="flex-1 bg-slate-400 rounded-md p-1 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200">
+              <div className="flex gap-1 min-w-fit  overflow-x-auto "> 
+                {boards
             ?.filter((job) => job?.job?.subStatus !== "Out_of_Stock")
             .map((board) => (
               <Board
@@ -248,8 +248,8 @@ const MenageJobCard = () => {
                 fetchAllJob={fetchAllJob}
               />
             ))}
-        </div>
-      </div>
+              </div>
+            </div>
 
       {openAddJob && (
         <TabPanel

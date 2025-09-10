@@ -133,15 +133,15 @@ const AllCustomer = () => {
   return (
     <div className="p-2">
       <div className="w-full px-4 h-12 bg-slate-500 rounded-md flex justify-between items-center mb-1">
-        <h2 className="font-bold text-white text-lg">All Customers</h2>
+        <h2 className="font-bold text-white text-lg">All Client</h2>
         <div>
-          <span className="text-white p-4 font-semibold">Total Customers</span>
+          {/* <span className="text-white p-4 font-semibold">Total Customers</span> */}
           <span className="text-black bg-slate-100 px-8 py-1 rounded-md font-semibold">
             {totalCustomers}
           </span>
         </div>
         <button
-          className="border-2 px-3 py-1 border-green-400 text-green-400 hover:bg-green-400 hover:text-white transition-all rounded-full"
+          className="border-2 px-2 py-1 border-green-400 text-green-400 hover:bg-green-400 hover:text-white transition-all rounded-full"
           onClick={() => {
             setFormData({
               name: "",
@@ -154,7 +154,7 @@ const AllCustomer = () => {
             setShowModal(true);
           }}
         >
-          Add New Customer
+          Add Client
         </button>
       </div>
 
@@ -231,23 +231,23 @@ const AllCustomer = () => {
                       key={c._id}
                       className={`text-center hover:bg-gray-400 ${rowBg}`}
                     >
-                      <td className="border border-slate-100 py-1">
+                      <td className="border border-slate-100 py-2">
                         {c.customerId}
                       </td>
-                      <td className="border border-slate-100 py-1">{c.name}</td>
-                      <td className="border border-slate-100 py-1">
+                      <td className="border border-slate-100 py-2">{c.name}</td>
+                      <td className="border border-slate-100 py-2">
                         {c.address}
                       </td>
-                      <td className="border border-slate-100 py-1">
+                      <td className="border border-slate-100 py-2">
                         {c.mobile}
                       </td>
-                      <td className="border border-slate-100 py-1">
+                      <td className="border border-slate-100 py-2">
                         {c.whatsapp}
                       </td>
-                      <td className="border border-slate-100 py-1">
+                      <td className="border border-slate-100 py-2">
                         {c.email}
                       </td>
-                      <td className="border border-slate-100 py-1">
+                      <td className="border border-slate-100 py-2">
                         <button
                           className="text-blue-600 hover:underline"
                           onClick={() => handleEdit(c)}

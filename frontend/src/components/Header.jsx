@@ -14,14 +14,13 @@ const Header = () => {
   const [menuDisplay, setMenuDisplay] = useState(false);
   // console.log("user header", user);
   const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-      if (!user?.role) {
-        navigate("/");
-      }
-    }, [user, navigate]);
-
+  useEffect(() => {
+    if (!user?.role) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const handleLogout = async () => {
     const fetchData = await fetch(SummaryApi.logout_user.url, {
@@ -33,7 +32,7 @@ const Header = () => {
     if (data.success) {
       toast.success(data.message);
       dispatch(setUserDetails(null));
-      navigate("/")
+      navigate("/");
     }
 
     if (data.error) {
@@ -44,12 +43,12 @@ const Header = () => {
   return (
     <>
       <div className="p-1">
-        <div className="drawer  bg-slate-400 h-fit  rounded-md px-4  ">
+        <div className="drawer  bg-slate-400 h-fit  rounded-md px-1 lg:px-8  ">
           <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content flex flex-col">
             {/* Navbar */}
-            <div className="navbar flex justify-between  max-w-10/12">
-              <div className="flex-none lg:hidden">
+            <div className="navbar flex justify-between max-w-10/12">
+              <div className="flex-none   lg:hidden">
                 <label
                   htmlFor="my-drawer-3"
                   aria-label="open sidebar"
@@ -70,34 +69,14 @@ const Header = () => {
                   </svg>
                 </label>
               </div>
-              <div className="flex px-2 justify-center lg:justify-start">
-                <Link to={"/Home"} className="text-2xl font-bold lg:text-3xl ">
+              <div className="flex px-2  ">
+                <Link to={"/Home"} className="text-xl font-bold lg:text-3xl ">
                   GPCI Maneger
                 </Link>
               </div>
-              {/* <div className="hidden flex-none lg:block ">
-                <ul className="menu menu-horizontal">
-
-                  <li>
-                    <button className="btn btn-ghost">Home</button>
-                  </li>
-                  <li>
-                    <button className="btn btn-ghost">Order</button>
-                  </li>
-                  <li>
-                    <button className="btn btn-ghost">Process</button>
-                  </li>
-                  <li>
-                    <button className="btn btn-ghost">Store</button>
-                  </li>
-                  <li>
-                    <button className="btn btn-ghost">Delevery</button>
-                  </li>
-                </ul>
-              </div> */}
-              <div className=" lg-px-2">
+              <div className=" lg-px-2 ">
                 <div
-                  className="relative flex justify-center "
+                  className="relative hidden lg:flex  justify-center "
                   onClick={() => setMenuDisplay((prev) => !prev)}
                 >
                   {user?._id && (
@@ -119,7 +98,7 @@ const Header = () => {
                       <nav>
                         {user?.role === ROLE.ADMIN && (
                           <Link
-                            to={"/Home/admin-panel/Menage-Job-Card"} 
+                            to={"/Home/admin-panel/Menage-Job-Card"}
                             className="whitespace-nowrap shadow-lg bg-white  hover:bg-slate-100 p-2 hidden md:block "
                           >
                             {" "}
@@ -130,7 +109,7 @@ const Header = () => {
                     </div>
                   )}
                 </div>
-                <div className="text-3xl mr-4 ml-2 cursor-pointer">
+                <div className="text-3xl hidden lg:flex mr-4 ml-2 cursor-pointer">
                   <div>
                     {user?._id ? (
                       <button onClick={handleLogout}>
@@ -147,22 +126,197 @@ const Header = () => {
             </div>
           </div>
 
-          <div className="drawer-side">
+          {/* drawer side */}
+          <div className="drawer-side fixed z-[80]">
             <label
               htmlFor="my-drawer-3"
               aria-label="close sidebar"
-              className="drawer-overlay"
+              className="drawer-overlay "
             ></label>
-            <ul className="menu bg-base-200 min-h-full w-80 p-4">
+
+            <ul className="menu bg-base-200 h-full w-72 p-4 z-50 ">
               {/* Sidebar content here */}
+              <div className="bg-white relative rounded-full">
+                {user?._id && (
+                  <div className="text-3xl  flex  items-center cursor-pointer">
+                    {user?.profilePic ? (
+                      <img
+                        src={user?.profilePic}
+                        className="h-20 w-20 border-2  border-gray-800 rounded-full"
+                        alt={user?.name}
+                      />
+                    ) : (
+                      <FaRegCircleUser />
+                    )}
+                    <p className="px-10">{user?.name}</p>
+                  </div>
+                )}
+              </div>
+
               <li>
-                <a>Sidebar Item 1</a>
+                <Link
+                  to="Home"
+                  onClick={() => {
+                    document.getElementById("my-drawer-3").checked = false;
+                  }}
+                >
+                  Home
+                </Link>
+              </li>
+
+              <li className="group">
+                <details>
+                  <summary className="cursor-pointer">Admin Panel</summary>
+                  <ul className="pl-4 space-y-1">
+                    <li>
+                      <Link
+                        to="Home/admin-panel/all-user"
+                        onClick={() => {
+                          document.getElementById(
+                            "my-drawer-3"
+                          ).checked = false;
+                        }}
+                      >
+                        Users
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="Home/admin-panel/all-customer"
+                        onClick={() => {
+                          document.getElementById(
+                            "my-drawer-3"
+                          ).checked = false;
+                        }}
+                      >
+                        All Customers
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="Home/admin-panel/Menage-Job-Card"
+                        onClick={() => {
+                          document.getElementById(
+                            "my-drawer-3"
+                          ).checked = false;
+                        }}
+                      >
+                        Menage Jobs
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link
+                        to="Home/admin-panel/all-job"
+                        onClick={() => {
+                          document.getElementById(
+                            "my-drawer-3"
+                          ).checked = false;
+                        }}
+                      >
+                        Active Jobs
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="Home/admin-panel/Peyment-Status"
+                        onClick={() => {
+                          document.getElementById(
+                            "my-drawer-3"
+                          ).checked = false;
+                        }}
+                      >
+                        Peyment Status
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="Home/admin-panel/Job-History"
+                        onClick={() => {
+                          document.getElementById(
+                            "my-drawer-3"
+                          ).checked = false;
+                        }}
+                      >
+                        Job History
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="Home/admin-panel/Job-Category"
+                        onClick={() => {
+                          document.getElementById(
+                            "my-drawer-3"
+                          ).checked = false;
+                        }}
+                      >
+                        job Category
+                      </Link>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+
+              <li>
+                <Link
+                  to="Home/view-board/Desgin"
+                  onClick={() => {
+                    document.getElementById("my-drawer-3").checked = false;
+                  }}
+                >
+                  Desgin Job
+                </Link>
               </li>
               <li>
-                <a>Sidebar Item 2</a>
+                <Link
+                  to="Home/view-board/Printing"
+                  onClick={() => {
+                    document.getElementById("my-drawer-3").checked = false;
+                  }}
+                >
+                  Print Job
+                </Link>
               </li>
               <li>
-                <a>Sidebar Item 2</a>
+                <Link
+                  to="Home/view-board/Other_work"
+                  onClick={() => {
+                    document.getElementById("my-drawer-3").checked = false;
+                  }}
+                >
+                  Binding Job
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="Home/view-board/Completed"
+                  onClick={() => {
+                    document.getElementById("my-drawer-3").checked = false;
+                  }}
+                >
+                  Complited Job
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="Home/view-board/Completed"
+                  onClick={() => {
+                    document.getElementById("my-drawer-3").checked = false;
+                  }}
+                >
+                  {user?._id ? (
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 text-red-400"
+                    >
+                      <MdLogout /> Logout
+                    </button>
+                  ) : (
+                    <Link to={"login"}>
+                      <MdLogin /> LogIn
+                    </Link>
+                  )}
+                </Link>
               </li>
             </ul>
           </div>

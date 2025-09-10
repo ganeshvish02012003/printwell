@@ -95,33 +95,35 @@ const PeymentStatus = () => {
 
   return (
     <div className="p-2">
-      <div className="bg-slate-500 px-4 py-2 rounded-md flex justify-between items-center mb-1">
-        <h2 className="font-bold text-white text-lg">Payment Status</h2>
-        <div>
-          <span className="text-white p-4 font-semibold">Total Jobs</span>
-          <span className="text-black bg-slate-100 px-8 py-1 rounded-md font-semibold">
-            {totalJobs}
-          </span>
-        </div>
-        <div>
-          <span className="text-white p-4 font-semibold">Total Client</span>
-          <span className="text-black bg-slate-100 px-8 py-1 rounded-md font-semibold">
-            {totalClients}
-          </span>
-        </div>
+      <div className="bg-slate-500 px-4 py-2 rounded-md flex flex-wrap justify-between items-center mb-1 gap-x-4">
+    <h2 className="font-bold text-white text-lg">Payment Status</h2>
 
-        <div>
-          <span className="text-white p-4 font-semibold">Credit</span>
-          <span className="text-red-500 bg-slate-100 px-8 py-1 rounded-md font-semibold">
-            ₹ {totalDueAmount.toLocaleString()}
-          </span>
-        </div>
-      </div>
+    <div className="hidden md:block">
+      <span className="text-white p-4 font-semibold">Total Jobs</span>
+      <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
+        {totalJobs}
+      </span>
+    </div>
+
+    <div className="hidden md:block">
+      <span className="text-white p-4 font-semibold">Total Client</span>
+      <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
+        {totalClients}
+      </span>
+    </div>
+
+    <div className="hidden md:block">
+      <span className="text-white p-4 font-semibold">Credit</span>
+      <span className="text-red-500 bg-slate-100 px-4 py-1 rounded-md font-semibold">
+        ₹ {totalDueAmount.toLocaleString()}
+      </span>
+    </div>
+  </div>
 
       <div className="border border-slate-300 overflow-hidden">
-        <div className="overflow-y-auto h-[calc(100vh-148px)]">
+        <div className="overflow-y-auto relative z-0 h-[calc(100vh-148px)]">
           <table className="w-full table-auto border-collapse">
-            <thead className="bg-slate-500 text-white sticky top-0 z-10">
+            <thead className="bg-slate-500 text-white sticky top-0 z-1">
               <tr>
                 <th className="border px-2 py-2">Sr.</th>
                 <th className="border px-2 py-2">
@@ -218,38 +220,38 @@ const PeymentStatus = () => {
                   return (
                     <React.Fragment key={job._id}>
                       <tr className={`hover:bg-gray-400 text-center ${rowBg}`}>
-                        <td className="border border-slate-100 p-1">
+                        <td className="border border-slate-100 p-1 py-2">
                           {job?.job?.jobCardId}
                         </td>
-                        <td className="border border-slate-100 p-1">
+                        <td className="border border-slate-100 p-1 py-2">
                           {job?.general?.Customer_name || "N/A"}
                         </td>
-                        <td className="border border-slate-100 p-1">
+                        <td className="border border-slate-100 p-1 py-2">
                           {job?.job?.jobName || "N/A"}
                         </td>
 
-                        <td className="border w-24 border-slate-100 p-1 ">
+                        <td className="border w-24 border-slate-100 p-1 py-2">
                           {job?.createdAt
                             ? moment(job.createdAt).format("YYYY/MM/DD")
                             : "N/A"}
                         </td>
-                        <td className="border w-24 border-slate-100 p-1">
+                        <td className="border w-24 border-slate-100 p-1 py-2">
                           {job?.finished?.Total_Amount}
                         </td>
-                        <td className="border w-24 border-slate-100 p-1">
+                        <td className="border w-24 border-slate-100 p-1 py-2">
                           {job?.finished?.Advance}
                         </td>
-                        <td className="border w-24 border-slate-100 p-1 font-bold">
+                        <td className="border w-24 border-slate-100 p-1 py-2 font-bold">
                           {job?.finished?.Due_Amount}
                         </td>
 
-                        <td className="border w-24 border-slate-100 p-1">
+                        <td className="border w-24 border-slate-100 p-1 py-2">
                           {job?.finished?.Peyment_Status}
                         </td>
-                        <td className="border w-28 border-slate-100 p-1">
+                        <td className="border w-28 border-slate-100 p-1 py-2">
                           {job?.finished?.Peyment_Mode}
                         </td>
-                        <td className="border border-slate-100 p-1 text-center">
+                        <td className="border border-slate-100 p-1 py-2 text-center">
                           <button
                             className="bg-green-500 text-white p-1 rounded-full hover:bg-green-600"
                             onClick={() => setEditJobId(job._id)}

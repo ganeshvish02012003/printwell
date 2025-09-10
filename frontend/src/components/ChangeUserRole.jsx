@@ -36,44 +36,59 @@ const ChangeUserRole = ({ name, email, userId, role, onClose, callFunc, }) => {
     console.log("role updated", responseData);
   };
 
-  return (
-    <div className="fixed top-0 bottom-0 left-0 right-0 w-full h-full z-10 flex justify-between items-center bg-slate-200 bg-opacity-80 ">
-      <div className="mx-auto bg-slate-50 shadow-md p-4 w-full max-w-sm">
-        <button className="block ml-auto" onClick={onClose}>
-          <IoMdClose />
-        </button>
+return (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="mx-4 w-full max-w-md bg-white rounded-2xl shadow-lg p-6 relative">
+      {/* Close Button */}
+      <button
+        className="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-2xl"
+        onClick={onClose}
+      >
+        <IoMdClose />
+      </button>
 
-        <h1 className="pb-4 text-lg font-medium">change User Role</h1>
-        <p>Name : {name} </p>
-        <p>Email : {email}</p>
+      {/* Header */}
+      <h1 className="text-xl font-semibold text-slate-700 border-b pb-3 mb-4">
+        Change User Role
+      </h1>
 
-        <div className="flex items-center justify-between my-4">
-          <p>Role : </p>
-          <select
-            className="border px-4 py-1 "
-            value={userRole}
-            onChange={handleOnChangeSelect}
-          >
-            {Object.values(ROLE).map((el) => {
-              return (
-                <option value={el} key={el}>
-                  {" "}
-                  {el}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-
-        <button
-          className="w-fit mx-auto block py-1 px-3 rounded-full bg-slate-500 text-white hover:bg-slate-600"
-          onClick={updateUserRole}
-        >
-          Change Role{" "}
-        </button>
+      {/* User Info */}
+      <div className="space-y-2 mb-4 text-slate-600">
+        <p>
+          <span className="font-medium">Name:</span> {name}
+        </p>
+        <p>
+          <span className="font-medium">Email:</span> {email}
+        </p>
       </div>
+
+      {/* Role Selector */}
+      <div className="flex items-center justify-between mb-6">
+        <p className="font-medium text-slate-700">Role:</p>
+        <select
+          className="border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400"
+          value={userRole}
+          onChange={handleOnChangeSelect}
+        >
+          {Object.values(ROLE).map((el) => (
+            <option value={el} key={el}>
+              {el}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Action Button */}
+      <button
+        className="w-full py-2 rounded-lg bg-slate-600 text-white font-medium hover:bg-slate-700 transition"
+        onClick={updateUserRole}
+      >
+        Update Role
+      </button>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default ChangeUserRole;

@@ -276,9 +276,9 @@ const ViewKanbanBoardPage = ({
   };
 
   return (
-    <div className="h-[calc(88vh)] mx-1 flex flex-col">
-      <div className="flex-1 bg-slate-400 rounded-md p-2 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200">
-        <div className="flex gap-1 min-w-fit overflow-x-auto ">
+    <div className="h-[calc(100vh-75px)] mx-1 flex flex-col">
+      <div className="flex-1 bg-slate-400 rounded-md p-1 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200">
+        <div className="flex gap-1 min-w-fit overflow-x-auto "> 
           {boards
             .filter((board) => board.title !== printSubStatus)
             .map((board) => (
@@ -309,7 +309,7 @@ const ViewKanbanBoardPage = ({
                   handleDragEnter={handleDragEnter}
                   fetchAllJob={fetchAllJob}
                   flex="flex"
-                  hight="h-[calc(100vh-525px)] py-0 w-screen"
+                  hight="h-[calc(1vh+115px)] py-0 w-screen"
                   color={color}
                   text={text}
                 />

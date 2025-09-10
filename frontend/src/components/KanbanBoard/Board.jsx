@@ -74,7 +74,7 @@ const Board = ({
         </div>
 
         <div
-          className="bg-slate-50 h-[calc(100vh-175px)] rounded-md p-2 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-100"
+          className="bg-slate-50 h-[calc(100vh-165px)] rounded-md p-2 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-100"
           onDragEnter={() => handleDragEnter(null, boards.id)}
         >
           {sortedCards

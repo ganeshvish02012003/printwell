@@ -205,44 +205,44 @@ const AllJob = () => {
     <div className="p-2">
       <div className="bg-slate-500 px-4 py-2 rounded-md flex justify-between items-center mb-1">
         {/* <h2 className="font-bold text-white text-lg">All Jobs</h2> */}
-        <div>
+        <div className="">
           <span className="text-white p-2 font-semibold text-lg">Total</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
             {/* count of total jobs */} {total_jobs}
           </span>
         </div>
-        <div>
+        <div className="hidden md:block">
           <span className="text-white p-2 font-semibold text-lg">Active</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
             {/* count of total jobs */} {total_ActiveJobs}
           </span>
         </div>
-        <div>
+        <div className="hidden md:block">
           <span className="text-white p-2 font-semibold text-lg">Pending</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
             {/* count of total jobs */} {Admin_TO_DO}
           </span>
         </div>
-        <div>
+        <div className="hidden xl:block">
           <span className="text-white p-2 font-semibold">Desgin</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
-            {/* whose status is Desgin */} {Active_Desgin}
+            {Active_Desgin}
           </span>
         </div>
-        <div>
+        <div className="hidden xl:block">
           <span className="text-white p-2 font-semibold">Print</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
             {/* whose status is Printing */} {Active_Print}
           </span>
         </div>
-        <div>
+        <div className="hidden xl:block">
           <span className="text-white p-2 px-2 font-semibold">Binding</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
             {/* whose status is Other_work */} {Admin_Other_work}
           </span>
         </div>
-        <div>
-          <span className="text-white p-2 font-semibold">Complete</span>
+        <div className="hidden xl:block">
+          <span className="text-white p-2 ">Complete</span>
           <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
             {/* whose status is Other_work */} {finished}
           </span>
@@ -256,7 +256,7 @@ const AllJob = () => {
       </div>
 
       <div className="border border-slate-300 overflow-hidden">
-        <div className="overflow-y-auto h-[calc(100vh-148px)]">
+        <div className="overflow-y-auto relative z-0 h-[calc(100vh-148px)]">
           <table className="w-full table-auto border-collapse">
             <thead className="bg-slate-500 text-white sticky top-0 z-10">
               <tr>

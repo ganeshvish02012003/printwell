@@ -78,7 +78,7 @@ const JobHistory = () => {
       </div>
 
       <div className="border border-slate-300 overflow-hidden">
-        <div className="overflow-y-auto h-[calc(100vh-148px)]">
+        <div className="overflow-y-auto relative z-0 h-[calc(100vh-148px)]">
           <table className="w-full table-auto border-collapse">
             <thead className="bg-slate-500 text-white sticky top-0 z-10">
               <tr>
@@ -155,32 +155,32 @@ const JobHistory = () => {
                   return (
                     <React.Fragment key={job._id}>
                       <tr className={`hover:bg-gray-400 text-center ${rowBg}`}>
-                        <td className="border border-slate-100 p-1">
+                        <td className="border border-slate-100 p-1 py-2">
                           {job?.job?.jobCardId}
                         </td>
-                        <td className="border border-slate-100 p-1">
+                        <td className="border border-slate-100 p-1 py-2">
                           {job?.general?.Customer_name || "N/A"}
                         </td>
-                        <td className="border border-slate-100 p-1">
+                        <td className="border border-slate-100 p-1 py-2">
                           {job?.job?.jobName || "N/A"}
                         </td>
 
-                        <td className="border w-24 border-slate-100 p-1">
+                        <td className="border w-24 border-slate-100 p-1 py-2">
                           {job?.job?.quantity}
                         </td>
-                        <td className="border w-24 border-slate-100 p-1">
+                        <td className="border w-24 border-slate-100 p-1 py-2">
                           {job?.job?.category}
                         </td>
-                        <td className="border w-24 border-slate-100 p-1">
+                        <td className="border w-24 border-slate-100 p-1 py-2">
                           {job?.finished?.Peyment_Status}
                         </td>
 
-                        <td className="border w-24 border-slate-100 p-1">
+                        <td className="border w-24 border-slate-100 p-1 py-2">
                           {job?.createdAt
                             ? moment(job.createdAt).format("YYYY/MM/DD")
                             : "N/A"}
                         </td>
-                        <td className="border border-slate-100 p-1 text-center">
+                        <td className="border border-slate-100 p-1 py-2 text-center">
                           <button
                             className="bg-green-500 text-white p-1 rounded-full hover:bg-green-600"
                             onClick={() => setEditJobId(job._id)}
