@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MdLogin } from "react-icons/md";
 import { MdLogout } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "../store/userSlice";
 import SummaryApi from "../common";
@@ -97,13 +97,13 @@ const Header = () => {
                     <div className="absolute bottom-0 top-11 h-fit p-2  rounded  ">
                       <nav>
                         {user?.role === ROLE.ADMIN && (
-                          <Link
+                          <NavLink
                             to={"/Home/admin-panel/Menage-Job-Card"}
                             className="whitespace-nowrap shadow-lg bg-white  hover:bg-slate-100 p-2 hidden md:block "
                           >
                             {" "}
                             Admin Panel
-                          </Link>
+                          </NavLink>
                         )}
                       </nav>
                     </div>
@@ -131,194 +131,307 @@ const Header = () => {
             <label
               htmlFor="my-drawer-3"
               aria-label="close sidebar"
-              className="drawer-overlay "
+              className="drawer-overlay"
             ></label>
 
-            <ul className="menu bg-base-200 h-full w-72 p-4 z-50 ">
+            <div className="bg-base-200 h-screen w-72 p-4 z-50 overflow-y-auto">
               {/* Sidebar content here */}
-              <div className="bg-white relative rounded-full">
+              <div className="bg-white relative rounded-full mb-4">
                 {user?._id && (
-                  <div className="text-3xl  flex  items-center cursor-pointer">
+                  <div className="text-3xl flex items-center cursor-pointer">
                     {user?.profilePic ? (
                       <img
                         src={user?.profilePic}
-                        className="h-20 w-20 border-2  border-gray-800 rounded-full"
+                        className="h-20 w-20 border-2 border-gray-800 rounded-full"
                         alt={user?.name}
                       />
                     ) : (
                       <FaRegCircleUser />
                     )}
-                    <p className="px-10">{user?.name}</p>
+                    <p className="px-4">{user?.name}</p>
                   </div>
                 )}
               </div>
 
-              <li>
-                <Link
-                  to="Home"
-                  onClick={() => {
-                    document.getElementById("my-drawer-3").checked = false;
-                  }}
-                >
-                  Home
-                </Link>
-              </li>
+              <ul className="menu space-y-2">
+                 <li>
 
-              <li className="group">
-                <details>
-                  <summary className="cursor-pointer">Admin Panel</summary>
-                  <ul className="pl-4 space-y-1">
-                    <li>
-                      <Link
-                        to="Home/admin-panel/all-user"
-                        onClick={() => {
-                          document.getElementById(
-                            "my-drawer-3"
-                          ).checked = false;
-                        }}
-                      >
-                        Users
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="Home/admin-panel/all-customer"
-                        onClick={() => {
-                          document.getElementById(
-                            "my-drawer-3"
-                          ).checked = false;
-                        }}
-                      >
-                        All Customers
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="Home/admin-panel/Menage-Job-Card"
-                        onClick={() => {
-                          document.getElementById(
-                            "my-drawer-3"
-                          ).checked = false;
-                        }}
-                      >
-                        Menage Jobs
-                      </Link>
-                    </li>
+                  <NavLink
+  to="Home"
+  end
+  className={({ isActive }) =>
+    `block px-3 py-2 rounded-md ${
+      isActive ? "bg-slate-600 text-white font-bold" : "hover:bg-slate-300"
+    }`
+  }
+  onClick={() => {
+    document.getElementById("my-drawer-3").checked = false;
+  }}
+>
+  Home
+</NavLink>
 
-                    <li>
-                      <Link
-                        to="Home/admin-panel/all-job"
-                        onClick={() => {
-                          document.getElementById(
-                            "my-drawer-3"
-                          ).checked = false;
-                        }}
-                      >
-                        Active Jobs
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="Home/admin-panel/Peyment-Status"
-                        onClick={() => {
-                          document.getElementById(
-                            "my-drawer-3"
-                          ).checked = false;
-                        }}
-                      >
-                        Peyment Status
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="Home/admin-panel/Job-History"
-                        onClick={() => {
-                          document.getElementById(
-                            "my-drawer-3"
-                          ).checked = false;
-                        }}
-                      >
-                        Job History
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="Home/admin-panel/Job-Category"
-                        onClick={() => {
-                          document.getElementById(
-                            "my-drawer-3"
-                          ).checked = false;
-                        }}
-                      >
-                        job Category
-                      </Link>
-                    </li>
-                  </ul>
-                </details>
-              </li>
+                </li>
 
-              <li>
-                <Link
-                  to="Home/view-board/Desgin"
-                  onClick={() => {
-                    document.getElementById("my-drawer-3").checked = false;
-                  }}
-                >
-                  Desgin Job
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="Home/view-board/Printing"
-                  onClick={() => {
-                    document.getElementById("my-drawer-3").checked = false;
-                  }}
-                >
-                  Print Job
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="Home/view-board/Other_work"
-                  onClick={() => {
-                    document.getElementById("my-drawer-3").checked = false;
-                  }}
-                >
-                  Binding Job
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="Home/view-board/Completed"
-                  onClick={() => {
-                    document.getElementById("my-drawer-3").checked = false;
-                  }}
-                >
-                  Complited Job
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="Home/view-board/Completed"
-                  onClick={() => {
-                    document.getElementById("my-drawer-3").checked = false;
-                  }}
-                >
+                <li>
+                  <details>
+                    <summary className="cursor-pointer">Admin Panel</summary>
+                    <ul className="pl-4 space-y-1">
+                      <li>
+                        <NavLink
+                          to="Home/admin-panel/all-user"
+                          className={({ isActive }) =>
+                            `block px-3 py-2 rounded-md ${
+                              isActive
+                                ? "bg-slate-600 text-white font-bold"
+                                : "hover:bg-slate-300"
+                            }`
+                          }
+                          onClick={() => {
+                            document.getElementById(
+                              "my-drawer-3"
+                            ).checked = false;
+                          }}
+                        >
+                          Users
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="Home/admin-panel/all-customer"
+                          className={({ isActive }) =>
+                            `block px-3 py-2 rounded-md ${
+                              isActive
+                                ? "bg-slate-600 text-white font-bold"
+                                : "hover:bg-slate-300"
+                            }`
+                          }
+                          onClick={() =>
+                            (document.getElementById(
+                              "my-drawer-3"
+                            ).checked = false)
+                          }
+                        >
+                          All Customers
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="Home/admin-panel/Menage-Job-Card"
+                          className={({ isActive }) =>
+                            `block px-3 py-2 rounded-md ${
+                              isActive
+                                ? "bg-slate-600 text-white font-bold"
+                                : "hover:bg-slate-300"
+                            }`
+                          }
+                          onClick={() =>
+                            (document.getElementById(
+                              "my-drawer-3"
+                            ).checked = false)
+                          }
+                        >
+                          Menage Jobs
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="Home/admin-panel/all-job"
+                          className={({ isActive }) =>
+                            `block px-3 py-2 rounded-md ${
+                              isActive
+                                ? "bg-slate-600 text-white font-bold"
+                                : "hover:bg-slate-300"
+                            }`
+                          }
+                          onClick={() =>
+                            (document.getElementById(
+                              "my-drawer-3"
+                            ).checked = false)
+                          }
+                        >
+                          Active Jobs
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="Home/admin-panel/Peyment-Status"
+                          className={({ isActive }) =>
+                            `block px-3 py-2 rounded-md ${
+                              isActive
+                                ? "bg-slate-600 text-white font-bold"
+                                : "hover:bg-slate-300"
+                            }`
+                          }
+                          onClick={() =>
+                            (document.getElementById(
+                              "my-drawer-3"
+                            ).checked = false)
+                          }
+                        >
+                          Peyment Status
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="Home/admin-panel/Job-History"
+                          className={({ isActive }) =>
+                            `block px-3 py-2 rounded-md ${
+                              isActive
+                                ? "bg-slate-600 text-white font-bold"
+                                : "hover:bg-slate-300"
+                            }`
+                          }
+                          onClick={() =>
+                            (document.getElementById(
+                              "my-drawer-3"
+                            ).checked = false)
+                          }
+                        >
+                          Job History
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="Home/admin-panel/Job-Category"
+                          className={({ isActive }) =>
+                            `block px-3 py-2 rounded-md ${
+                              isActive
+                                ? "bg-slate-600 text-white font-bold"
+                                : "hover:bg-slate-300"
+                            }`
+                          }
+                          onClick={() =>
+                            (document.getElementById(
+                              "my-drawer-3"
+                            ).checked = false)
+                          }
+                        >
+                          Job Category
+                        </NavLink>
+                      </li>
+                    </ul>
+                  </details>
+                </li>
+
+
+
+
+                <li>
+                  <NavLink
+                    to="Home/view-board/Desgin"
+                    className={({ isActive }) =>
+                      `block px-3 py-2 rounded-md ${
+                        isActive
+                          ? "bg-slate-600 text-white font-bold"
+                          : "hover:bg-slate-300"
+                      }`
+                    }
+                    onClick={() => {
+                      document.getElementById("my-drawer-3").checked = false;
+                    }}
+                  >
+                    Desgin Job
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="Home/view-board/Printing"
+                    className={({ isActive }) =>
+                      `block px-3 py-2 rounded-md ${
+                        isActive
+                          ? "bg-slate-600 text-white font-bold"
+                          : "hover:bg-slate-300"
+                      }`
+                    }
+                    onClick={() => {
+                      document.getElementById("my-drawer-3").checked = false;
+                    }}
+                  >
+                    Print Job
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="Home/view-board/Other_work"
+                    className={({ isActive }) =>
+                      `block px-3 py-2 rounded-md ${
+                        isActive
+                          ? "bg-slate-600 text-white font-bold"
+                          : "hover:bg-slate-300"
+                      }`
+                    }
+                    onClick={() => {
+                      document.getElementById("my-drawer-3").checked = false;
+                    }}
+                  >
+                    Binding Job
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="Home/view-board/Completed"
+                    className={({ isActive }) =>
+                      `block px-3 py-2 rounded-md ${
+                        isActive
+                          ? "bg-slate-600 text-white font-bold"
+                          : "hover:bg-slate-300"
+                      }`
+                    }
+                    onClick={() => {
+                      document.getElementById("my-drawer-3").checked = false;
+                    }}
+                  >
+                    Completed Job
+                  </NavLink>
+                </li>
+                {/* <li>
                   {user?._id ? (
                     <button
                       onClick={handleLogout}
                       className="flex items-center gap-2 text-red-400"
+                        onClick={() => {
+    document.getElementById("my-drawer-3").checked = false;
+  }}
                     >
                       <MdLogout /> Logout
                     </button>
                   ) : (
-                    <Link to={"login"}>
+                    <Link to="login">
                       <MdLogin /> LogIn
                     </Link>
                   )}
-                </Link>
-              </li>
-            </ul>
+                </li> */}
+                <li>
+  {user?._id ? (
+    <button
+      onClick={() => {
+        handleLogout();
+        document.getElementById("my-drawer-3").checked = false;
+      }}
+      className="flex items-center flex-row gap-2 text-red-400"
+    >
+      <MdLogout /> Logout
+    </button>
+  ) : (
+    <NavLink
+      to="login"
+      className={({ isActive }) =>
+        `block px-3 py-2 rounded-md ${
+          isActive ? "bg-slate-600 text-white font-bold" : "hover:bg-slate-300"
+        }`
+      }
+      onClick={() => {
+        document.getElementById("my-drawer-3").checked = false;
+      }}
+    >
+      <MdLogin /> LogIn
+    </NavLink>
+  )}
+</li>
+
+              </ul>
+            </div>
           </div>
         </div>
       </div>

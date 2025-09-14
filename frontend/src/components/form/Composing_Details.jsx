@@ -11,12 +11,12 @@ const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
       design: false,
       setting: false,
       typing: false,
-      PrintOut :false,
+      PrintOut: false,
       pdf: false,
       master: false,
       butter: false,
       OldPlate: false,
-      NewPlate: false
+      NewPlate: false,
     },
     proofs: [{ id: 1, status: null }],
     finalDesignPath: "",
@@ -106,45 +106,55 @@ const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
       <p className="text-center text-lg font-bold py-1 bg-slate-400 mb-2 text-white rounded">
         Composing Details
       </p>
-      <div className="flex">
-        <div className="w-3/4 p-2">
+      <div className="md:flex  h-[calc(100vh-280px)] overflow-y-auto">
+        <div className="w-full md:w-3/4 p-2">
           <div className="rounded-xl">
             <div className="mb-3 grid grid-cols-6">
-              <p className="text-sm  mb-1 pl-1 col-span-1">Task</p>
-              <div className="col-span-5 grid grid-cols-1 md:grid-cols-3 gap-2">
-                {["design", "setting", "typing", "PrintOut", "master","OldPlate" ,"pdf","butter" , "NewPlate" ].map(
-                  (item) => (
-                    <div
-                      key={item}
-                      className="bg-slate-50 rounded flex justify-between items-center p-2 py-1"
+              <p className="text-sm  mb-1 pl-1 col-span-6 md:col-span-1">
+                Task
+              </p>
+              <div className="col-span-6 md:col-span-5 grid grid-cols-2 md:grid-cols-3 gap-2">
+                {[
+                  "design",
+                  "setting",
+                  "typing",
+                  "PrintOut",
+                  "master",
+                  "OldPlate",
+                  "pdf",
+                  "butter",
+                  "NewPlate",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="bg-slate-50 rounded flex justify-between items-center p-2 py-1"
+                  >
+                    <label
+                      htmlFor={item}
+                      className="flex-1 flex justify-between"
                     >
-                      <label
-                        htmlFor={item}
-                        className="flex-1 flex justify-between"
-                      >
-                        <span className="px-2 text-sm font-normal">
-                          {item.replace("_", " ")}
-                        </span>
-                        <input
-                          type="checkbox"
-                          name={item}
-                          id={item}
-                          checked={data.proofChecklist[item]}
-                          onChange={handleCheckboxChange}
-                          className="h-4 w-4"
-                        />
-                      </label>
-                    </div>
-                  )
-                )}
+                      <span className="px-2 text-sm font-normal">
+                        {item.replace("_", " ")}
+                      </span>
+                      <input
+                        type="checkbox"
+                        name={item}
+                        id={item}
+                        checked={data.proofChecklist[item]}
+                        onChange={handleCheckboxChange}
+                        className="h-4 w-4"
+                      />
+                    </label>
+                  </div>
+                ))}
               </div>
             </div>
 
             <div className="grid grid-cols-6 mb-2">
-              <h2 className="col-span-1 pl-1 text-sm flex items-start">
+              <h2 className="col-span-6 md:col-span-1 pl-1 text-sm flex items-start">
                 Proof Check
               </h2>
-              <div className="p-2 text-sm border rounded col-span-5">
+              <div className="p-2 text-sm border rounded col-span-6 md:col-span-5">
                 <div className="flex gap-2 flex-wrap">
                   {[1, 2, 3, 4, 5].map((num, index) => {
                     const proof = data.proofs[index] || {
@@ -210,7 +220,7 @@ const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
 
             {/* Final Design File Path */}
             <div className="grid grid-cols-6 mb-2">
-              <label className="col-span-1 text-sm pl-1 flex items-center">
+              <label className="col-span-6 md:col-span-1 text-sm pl-1 flex items-center">
                 Design Path:
               </label>
               <input
@@ -219,14 +229,14 @@ const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
                 value={data.finalDesignPath}
                 placeholder="e.g., /uploads/final_design.pdf"
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-5"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-5"
               />
             </div>
 
             <div className="grid grid-cols-6 mb-2">
               <label
                 htmlFor="description"
-                className="col-span-1 pl-1 text-sm flex items-start"
+                className="col-span-6 md:col-span-1 pl-1 text-sm flex items-start"
               >
                 Description:
               </label>
@@ -236,7 +246,7 @@ const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
                 placeholder="Enter Composing Description"
                 value={data.description}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 text-sm border rounded col-span-5"
+                className="p-1 bg-slate-50 text-sm border rounded col-span-6 md:col-span-5"
                 rows={3}
               ></textarea>
             </div>
@@ -244,7 +254,7 @@ const Composing_Details = ({ onChange = () => {}, initialData = {} }) => {
         </div>
 
         {/* final image */}
-        <div className="w-1/4 px-2 pt-1">
+        <div className=" md:w-1/4  px-2 pt-1">
           <label htmlFor="sampleFile" className="block">
             Final File
           </label>

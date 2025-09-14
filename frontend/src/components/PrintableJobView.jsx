@@ -2,20 +2,30 @@ import React from "react";
 import moment from "moment";
 
 const PrintableJobView = ({ closeModal, card, fetchAllJob }) => {
+
+  // put this inside your component function (above return)
+const isTrue = (v) =>
+  v === true ||
+  v === "true" ||
+  v === 1 ||
+  v === "1" ||
+  v === "yes" ||
+  v === "Yes";
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white relative rounded-lg p-4 overflow-y-auto max-w-screen-md w-full h-screen">
+      <div className="bg-white relative rounded-lg   overflow-auto max-w-screen-md w-full h-screen">
         <button
           onClick={closeModal}
-          className="absolute top-2 right-2 hover:text-red-500 text-xl"
+          className="fixed md:absolute top-2 right-2 hover:text-red-500 text-xl"
         >
           ✕
         </button>
         {/* Your printable content goes here */}
-        <h2 className="text-xl text-center  rounded pt-4 font-bold uppercase">
+        <h2 className="text-xl text-center w-[750px]  rounded pt-4 font-bold uppercase">
           Goyal printing & converting industries
         </h2>
-        <div className="  h-full p-4 pt-1">
+        <div className="  h-full w-[750px] p-4 pt-1">
           <h2 className="text-2xl text-center bg-gray-300 rounded pb-1 uppercase font-bold">
             Printing Job Card
           </h2>
@@ -349,7 +359,7 @@ const PrintableJobView = ({ closeModal, card, fetchAllJob }) => {
               </div>
               <p className="text-[12px] pt-1 ">
                 {" "}
-                Paper_description :-{" "}
+                Paper description :-{" "}
                 <span className="font-bold underline">
                   {" "}
                   {card.paper?.Paper_description ||
@@ -366,7 +376,7 @@ const PrintableJobView = ({ closeModal, card, fetchAllJob }) => {
                 <div className="w-4/12 ">
                   <p className="text-[12px] pt-1 ">
                     {" "}
-                    Paper_name :-{" "}
+                    Machine name :-{" "}
                     <span className="font-bold underline">
                       {" "}
                       {card.printing?.Machine_name ||
@@ -436,7 +446,7 @@ const PrintableJobView = ({ closeModal, card, fetchAllJob }) => {
               </p>
             </div>
 
-            <div className="bg-slate-50 p-4 mt-1 py-2 border rounded">
+            {/* <div className="bg-slate-50 p-4 mt-1 py-2 border rounded">
               <h1 className="text-center bg-slate-200 rounded font-bold ">
                 Binding Details
               </h1>
@@ -530,7 +540,108 @@ const PrintableJobView = ({ closeModal, card, fetchAllJob }) => {
                     "_______________________________________"}{" "}
                 </span>
               </p>
-            </div>
+            </div> */}
+            
+<div className="bg-slate-50 p-4 mt-1 py-2 border rounded">
+  <h1 className="text-center bg-slate-200 rounded font-bold ">
+    Binding Details
+  </h1>
+
+  <div className="flex pt-2">
+    <div className="w-4/12 ">
+      <p className="text-[12px] pt-1 flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={isTrue(card?.binding?.Numbering)}
+          disabled
+          className="w-4 h-4"
+          aria-label="Numbering"
+        />
+        Numbering
+      </p>
+
+      <p className="text-[12px] pt-1 flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={isTrue(card?.binding?.Perfiting)}
+          disabled
+          className="w-4 h-4"
+          aria-label="Perfiting"
+        />
+        Perfiting
+      </p>
+      <p className="text-[12px] pt-1 flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={isTrue(card?.binding?.Binding )}
+          disabled
+          className="w-4 h-4"
+          aria-label="Binding"
+        />
+        Binding
+      </p>
+    </div>
+
+    <div className="w-4/12 ">
+      <p className="text-[12px] pt-1">
+        set number :-
+        <span className="font-bold underline ml-1">
+          {card.binding?.set_number || "___________________________"}
+        </span>
+      </p>
+
+      <p className="text-[12px] pt-1 flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={isTrue(card?.binding?.Half_cutting)}
+          disabled
+          className="w-4 h-4"
+          aria-label="Half cutting"
+        />
+        Half cutting
+      </p>
+
+      <p className="text-[12px] pt-1">
+        Binding Type :-
+        <span className="font-bold underline ml-1">
+          {card.job?.binding_type || "__________________________________"}
+        </span>
+      </p>
+    </div>
+
+    <div className="w-4/12 ">
+      <p className="text-[12px] pt-1 flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={isTrue(card?.binding?.Full_cutting)}
+          disabled
+          className="w-4 h-4"
+          aria-label="Full cutting"
+        />
+        Full cutting
+      </p>
+
+      <p className="text-[12px] pt-1 flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={isTrue(card?.binding?.Packing)}
+          disabled
+          className="w-4 h-4"
+          aria-label="Packing"
+        />
+        Packing
+      </p>
+    </div>
+  </div>
+
+  <p className="text-[12px] pt-1">
+    Binding description :-
+    <span className="font-bold underline ml-1">
+      {card.binding?.Binding_description || "_______________________________________"}
+    </span>
+  </p>
+</div>
+
 
             <div className="bg-slate-50 p-4 mt-1  py-2 border rounded">
               <h1 className="text-center bg-slate-200 rounded font-bold">

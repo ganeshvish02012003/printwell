@@ -30,6 +30,10 @@ const CustomerSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+      clientType: {
+      type: String, 
+      trim: true,
+    },
   },
   {
     timestamps: true,

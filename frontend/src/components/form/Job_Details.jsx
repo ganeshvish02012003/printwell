@@ -127,11 +127,13 @@ const Job_Details = ({
       <p className="text-center text-lg font-bold py-1 bg-slate-400 mb-2 text-white rounded">
         Job Details
       </p>
-      <div className="flex">
-        <div className="w-3/4 p-2">
+      <div className="md:flex  h-[calc(100vh-280px)] overflow-y-auto">
+        <div className="w-full md:w-3/4 p-2">
           <div className="rounded-xl">
             {/* Job Name */}
-            <div className="grid grid-cols-6 mb-2">
+            <div
+              className="grid grid-cols-1 md:grid-cols-6 gap-1 md:gap-2 mb-2"
+            >
               <label
                 htmlFor="jobName"
                 className="col-span-1 text-sm pl-1 flex items-center"
@@ -145,7 +147,7 @@ const Job_Details = ({
                 value={data.jobName || ""}
                 placeholder="Enter Job Name"
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-4"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-4 "
                 required
               />
 
@@ -156,13 +158,15 @@ const Job_Details = ({
                 value={data.jobCardId || ""}
                 onChange={handleInputChange}
                 placeholder="Job Id"
-                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-1"
                 disabled
               />
             </div>
 
             {/* Job Category */}
-            <div className="grid grid-cols-6 mb-2">
+            <div
+              className="grid grid-cols-1 md:grid-cols-6 gap-1 md:gap-2 mb-2"
+            >
               <label
                 htmlFor="category"
                 className="col-span-1 text-sm pl-1 flex items-center"
@@ -215,7 +219,9 @@ const Job_Details = ({
             </div>
 
             {/* Quantity */}
-            <div className="grid grid-cols-6 mb-2">
+            <div
+              className="grid grid-cols-1 md:grid-cols-6 gap-1 md:gap-2 mb-2"
+            >
               <label
                 htmlFor="quantity"
                 className="col-span-1 text-sm pl-1  flex items-center"
@@ -234,7 +240,7 @@ const Job_Details = ({
 
               <label
                 htmlFor="pages"
-                className="col-span-1 text-sm pl-1 ml-2 flex items-center"
+                className="col-span-1 text-sm pl-1 md:ml-2 flex items-center"
               >
                 No. of Pages:
               </label>
@@ -249,7 +255,9 @@ const Job_Details = ({
             </div>
 
             {/* Job Size & Pages */}
-            <div className="grid grid-cols-6 mb-2">
+            <div
+              className="grid grid-cols-1 md:grid-cols-6 gap-1 md:gap-2 mb-2"
+            >
               <label
                 htmlFor="jobSize"
                 className="col-span-1 text-sm pl-1 flex items-center"
@@ -259,7 +267,7 @@ const Job_Details = ({
               <select
                 name="jobSize"
                 id="jobSize"
-                value={data.jobSize || ""}
+                value={data.jobSize || "" }
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
               >
@@ -326,7 +334,9 @@ const Job_Details = ({
             </div>
 
             {/* Color & Ink */}
-            <div className="grid grid-cols-6 mb-2">
+            <div
+              className="grid grid-cols-1 md:grid-cols-6 gap-1 md:gap-2 mb-2"
+            >
               <label
                 htmlFor="color"
                 className="col-span-1 text-sm pl-1 flex items-center"
@@ -346,7 +356,7 @@ const Job_Details = ({
 
               <label
                 htmlFor="ink"
-                className="col-span-1 text-sm pl-1 mx-8 flex items-center"
+                className="col-span-1 text-sm pl-1 md:mx-8 flex items-center"
               >
                 Ink:
               </label>
@@ -369,7 +379,9 @@ const Job_Details = ({
             </div>
 
             {/* Paper & Paper GSM*/}
-            <div className="grid grid-cols-6 mb-2">
+            <div
+              className="grid grid-cols-1 md:grid-cols-6 gap-1 md:gap-2 mb-2"
+            >
               <label
                 htmlFor="paperName"
                 className="col-span-1 text-sm pl-1 flex items-center"
@@ -396,19 +408,20 @@ const Job_Details = ({
                 <option value="Taxture paper">Taxture paper</option>
                 <option value="Sticker">Sticker</option>
                 <option value="NT Sticker">NT Sticker</option>
-                <option value="NT Transperent Sticker">NT Transperent Sticker</option>
+                <option value="NT Transperent Sticker">
+                  NT Transperent Sticker
+                </option>
                 <option value="Golden Sticker">Golden Sticker</option>
                 <option value="Silvar Sticker">Silvar Sticker</option>
                 <option value="Ivory / Bristol Board">
                   Ivory / Bristol Board
                 </option>
                 <option value="Art Card">Art Card</option>
-              
               </select>
 
               <label
                 htmlFor="paper_GSM"
-                className="col-span-1 text-sm pl-1 ml-2 flex items-center font-normal "
+                className="col-span-1 text-sm pl-1 md:ml-2 flex items-center font-normal "
               >
                 Paper GSM
               </label>
@@ -420,12 +433,13 @@ const Job_Details = ({
                 value={data.paper_GSM}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-                
               />
             </div>
 
             {/* Machine & Paper Color*/}
-            <div className="grid grid-cols-6 mb-2">
+            <div
+              className="grid grid-cols-1 md:grid-cols-6 gap-1 md:gap-2 mb-2"
+            >
               <label
                 htmlFor="Machine_name"
                 className="col-span-1 text-sm pl-1  flex items-center font-normal"
@@ -456,7 +470,7 @@ const Job_Details = ({
 
               <label
                 htmlFor="paperColor"
-                className="col-span-1 text-sm pl-1 ml-2 flex items-center"
+                className="col-span-1 text-sm pl-1 md:ml-2 flex items-center"
               >
                 Paper Color:
               </label>
@@ -477,10 +491,12 @@ const Job_Details = ({
             </div>
 
             {/* Delivery Date and time */}
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            <div
+              className="grid grid-cols-1 md:grid-cols-6 gap-1 md:gap-2 mb-2 justify-center"
+            >
               <label
                 htmlFor="When_to_give_goods"
-                className="col-span-1 text-sm  pl-1  flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm  pl-1  flex items-center font-normal "
               >
                 Delivery Date
               </label>
@@ -491,7 +507,7 @@ const Job_Details = ({
                 placeholder="Delivery Date"
                 value={data.When_to_give_goods}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded px-0 col-span-1 "
+                className="p-1 bg-slate-50 border text-sm rounded px-0 col-span-3 md:col-span-1 "
               />
               <input
                 type="time"
@@ -500,12 +516,12 @@ const Job_Details = ({
                 placeholder="Delivery Time"
                 value={data.Time_of_give_goods}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-1 "
+                className="p-1 bg-slate-50 border text-sm rounded col-span-3 md:col-span-1 "
               />
 
               <label
                 htmlFor="priority"
-                className="col-span-1 text-sm pl-1 flex items-center"
+                className="col-span-6 md:col-span-1 text-sm pl-1 flex items-center"
               >
                 Priority:
               </label>
@@ -514,9 +530,8 @@ const Job_Details = ({
                 id="priority"
                 value={data.priority || "Medium"}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
               >
-
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>
                 <option value="Urgent">Urgent</option>
@@ -525,7 +540,9 @@ const Job_Details = ({
             </div>
 
             {/* Job Description */}
-            <div className="grid grid-cols-6 ">
+            <div
+              className="grid grid-cols-1 md:grid-cols-6 gap-1 md:gap-2"
+            >
               <label
                 htmlFor="job_description"
                 className="col-span-1 text-sm pl-1 flex items-start"
@@ -535,7 +552,7 @@ const Job_Details = ({
               <textarea
                 name="job_description"
                 id="job_description"
-                value={data.job_description || ""}
+                value={data.job_description ||  ""}
                 onChange={handleInputChange}
                 className="p-1 bg-slate-50 border text-sm rounded col-span-5"
                 rows={1}
@@ -545,7 +562,7 @@ const Job_Details = ({
         </div>
 
         {/* Preview Section */}
-        <div className="w-1/4 px-2 pt-1">
+        <div className=" md:w-1/4 px-2 pt-1">
           <label htmlFor="sampleFile" className="block">
             Sample File:
           </label>

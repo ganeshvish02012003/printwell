@@ -9,6 +9,7 @@ const AllCustomer = () => {
     mobile: "",
     whatsapp: "",
     email: "",
+    clientType: "",
   });
 
   const [customers, setCustomers] = useState([]);
@@ -38,6 +39,7 @@ const AllCustomer = () => {
     mobile: "",
     whatsapp: "",
     email: "",
+    clientType: "",
   });
 
   const handleSearchChange = (e) => {
@@ -115,6 +117,7 @@ const AllCustomer = () => {
         mobile: "",
         whatsapp: "",
         email: "",
+        clientType: "",
       });
       setShowModal(false);
       setEditingId(null);
@@ -149,6 +152,7 @@ const AllCustomer = () => {
               mobile: "",
               whatsapp: "",
               email: "",
+              clientType: "",
             });
             setEditingId(null);
             setShowModal(true);
@@ -214,6 +218,16 @@ const AllCustomer = () => {
                     className=" p-1 min-w-40 text-sm text-center text-white placeholder-white bg-slate-500 rounded border"
                   />
                 </th>
+                <th className="border py-2">
+                  <input
+                    type="text"
+                    name="clientType"
+                    value={searchQuery.clientType}
+                    onChange={handleSearchChange}
+                    placeholder=" ClientType"
+                    className=" p-1  w-24 text-sm text-center text-white placeholder-white bg-slate-500 rounded border"
+                  />
+                </th>
                 <th className="border py-2">Action</th>
               </tr>
             </thead>
@@ -248,6 +262,9 @@ const AllCustomer = () => {
                         {c.email}
                       </td>
                       <td className="border border-slate-100 py-2">
+                        {c.clientType}
+                      </td>
+                      <td className="border border-slate-100 py-2">
                         <button
                           className="text-blue-600 hover:underline"
                           onClick={() => handleEdit(c)}
@@ -278,20 +295,25 @@ const AllCustomer = () => {
               {editingId ? "Update Customer" : "Add New Customer"}
             </h3>
             <form onSubmit={handleSubmit} className="space-y-3">
-              {["name", "address", "mobile", "whatsapp", "email"].map(
-                (field) => (
-                  <input
-                    key={field}
-                    type={field === "email" ? "email" : "text"}
-                    name={field}
-                    placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                    value={formData[field]}
-                    onChange={handleChange}
-                    required={["name", "mobile"].includes(field)}
-                    className="w-full p-2 border rounded"
-                  />
-                )
-              )}
+              {[
+                "name",
+                "address",
+                "mobile",
+                "whatsapp",
+                "email",
+                "clientType",
+              ].map((field) => (
+                <input
+                  key={field}
+                  type={field === "email" ? "email" : "text"}
+                  name={field}
+                  placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  required={["name", "mobile"].includes(field)}
+                  className="w-full p-2 border rounded"
+                />
+              ))}
 
               <div className="flex justify-between pt-4">
                 <button

@@ -173,7 +173,8 @@ useEffect(() => {
               <Tabs
                 value={value}
                 onChange={handleChange}
-                variant="fullWidth"
+                // variant="fullWidth"
+                variant="scrollable"
                 aria-label="full width tabs example"
                 className="bg-slate-500 text-white rounded-t-lg p-2 pb-0"
                 sx={{

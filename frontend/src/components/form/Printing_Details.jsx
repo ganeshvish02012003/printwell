@@ -44,13 +44,13 @@ useEffect(() => {
       <p className="text-center text-lg font-bold py-1 bg-slate-400 mb-2 text-white rounded">
         Printing Details
       </p>
-      <div className="flex">
-        <div className="bg  w-3/4 p-2">
-          <div className="   rounded-xl">
-            <div className="grid grid-cols-6 mb-2 justify-center">
+      <div className="md:flex  h-[calc(100vh-280px)] overflow-y-auto">
+        <div className=" w-full md:w-3/4 p-2">
+          <div className="   rounded-xl grid gap-1">
+            <div className="grid grid-cols-6 md:mb-2 gap-1  justify-center">
               <label
                 htmlFor="Machine_name"
-                className="col-span-1 text-sm pl-1  flex items-center font-normal"
+                className="col-span-6 md:col-span-1 text-sm pl-1  flex items-center font-normal"
               >
                 Machine name
               </label>
@@ -59,7 +59,7 @@ useEffect(() => {
                 id="Machine_name"
                 value={jobData.Machine_name ||data.Machine_name|| ""}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
                 
                 
               >
@@ -80,7 +80,7 @@ useEffect(() => {
 
               <label
                 htmlFor="Customer_name"
-                className="col-span-1 text-sm pl-1 mx-2 flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm pl-1 md:mx-2 flex items-center font-normal "
               >
                 Operator
               </label>
@@ -91,15 +91,15 @@ useEffect(() => {
                 placeholder="Enter Operator Name "
                 value={data.Operator_name}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
                 
               />
             </div>
 
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            <div className="grid grid-cols-6 md:mb-2 gap-1  justify-center">
               <label
                 htmlFor="Total_set_of_print"
-                className="col-span-1 text-sm  pl-1   flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm  pl-1   flex items-center font-normal "
               >
                 Total set
               </label>
@@ -110,13 +110,13 @@ useEffect(() => {
                 placeholder="Total set of printing "
                 value={data.Total_set_of_print}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
                 required
               />
 
               <label
                 htmlFor="print_no_per_set"
-                className="col-span-1 text-sm  pl-1 mx-2  flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm  pl-1 md:mx-2  flex items-center font-normal "
               >
                 Per Set
               </label>
@@ -127,15 +127,15 @@ useEffect(() => {
                 placeholder="Printing Number per set"
                 value={data.print_no_per_set}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
                 
               />
             </div>
 
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            <div className="grid grid-cols-6 md:mb-2 gap-1  justify-center">
               <label
                 htmlFor="Start_date_of_print"
-                className="col-span-1 text-sm  pl-1  flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm  pl-1  flex items-center font-normal "
               >
                 state Date
               </label>
@@ -146,13 +146,13 @@ useEffect(() => {
                 placeholder="Quantity of paper ordered"
                 value={data.Start_date_of_print}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
                
               />
 
               <label
                 htmlFor="Start_time_of_print"
-                className="col-span-1 text-sm  px-4  flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm  md:px-4  flex items-center font-normal "
               >
                 state time
               </label>
@@ -163,15 +163,15 @@ useEffect(() => {
                 placeholder="Quantity of paper ordered"
                 value={data.Start_time_of_print}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
                 
               />
             </div>
 
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            <div className="grid grid-cols-6 md:mb-2 gap-1  justify-center">
               <label
                 htmlFor="End_date_of_print"
-                className="col-span-1 text-sm  pl-1  flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm  pl-1  flex items-center font-normal "
               >
                 End Date
               </label>
@@ -182,13 +182,13 @@ useEffect(() => {
                 placeholder="Quantity of paper ordered"
                 value={data.End_date_of_print}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
                 
               />
 
               <label
                 htmlFor="End_time_of_print"
-                className="col-span-1 text-sm  px-4  flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm  md:px-4  flex items-center font-normal "
               >
                 End time
               </label>
@@ -199,15 +199,15 @@ useEffect(() => {
                 placeholder="Quantity of paper ordered"
                 value={data.End_time_of_print}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
                 
               />
             </div>
 
-            <div className="grid grid-cols-6 mb-2  justify-center">
+            <div className="grid grid-cols-6 md:mb-2 gap-1   justify-center">
               <label
                 htmlFor="printing_description"
-                className="col-span-1 pl-1 text-sm flex items-start font-normal"
+                className="col-span-6 md:col-span-1 pl-1 text-sm flex items-start font-normal"
               >
                 Description:
               </label>
@@ -217,7 +217,7 @@ useEffect(() => {
                 placeholder="enter Job description"
                 value={data.printing_description}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 text-sm border rounded col-span-5 "
+                className="p-1 bg-slate-50 text-sm border rounded col-span-6 md:col-span-5 "
                 rows={3}
               ></textarea>
             </div>
@@ -225,7 +225,7 @@ useEffect(() => {
         </div>
 
         {/* Preview image */}
-        <div className=" w-1/4  px-2 pt-1">
+        <div className=" hidden md:block w-1/4  px-2 pt-1">
           <label htmlFor="Final_Image" className="mt-3 p-1 pb-2">
             Preview :
           </label>

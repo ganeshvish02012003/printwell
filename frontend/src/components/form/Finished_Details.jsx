@@ -76,13 +76,13 @@ const Finished_Details = ({
       <p className="text-center text-lg font-bold py-1 bg-slate-400 mb-2 text-white rounded">
         Finished Details
       </p>
-      <div className="flex">
-        <div className="bg  w-3/4 p-2">
-          <div className="   rounded-xl">
+      <div className="md:flex  h-[calc(100vh-280px)] overflow-y-auto">
+        <div className="w-full md:w-3/4 p-2">
+          <div className=" rounded-xl">
             <div className="grid grid-cols-6 mb-2 justify-center">
               <label
                 htmlFor="Finished_goods_no"
-                className="col-span-1 text-sm pl-1  flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm pl-1  flex items-center font-normal "
               >
                 Goods
               </label>
@@ -93,12 +93,12 @@ const Finished_Details = ({
                 placeholder="Number of Finished Goods"
                 value={data.Finished_goods_no}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border mb-2 md:mb-0 text-sm rounded col-span-6 md:col-span-2"
               />
 
               <label
                 htmlFor="Finished_goods_pkt"
-                className="col-span-1 text-sm pl-1 mx-2 flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm pl-1 md:mx-2 flex items-center font-normal "
               >
                 Total Packet
               </label>
@@ -109,16 +109,62 @@ const Finished_Details = ({
                 placeholder="Total Bundle / packed "
                 value={data.Finished_goods_pkt}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border  text-sm rounded col-span-6 md:col-span-2"
+              />
+            </div>
+
+            <div className="grid grid-cols-6 mb-2 justify-center">
+              <label
+                htmlFor="Challan_no"
+                className="col-span-3 md:col-span-1 text-sm pl-1 flex items-center font-normal "
+              >
+                Challan No.
+              </label>
+              <label
+                htmlFor="Bill_no"
+                className="col-span-3 md:hidden md:col-span-1 text-sm pl-1 md:mx-2 flex items-center font-normal "
+              >
+                Bill no.
+              </label>
+              <input
+                type="text"
+                id="Challan_no"
+                name="Challan_no"
+                placeholder="Issue Challan Number"
+                value={data.Challan_no}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-3 md:col-span-2"
+              />
+
+              <label
+                htmlFor="Bill_no"
+                className="col-span-3 hidden md:flex md:col-span-1 text-sm pl-1 md:mx-2  items-center font-normal "
+              >
+                Bill no.
+              </label>
+              <input
+                type="text"
+                id="Bill_no"
+                name="Bill_no"
+                placeholder="Bill Number"
+                value={data.Bill_no}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded col-span-3 md:col-span-2"
               />
             </div>
 
             <div className="grid grid-cols-6 mb-2 justify-center">
               <label
                 htmlFor="Rate"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal "
+                className="col-span-3  md:col-span-1 text-sm pl-1  flex items-center font-normal"
               >
                 Rate
+              </label>
+              <label
+                htmlFor="Rate"
+                className="col-span-3 md:hidden md:col-span-1 text-sm pl-1 md:mx-2 flex items-center font-normal"
+              >
+                Unit
               </label>
               <input
                 type="text"
@@ -127,16 +173,23 @@ const Finished_Details = ({
                 placeholder="Rate"
                 value={data.Rate}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-3 md:col-span-2"
               />
+
+              <label
+                htmlFor="Rate"
+                className="col-span-3 hidden md:flex md:col-span-1 text-sm pl-1 md:mx-2  items-center font-normal"
+              >
+                Unit
+              </label>
               <select
                 name="Rate_unit"
                 id="Rate_unit"
                 value={data.Rate_unit}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-3 md:col-span-2"
               >
-                <option value={`${jobData.category}`} >
+                <option value={`${jobData.category}`}>
                   {`${jobData.category}`}
                 </option>
                 {jobCategories.map((el, index) => (
@@ -145,10 +198,97 @@ const Finished_Details = ({
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div className="grid grid-cols-6  justify-center">
+              <label
+                htmlFor="Total_Amount"
+                className="col-span-2 md:col-span-1 text-sm pl-1 flex items-center font-normal "
+              >
+                Amount
+              </label>
+
+              <input
+                type="text"
+                id="Total_Amount"
+                name="Total_Amount"
+                placeholder="Total_Amount"
+                value={data.Total_Amount}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm mb-2 rounded col-span-4 md:col-span-2 font-bold"
+              />
+
+              <label
+                htmlFor="Delivery_Charge"
+                className="col-span-3 md:col-span-1 text-sm pl-1  flex items-center font-normal "
+              >
+                Other Charges
+              </label>
+              <input
+                type="text"
+                name="Delivery_Charge"
+                placeholder="Delivery Charge"
+                value={data.Delivery_Charge}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded mb-2 col-span-3 md:col-span-2"
+              />
+            </div>
+
+            <div className="grid grid-cols-6  justify-center">
+              <label
+                htmlFor="Advance"
+                className="col-span-3 md:col-span-1 text-sm pl-1 flex items-center font-normal "
+              >
+                Advance
+              </label>
+              <input
+                type="text"
+                id="Advance"
+                name="Advance"
+                placeholder="Advance"
+                value={data.Advance}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded mb-2 col-span-3 md:col-span-2"
+              />
+
+              <label
+                htmlFor="Discount"
+                className="col-span-3 md:col-span-1 text-sm pl-1 md:mx-2 flex items-center font-normal "
+              >
+                Discount
+              </label>
+              <input
+                type="text"
+                id="Discount"
+                name="Discount"
+                placeholder="Discount "
+                value={data.Discount}
+                onChange={handleInputChange}
+                className="p-1 bg-slate-50 border text-sm rounded mb-2 col-span-3 md:col-span-2"
+              />
+            </div>
+
+            <div className="grid grid-cols-6 mb-2 justify-center">
+              <label
+                htmlFor="Due_Amount"
+                className="col-span-2 md:col-span-1 text-sm pl-1 flex items-center font-normal "
+              >
+                Due Amount
+              </label>
+
+              <input
+                type="text"
+                id="Due_Amount"
+                name="Due_Amount"
+                placeholder="Due Amount"
+                value={data.Due_Amount}
+                readOnly
+                className="p-1 bg-slate-50 border mb-2 md:mb-0 text-sm rounded col-span-4 md:col-span-2 font-bold"
+              />
 
               <label
                 htmlFor="Peyment_Status"
-                className="col-span-1 text-sm pl-1 mx-2 flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm pl-1 md:mx-2 flex items-center font-normal "
               >
                 Peyment
               </label>
@@ -157,7 +297,7 @@ const Finished_Details = ({
                 id="Peyment_Status"
                 value={data.Peyment_Status}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border  text-sm rounded col-span-1"
+                className="p-1 bg-slate-50 border  text-sm rounded col-span-3 md:col-span-1"
               >
                 <option value="Pending" disabled>
                   Status
@@ -166,12 +306,13 @@ const Finished_Details = ({
                 <option value="Paid">Paid</option>
                 <option value="Overdue">Overdue</option>
               </select>
+
               <select
                 name="Peyment_Mode"
                 id="Peyment_Mode"
                 value={data.Peyment_Mode}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+                className="p-1 bg-slate-50 border  text-sm rounded col-span-3 md:col-span-1"
               >
                 <option value="Pending">Mode</option>
                 <option value="Cash">Cash</option>
@@ -184,78 +325,8 @@ const Finished_Details = ({
 
             <div className="grid grid-cols-6 mb-2 justify-center">
               <label
-                htmlFor="Total_Amount"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal "
-              >
-                Total Amount
-              </label>
-
-              <input
-                type="text"
-                id="Total_Amount"
-                name="Total_Amount"
-                placeholder="Total_Amount"
-                value={data.Total_Amount}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-1 font-bold"
-              />
-
-              <input
-                type="text"
-                id="Advance"
-                name="Advance"
-                placeholder="Advance"
-                value={data.Advance}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
-              />
-
-              <label
-                htmlFor="Delivery_Charge"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal "
-              >
-                Other Amount
-              </label>
-              <input
-                type="text"
-                name="Delivery_Charge"
-                placeholder="Delivery Charge"
-                value={data.Delivery_Charge}
-                onChange={handleInputChange}
-                className="p-0 bg-slate-50 border text-sm rounded col-span-1"
-              />
-              <input
-                type="text"
-                id="Discount"
-                name="Discount"
-                placeholder="Discount "
-                value={data.Discount}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
-              />
-            </div>
-
-            <div className="grid grid-cols-6 mb-2 justify-center">
-              <label
-                htmlFor="Due_Amount"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal "
-              >
-                Due Amount
-              </label>
-
-              <input
-                type="text"
-                id="Due_Amount"
-                name="Due_Amount"
-                placeholder="Due Amount"
-                value={data.Due_Amount}
-                readOnly
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2 font-bold"
-              />
-
-              <label
                 htmlFor="Transmission"
-                className="col-span-1 text-sm pl-1 mx-2 flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm pl-1 flex items-center font-normal "
               >
                 Transmission
               </label>
@@ -266,8 +337,14 @@ const Finished_Details = ({
                 placeholder="Mode"
                 value={data.Transmission}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-1"
+                className="p-1 bg-slate-50 border text-sm mb-2 md:mb-0 rounded col-span-6 md:col-span-2"
               />
+              <label
+                htmlFor="Transmission_date"
+                className="col-span-6 md:col-span-1 text-sm pl-1 md:mx-2 flex items-center font-normal "
+              >
+                date
+              </label>
               <input
                 type="Date"
                 id="Transmission_date"
@@ -275,48 +352,14 @@ const Finished_Details = ({
                 placeholder="date"
                 value={data.Transmission_date}
                 onChange={handleInputChange}
-                className="p-1 px-0 bg-slate-50 border text-sm rounded col-span-1"
-              />
-            </div>
-
-            <div className="grid grid-cols-6 mb-2 justify-center">
-              <label
-                htmlFor="Challan_no"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal "
-              >
-                Challan No.
-              </label>
-              <input
-                type="text"
-                id="Challan_no"
-                name="Challan_no"
-                placeholder="Issue Challan Number"
-                value={data.Challan_no}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
-              />
-
-              <label
-                htmlFor="Bill_no"
-                className="col-span-1 text-sm pl-1 mx-2 flex items-center font-normal "
-              >
-                Bill no.
-              </label>
-              <input
-                type="text"
-                id="Bill_no"
-                name="Bill_no"
-                placeholder="Bill Number"
-                value={data.Bill_no}
-                onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 px-0 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
               />
             </div>
 
             <div className="grid grid-cols-6 mb-2 justify-center">
               <label
                 htmlFor="HSN_Code"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm pl-1  flex items-center font-normal "
               >
                 HSN Code
               </label>
@@ -327,12 +370,12 @@ const Finished_Details = ({
                 placeholder=" HSN Code "
                 value={data.HSN_Code}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm mb-2 md:mb-0 rounded col-span-6 md:col-span-2"
               />
 
               <label
                 htmlFor="Tax_Rate"
-                className="col-span-1 text-sm pl-1 mx-2 flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm pl-1 md:mx-2 flex items-center font-normal "
               >
                 Tax Rate
               </label>
@@ -343,14 +386,14 @@ const Finished_Details = ({
                 placeholder="Tax Rate"
                 value={data.Tax_Rate}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
               />
             </div>
 
             <div className="grid grid-cols-6 mb-2  justify-center">
               <label
                 htmlFor="finished_description"
-                className="col-span-1 pl-1 text-sm flex items-start font-normal"
+                className="col-span-6 md:col-span-1 pl-1 text-sm flex items-start font-normal"
               >
                 Description:
               </label>
@@ -360,7 +403,7 @@ const Finished_Details = ({
                 placeholder="enter Job description"
                 value={data.finished_description}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 text-sm border rounded col-span-5 "
+                className="p-1 bg-slate-50 text-sm border rounded col-span-6 md:col-span-5 "
                 rows={3}
               ></textarea>
             </div>
@@ -368,7 +411,7 @@ const Finished_Details = ({
         </div>
 
         {/* Preview image */}
-        <div className=" w-1/4  px-2 pt-1">
+        <div className="hidden md:block w-1/4  px-2 pt-1">
           <label htmlFor="Final_Image" className="mt-3 p-1 pb-2">
             Preview :
           </label>

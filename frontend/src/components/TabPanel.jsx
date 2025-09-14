@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Tabs, Tab, Box, dialogClasses } from "@mui/material";
+import { Tabs, Tab, Box} from "@mui/material";
 import Genral_Details from "./form/Genral_Details";
 import Job_Details from "./form/Job_Details";
 import Composing_Details from "./form/Composing_Details";
@@ -189,7 +189,8 @@ export default function FullWidthTabs({ onClose, fetchAllJob }) {
             <Tabs
               value={value}
               onChange={handleChange}
-              variant="fullWidth"
+              // variant="fullWidth"
+              variant="scrollable"
               aria-label="full width tabs example"
               className="bg-slate-500 text-white rounded-t-lg p-2 pb-0"
               sx={{
@@ -201,6 +202,7 @@ export default function FullWidthTabs({ onClose, fetchAllJob }) {
                   backgroundColor: "#64748b",
                   transition: "all 0.3s ease-in-out",
                   fontSize: "1rem",
+                  // width: "110px",
                   fontWeight: "bold",
                   "&.Mui-selected": {
                     color: "black",

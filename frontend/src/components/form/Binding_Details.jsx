@@ -42,13 +42,13 @@ const Binding_Details = ({ initialData = {}, onChange = () => {} }) => {
       <p className="text-center text-lg font-bold py-1 bg-slate-400 mb-2 text-white rounded">
       Binding Details
       </p>
-      <div className="flex">
-        <div className="bg  w-3/4 p-2">
+      <div className="md:flex  h-[calc(100vh-280px)] overflow-y-auto">
+        <div className="w-full md:w-3/4 p-2">
           <div className="   rounded-xl">
 
           <div className="grid grid-cols-6  gap-2 mb-2">
             {/* Checkbox with Text Input */}
-            <div className="col-span-2 mb-2  bg-slate-50 rounded  justify-between items-center p-1">
+            <div className="col-span-6 md:col-span-2 md:mb-2  bg-slate-50 rounded  justify-between items-center p-1">
               <label
                 htmlFor="Numbering"
                 className="flex-1 flex justify-between"
@@ -66,7 +66,7 @@ const Binding_Details = ({ initialData = {}, onChange = () => {} }) => {
             </div>
           
 
-            <div className="col-span-4 bg-slate-50 rounded flex justify-center items-center">
+            <div className="col-span-6 md:col-span-4 bg-slate-50 rounded flex justify-center items-center">
               <input
                 type="text"
                 name="set_number"
@@ -89,7 +89,7 @@ const Binding_Details = ({ initialData = {}, onChange = () => {} }) => {
             ].map((item) => (
               <div
                 key={item}
-                className="col-span-2 bg-slate-50 rounded flex justify-between items-center p-1"
+                className="col-span-6 md:col-span-2 bg-slate-50 rounded flex justify-between items-center p-1"
               >
                 <label htmlFor={item} className="flex-1 flex justify-between">
                   <span className="px-2 text-sm font-normal">
@@ -114,7 +114,7 @@ const Binding_Details = ({ initialData = {}, onChange = () => {} }) => {
           <div className="grid grid-cols-6 mb-2  justify-center">
               <label
                 htmlFor="Binding_description"
-                className="col-span-1 pl-1 text-sm flex items-start font-normal"
+                className="col-span-6 md:col-span-1 pl-1 text-sm flex items-start font-normal"
               >
                 Description: 
               </label>
@@ -124,7 +124,7 @@ const Binding_Details = ({ initialData = {}, onChange = () => {} }) => {
                 placeholder="Enter Binding description"
                 value={data.Binding_description}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 text-sm border rounded col-span-5 "
+                className="p-1 bg-slate-50 text-sm border rounded col-span-6 md:col-span-5 "
                 rows={3}
               ></textarea>
             </div>
@@ -133,7 +133,7 @@ const Binding_Details = ({ initialData = {}, onChange = () => {} }) => {
         </div>
 
         {/* Preview image */}
-        <div className=" w-1/4  px-2 pt-1">
+        <div className="hidden md:block w-1/4  px-2 pt-1">
           <label htmlFor="Final_Image" className="mt-3 p-1 pb-2">
             Preview :
           </label>

@@ -82,13 +82,13 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
       <p className="text-center text-lg font-bold py-1 bg-slate-400 mb-2 text-white rounded">
         Paper Details
       </p>
-      <div className="flex">
-        <div className="bg  w-3/4 p-2">
-          <div className="   rounded-xl">
-            <div className="grid grid-cols-6 mb-2 justify-center">
+      <div className="md:flex  h-[calc(100vh-280px)] overflow-y-auto">
+        <div className=" w-full md:w-3/4 p-2">
+          <div className="   rounded-xl grid gap-1">
+            <div className="grid grid-cols-6 md:mb-2 gap-1 justify-center">
               <label
                 htmlFor="Paper_name"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal"
+                className="col-span-6 md:col-span-1 text-sm pl-1 flex items-center font-normal"
               >
                 Paper Name
               </label>
@@ -97,7 +97,7 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
                 id="Paper_name"
                 value={data.paperName}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2 cursor-not-allowed"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2 cursor-not-allowed"
                 disabled
               >
                 <option value={`${jobData.paperName}`}>
@@ -107,7 +107,7 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
 
               <label
                 htmlFor="Paper_color"
-                className="col-span-1 text-sm pl-1 ml-2 flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm pl-1 md:ml-2 flex items-center font-normal "
               >
                 Paper Color
               </label>
@@ -116,7 +116,7 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
                 id="Paper_color"
                 value={data.paperColor}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2 cursor-not-allowed"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2 cursor-not-allowed"
                 disabled
               >
                 <option value={`${jobData.paperColor}`}>
@@ -125,10 +125,10 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
               </select>
             </div>
 
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            <div className="grid grid-cols-6 md:mb-2 gap-1  justify-center">
               <label
                 htmlFor="paper_size"
-                className="col-span-1 text-sm pl-1 flex items-center font-normal"
+                className="col-span-6 md:col-span-1 text-sm pl-1 flex items-center font-normal"
               >
                 Paper Size
               </label>
@@ -137,7 +137,7 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
                 id="paper_size"
                 value={data.paper_size}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
               >
                 <option value="" disabled>
                   Select Job Size
@@ -197,7 +197,7 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
 
               <label
                 htmlFor="paper_GSM"
-                className="col-span-1 text-sm pl-1 ml-2 flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm pl-1 md:ml-2 flex items-center font-normal "
               >
                 Paper GSM
               </label>
@@ -208,15 +208,15 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
                 placeholder={`${jobData.paper_GSM}`}
                 value={jobData.paper_GSM}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2 cursor-not-allowed"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2 cursor-not-allowed"
                 disabled
               />
             </div>
 
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            <div className="grid grid-cols-6 md:mb-2 gap-1  justify-center">
               <label
                 htmlFor="required_paper"
-                className="col-span-1 text-sm  pl-1   flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm  pl-1   flex items-center font-normal "
               >
                 required paper
               </label>
@@ -227,12 +227,12 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
                 placeholder="Quantity of required paper "
                 value={data.required_paper}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
               />
 
               <label
                 htmlFor="Ordered_paper"
-                className="col-span-1 text-sm  pl-1  flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm  pl-1  flex items-center font-normal "
               >
                 Ordered paper
               </label>
@@ -243,14 +243,14 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
                 placeholder="Quantity of paper ordered"
                 value={data.Ordered_paper}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
               />
             </div>
 
-            <div className="grid grid-cols-6 mb-2 justify-center">
+            <div className="grid grid-cols-6 md:mb-2 gap-1  justify-center">
               <label
                 htmlFor="DM_Challan_no"
-                className="col-span-1 text-sm  pl-1   flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm  pl-1   flex items-center font-normal "
               >
                 Challan no
               </label>
@@ -261,12 +261,12 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
                 placeholder="D.M. Challan number"
                 value={data.DM_Challan_no}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
               />
 
               <label
                 htmlFor="DM_Challan_date"
-                className="col-span-1 text-sm  px-4 mx-4 flex items-center font-normal "
+                className="col-span-6 md:col-span-1 text-sm ml-1 md:px-4 md:mx-4 flex items-center font-normal "
               >
                 Date
               </label>
@@ -277,14 +277,14 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
                 placeholder="Quantity of paper ordered"
                 value={data.DM_Challan_date}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 border text-sm rounded col-span-2"
+                className="p-1 bg-slate-50 border text-sm rounded col-span-6 md:col-span-2"
               />
             </div>
 
-            <div className="grid grid-cols-6 mb-2  justify-center">
+            <div className="grid grid-cols-6 md:mb-2 gap-1  justify-center">
               <label
                 htmlFor="Paper_description"
-                className="col-span-1 pl-1 text-sm flex items-start font-normal"
+                className="col-span-6 md:col-span-1 pl-1 text-sm flex items-start font-normal"
               >
                 Description:
               </label>
@@ -294,7 +294,7 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
                 placeholder="Enter Paper description"
                 value={data.Paper_description}
                 onChange={handleInputChange}
-                className="p-1 bg-slate-50 text-sm border rounded col-span-5 "
+                className="p-1 bg-slate-50 text-sm border rounded col-span-6 md:col-span-5 "
                 rows={3}
               ></textarea>
             </div>
@@ -313,7 +313,7 @@ const Paper_Details = ({ initialData, jobData = {}, onChange }) => {
         />
 
         {/* Preview image */}
-        <div className=" w-1/4  px-2 pt-1">
+        <div className="hidden md:block w-1/4  px-2 pt-1">
           <label htmlFor="Final_Image" className="mt-3 p-1 pb-2">
             Preview :
           </label>
