@@ -1,6 +1,7 @@
 const uploadJobPermission = require("../../helpers/permission");
 const jobModel = require("../../models/JobModel");
 const Counter = require("../../models/CounterModel"); 
+const { getIO } = require("../../io");
 
 async function UploadJob(req, res) {
   try {
@@ -28,6 +29,9 @@ async function UploadJob(req, res) {
     // Save the job
     const uploadJob = new jobModel(req.body);
     const saveJob = await uploadJob.save();
+
+  const io = getIO(); // ✅ Safe access
+    io.emit("jobCreated", saveJob);
 
     res.status(201).json({
       message: "Job added successfully",

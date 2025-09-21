@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SummaryApi from "../../common";
 import { toast } from "react-toastify";
+import Loading from "../../middleware/Loading";
 
 const AllCustomer = () => {
   const [formData, setFormData] = useState({
@@ -15,8 +16,10 @@ const AllCustomer = () => {
   const [customers, setCustomers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const fetchCustomers = async () => {
+    setLoading(true); // Start loading
     try {
       const res = await fetch(SummaryApi.allCustomer.url, {
         method: SummaryApi.allCustomer.method,
@@ -26,6 +29,8 @@ const AllCustomer = () => {
       if (data.success) setCustomers(data.data.reverse()); // reverse for newest first
     } catch (err) {
       console.error("Error fetching customers:", err);
+    } finally {
+      setLoading(false); // Stop loading after response
     }
   };
 
@@ -67,7 +72,7 @@ const AllCustomer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true); // Start loading
     try {
       const token = localStorage.getItem("token");
       // console.log("Submitting data:", formData);
@@ -124,6 +129,8 @@ const AllCustomer = () => {
     } catch (err) {
       // console.error("Error submitting form:", err);
       toast.error("An error occurred while saving the customer");
+    } finally {
+      setLoading(false); // Stop loading after response
     }
   };
 
@@ -135,6 +142,11 @@ const AllCustomer = () => {
 
   return (
     <div className="p-2">
+      {loading && (
+        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+          <Loading />
+        </div>
+      )}
       <div className="w-full px-4 h-12 bg-slate-500 rounded-md flex justify-between items-center mb-1">
         <h2 className="font-bold text-white text-lg">All Client</h2>
         <div>
@@ -290,6 +302,11 @@ const AllCustomer = () => {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          {loading && (
+            <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+              <Loading />
+            </div>
+          )}
           <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg">
             <h3 className="text-xl font-semibold mb-4 text-center">
               {editingId ? "Update Customer" : "Add New Customer"}

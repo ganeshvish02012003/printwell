@@ -4,11 +4,13 @@ import SummaryApi from "../../common";
 import AdminEditJob from "../AdminEditJob";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import moment from "moment";
+import Loading from "../../middleware/Loading";
 
 const PeymentStatus = () => {
   const [openAddJob, setOpenAddJob] = useState(false);
   const [allJob, setAllJob] = useState([]);
   const [editJobId, setEditJobId] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState({
     jobName: "",
     customer: "",
@@ -21,6 +23,7 @@ const PeymentStatus = () => {
   });
 
   const fetchAllJob = async () => {
+    setLoading(true); // Start loading
     try {
       const response = await fetch(SummaryApi.allJob.url, {
         method: SummaryApi.allJob.method,
@@ -30,6 +33,8 @@ const PeymentStatus = () => {
       setAllJob(dataResponse?.data || []);
     } catch (error) {
       console.error("Error fetching jobs:", error);
+    } finally {
+      setLoading(false); // Stop loading after response
     }
   };
 
@@ -95,30 +100,35 @@ const PeymentStatus = () => {
 
   return (
     <div className="p-2">
+      {loading && (
+        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+          <Loading />
+        </div>
+      )}
       <div className="bg-slate-500 px-4 py-2 rounded-md flex flex-wrap justify-between items-center mb-1 gap-x-4">
-    <h2 className="font-bold text-white text-lg">Payment Status</h2>
+        <h2 className="font-bold text-white text-lg">Payment Status</h2>
 
-    <div className="hidden md:block">
-      <span className="text-white p-4 font-semibold">Total Jobs</span>
-      <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
-        {totalJobs}
-      </span>
-    </div>
+        <div className="hidden md:block">
+          <span className="text-white p-4 font-semibold">Total Jobs</span>
+          <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
+            {totalJobs}
+          </span>
+        </div>
 
-    <div className="hidden md:block">
-      <span className="text-white p-4 font-semibold">Total Client</span>
-      <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
-        {totalClients}
-      </span>
-    </div>
+        <div className="hidden md:block">
+          <span className="text-white p-4 font-semibold">Total Client</span>
+          <span className="text-black bg-slate-100 px-4 py-1 rounded-md font-semibold">
+            {totalClients}
+          </span>
+        </div>
 
-    <div className="hidden md:block">
-      <span className="text-white p-4 font-semibold">Credit</span>
-      <span className="text-red-500 bg-slate-100 px-4 py-1 rounded-md font-semibold">
-        ₹ {totalDueAmount.toLocaleString()}
-      </span>
-    </div>
-  </div>
+        <div className="hidden md:block">
+          <span className="text-white p-4 font-semibold">Credit</span>
+          <span className="text-red-500 bg-slate-100 px-4 py-1 rounded-md font-semibold">
+            ₹ {totalDueAmount.toLocaleString()}
+          </span>
+        </div>
+      </div>
 
       <div className="border border-slate-300 overflow-hidden">
         <div className="overflow-y-auto relative z-0 h-[calc(100vh-148px)]">

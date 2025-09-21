@@ -28,10 +28,10 @@ function TabPanel({ children, value, index }) {
   );
 }
 
-const AdminEditJob = ({ onClose, job ,fetchAllJob}) => {
+const AdminEditJob = ({ onClose, job, fetchAllJob }) => {
   const [value, setValue] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [jobCategories, setJobCategories] = useState([]);  
+  const [jobCategories, setJobCategories] = useState([]);
 
   // Persistent Form State
   const [formData, setFormData] = useState({
@@ -42,11 +42,8 @@ const AdminEditJob = ({ onClose, job ,fetchAllJob}) => {
     paper: job.paper || {},
     printing: job.printing || {},
     binding: job.binding || {},
-    finished: job.finished || {},  
+    finished: job.finished || {},
   });
-
- 
-
 
   // Handle tab change
   const handleChange = (event, newValue) => {
@@ -99,7 +96,7 @@ const AdminEditJob = ({ onClose, job ,fetchAllJob}) => {
 
       if (response.ok) {
         toast.success(responseData?.message || "Form submitted successfully!");
-        fetchAllJob()
+        fetchAllJob();
 
         if (onClose) {
           onClose(); // Ensure it is defined before calling
@@ -128,37 +125,37 @@ const AdminEditJob = ({ onClose, job ,fetchAllJob}) => {
     });
   };
 
- // fetch categories
-useEffect(() => {
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch(SummaryApi.alljobCategory.url, {
-        method: SummaryApi.alljobCategory.method,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await res.json();
-      if (data.success) {
-        setJobCategories(data.data);
+  // fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(SummaryApi.alljobCategory.url, {
+          method: SummaryApi.alljobCategory.method,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await res.json();
+        if (data.success) {
+          setJobCategories(data.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch job categories:", err);
       }
-    } catch (err) {
-      console.error("Failed to fetch job categories:", err);
-    }
-  };
+    };
 
-  fetchCategories();
-}, []);
+    fetchCategories();
+  }, []);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 backdrop-blur-sm top-0 z-10">
       {loading && (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-          <Loading/>
+        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+          <Loading />
         </div>
       )}
       <div className=" z-10 fixed w-full h-full bg-opacity-75 top-0 bottom-0 left-0 right-0 flex justify-center items-center">
-      <div className="bg-slate-50 p-4 rounded w-full h-full max-w-4xl max-h-[95%] overflow-hidden">
+        <div className="bg-slate-50 p-4 rounded w-full h-full max-w-4xl max-h-[95%] overflow-hidden">
           <div>
             <div className="flex justify-between items-center pb-3">
               <h2 className="font-bold text-lg">Edit Jobs</h2>
@@ -231,7 +228,7 @@ useEffect(() => {
                 <TabPanel value={value} index={3}>
                   <Paper_Details
                     initialData={formData.paper}
-                    jobData={formData.job} 
+                    jobData={formData.job}
                     onChange={(data) => handleFormDataChange("paper", data)}
                   />
                 </TabPanel>
@@ -239,7 +236,7 @@ useEffect(() => {
                 <TabPanel value={value} index={4}>
                   <Printing_Details
                     initialData={formData.printing}
-                    jobData={formData.job} 
+                    jobData={formData.job}
                     onChange={(data) => handleFormDataChange("printing", data)}
                   />
                 </TabPanel>
@@ -254,12 +251,11 @@ useEffect(() => {
                 <TabPanel value={value} index={6}>
                   <Finished_Details
                     initialData={formData.finished}
-                    jobData={formData.job} 
+                    jobData={formData.job}
                     jobCategories={jobCategories}
                     onChange={(data) => handleFormDataChange("finished", data)}
                   />
                 </TabPanel>
-
 
                 <button
                   type="submit"

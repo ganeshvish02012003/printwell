@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import Login from "../../pages/Login";
 import throttle from "lodash/throttle";
 import TabPanel from "../TabPanel";
+import Loading from "../../middleware/Loading";
 
 const statusToBoardId = {
   Pending: "To_Do",
@@ -35,11 +36,13 @@ const MenageJobCard = () => {
   const [target, setTarget] = useState({ cid: "", bid: "" });
   const user = useSelector((state) => state?.user?.user);
   const [openAddJob, setOpenAddJob] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   /* ------------------------------------------------------------------ */
   /* 1️⃣  FETCH ALL JOBS (memoised so reference stays stable)            */
   /* ------------------------------------------------------------------ */
   const fetchAllJob = useCallback(async () => {
+    setLoading(true); // Start loading
     try {
       const res = await fetch(SummaryApi.allJob.url, {
         method: SummaryApi.allJob.method,
@@ -100,6 +103,8 @@ const MenageJobCard = () => {
       setBoards(temp);
     } catch (err) {
       console.error("Failed to fetch jobs:", err);
+    } finally {
+      setLoading(false); // Stop loading after response
     }
   }, []);
 
@@ -226,6 +231,11 @@ const MenageJobCard = () => {
 
   return (
     <div className="h-[calc(100vh-75px)] max-w-[84vw] min-w-full  mx-auto flex flex-col">
+      {loading && (
+        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+          <Loading />
+        </div>
+      )}
       <div className="w-full px-4 h-10 bg-slate-500 rounded-md flex justify-between items-center ">
         <h2 className="font-bold text-white text-lg">Menage Jobs</h2>
         <button
@@ -235,9 +245,9 @@ const MenageJobCard = () => {
           Add Job
         </button>
       </div>
-            <div className="flex-1 bg-slate-400 rounded-md p-1 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200">
-              <div className="flex gap-1 min-w-fit  overflow-x-auto "> 
-                {boards
+      <div className="flex-1 bg-slate-400 rounded-md p-1 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200">
+        <div className="flex gap-1 min-w-fit  overflow-x-auto ">
+          {boards
             ?.filter((job) => job?.job?.subStatus !== "Out_of_Stock")
             .map((board) => (
               <Board
@@ -248,8 +258,8 @@ const MenageJobCard = () => {
                 fetchAllJob={fetchAllJob}
               />
             ))}
-              </div>
-            </div>
+        </div>
+      </div>
 
       {openAddJob && (
         <TabPanel

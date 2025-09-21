@@ -12,6 +12,12 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ROLE from "../common/role";
 import { AiFillCheckCircle } from "react-icons/ai";
+import { io } from "socket.io-client";
+import Loading from "../middleware/Loading";
+
+const socket = io(import.meta.env.VITE_BACKEND_DOMAIN, {
+  withCredentials: true,
+});
 
 import {
   Chart as ChartJS,
@@ -37,8 +43,10 @@ const Home = () => {
   const [allJobs, setAllJobs] = useState([]);
   const user = useSelector((state) => state?.user?.user);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const fetchAllJobs = async () => {
+    setLoading(true); // Start loading
     try {
       const response = await fetch(SummaryApi.allJob.url, {
         method: SummaryApi.allJob.method,
@@ -49,26 +57,49 @@ const Home = () => {
       setAllJobs(data?.data || []);
     } catch (error) {
       console.error("Failed to fetch jobs", error);
+    } finally {
+      setLoading(false); // Stop loading after response
     }
   };
+
+  // useEffect(() => {
+  //   if (user?.role !== ROLE.ADMIN && user?.role !== ROLE.EMPLOYEE) {
+  //     navigate("/");
+  //   }
+  //   fetchAllJobs();
+  // }, [user, navigate]);
 
   useEffect(() => {
     if (user?.role !== ROLE.ADMIN && user?.role !== ROLE.EMPLOYEE) {
       navigate("/");
     }
-    fetchAllJobs();
-  }, [user, navigate]);
 
-  // useEffect(() => {
-  //   console.log(
-  //     "All Status values:",
-  //     allJobs.map((job) => job?.job?.status)
-  //   );
-  //   console.log(
-  //     "All subStatus values:",
-  //     allJobs.map((job) => job?.job?.subStatus)
-  //   );
-  // }, [allJobs]);
+    // Initial load
+    fetchAllJobs();
+
+    // Socket listeners
+    socket.on("jobCreated", (newJob) => {
+      setAllJobs((prevJobs) => [newJob, ...prevJobs]);
+    });
+
+    socket.on("jobUpdated", (updatedJob) => {
+      setAllJobs((prevJobs) =>
+        prevJobs.map((job) => (job._id === updatedJob._id ? updatedJob : job))
+      );
+    });
+
+    socket.on("jobDeleted", (deletedJobId) => {
+      setAllJobs((prevJobs) =>
+        prevJobs.filter((job) => job._id !== deletedJobId)
+      );
+    });
+
+    return () => {
+      socket.off("jobCreated");
+      socket.off("jobUpdated");
+      socket.off("jobDeleted");
+    };
+  }, [user, navigate]);
 
   // ✅ Count Logic
   const Admin_TO_DO = allJobs.filter(
@@ -478,6 +509,11 @@ const Home = () => {
 
   return (
     <div className="lg:h-[calc(100vh-12vh)] flex flex-col lg:flex-row bg-slate-400 p-1 mx-1 rounded-md gap-1">
+      {loading && (
+        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+          <Loading />
+        </div>
+      )}
       {/* ================= Left Side ================= */}
       <div className="bg-slate-200 p-2 rounded-md h-full w-full lg:w-[75%] flex flex-col ">
         {/* Count lable */}
@@ -506,7 +542,7 @@ const Home = () => {
             <div className=" h-[70px] rounded-md bg-gradient-to-r from-[#9C27B0] to-[#E1BEE7] shadow-md flex flex-col items-center justify-center font-semibold text-white">
               <p className="text-3xl">{Admin_Desgin}</p>
               <div className="flex items-center gap-2">
-                <p>Desgin</p>
+                <p>Design</p>
                 <MdDesignServices className="text-xl" />
               </div>
             </div>

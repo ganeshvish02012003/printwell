@@ -170,7 +170,7 @@ export default function FullWidthTabs({ onClose, fetchAllJob }) {
   return (
     <div className=" z-10 fixed w-full h-full backdrop-blur-sm top-0 bottom-0 left-0 right-0 flex justify-center items-center">
       {loading && (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
           <Loading />
         </div>
       )}

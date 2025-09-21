@@ -3,10 +3,12 @@ import TabPanel from "../TabPanel";
 import SummaryApi from "../../common";
 import AdminJobCard from "../AdminJobCard";
 import moment from "moment";
+import Loading from "../../middleware/Loading";
 
 const AllJob = () => {
   const [openAddJob, setOpenAddJob] = useState(false);
   const [allJob, setAllJob] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState({
     jobName: "",
     customer: "",
@@ -18,6 +20,7 @@ const AllJob = () => {
   });
 
   const fetchAllJob = async () => {
+    setLoading(true); // Start loading
     try {
       const response = await fetch(SummaryApi.allJob.url, {
         method: SummaryApi.allJob.method,
@@ -28,6 +31,8 @@ const AllJob = () => {
       setAllJob(dataResponse?.data || []);
     } catch (error) {
       console.error("Error fetching jobs:", error);
+    } finally {
+      setLoading(false); // Stop loading after response
     }
   };
 
@@ -203,6 +208,11 @@ const AllJob = () => {
 
   return (
     <div className="p-2">
+      {loading && (
+        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+          <Loading />
+        </div>
+      )}
       <div className="bg-slate-500 px-4 py-2 rounded-md flex justify-between items-center mb-1">
         {/* <h2 className="font-bold text-white text-lg">All Jobs</h2> */}
         <div className="">

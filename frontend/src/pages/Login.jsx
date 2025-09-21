@@ -9,10 +9,12 @@ import SummaryApi from "../common";
 import Context from "../context";
 import { useDispatch } from "react-redux"; // ⬅️ NEW
 import { setUserDetails } from "../store/userSlice"; // ⬅️ NEW
+import Loading from "../middleware/Loading";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({ email: "", password: "" });
+    const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const { fatchUserDetails } = useContext(Context);
@@ -44,7 +46,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true); // Start loading
     try {
       const dataResponse = await fetch(SummaryApi.signIn.url, {
         method: SummaryApi.signIn.method,
@@ -74,11 +76,18 @@ const Login = () => {
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Something went wrong. Please try again.");
+    }finally {
+      setLoading(false); // Stop loading after response
     }
   };
 
   return (
     <div className="bg-slate-400 min-h-[88vh] p-2 mx-1 rounded-md flex items-center justify-center">
+            {loading && (
+              <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+                <Loading/>
+              </div>
+            )}
       <div className="w-full max-w-md bg-slate-100 rounded-lg shadow-lg p-6 sm:p-8">
         <h1 className="text-center text-2xl sm:text-3xl font-semibold text-slate-700">
           Login

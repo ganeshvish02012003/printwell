@@ -4,6 +4,12 @@ import DesginBoard from "./DesginBoard";
 import { throttle } from "lodash";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
+import Loading from "../../middleware/Loading";
+
+const socket = io(import.meta.env.VITE_BACKEND_DOMAIN, {
+  withCredentials: true,
+});
 
 const ViewKanbanBoardPage = ({
   mainStatus,
@@ -16,6 +22,7 @@ const ViewKanbanBoardPage = ({
   const [targetCard, setTargetCard] = useState({ bid: "", cid: "" });
   const user = useSelector((state) => state?.user?.user);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const boardIdToSubStatus = useMemo(() => {
     const mapping = {};
@@ -74,6 +81,7 @@ const ViewKanbanBoardPage = ({
   };
 
   const fetchAllJob = async () => {
+    setLoading(true); // Start loading
     try {
       const response = await fetch(SummaryApi.allJob.url, {
         method: SummaryApi.allJob.method,
@@ -128,23 +136,53 @@ const ViewKanbanBoardPage = ({
       setBoards(boardList);
     } catch (err) {
       console.error("Error fetching jobs:", err);
+    } finally {
+      setLoading(false); // Stop loading after response
     }
   };
 
   const throttledFetchJobs = useMemo(() => throttle(fetchAllJob, 1000), []);
 
+  // useEffect(() => {
+  //   fetchAllJob();
+
+  //   const onStorage = (e) => {
+  //     if (e.key === "kanban_sync") {
+  //       throttledFetchJobs();
+  //     }
+  //   };
+
+  //   window.addEventListener("storage", onStorage);
+  //   return () => {
+  //     window.removeEventListener("storage", onStorage);
+  //     throttledFetchJobs.cancel();
+  //   };
+  // }, [throttledFetchJobs]);
+
   useEffect(() => {
     fetchAllJob();
 
-    const onStorage = (e) => {
-      if (e.key === "kanban_sync") {
-        throttledFetchJobs();
-      }
-    };
+    // 🔥 Listen for socket events from backend
+    socket.on("jobUpdated", () => {
+      // console.log("Received jobUpdated event -> refreshing jobs");
+      throttledFetchJobs();
+    });
 
-    window.addEventListener("storage", onStorage);
+    socket.on("jobCreated", () => {
+      // console.log("Received jobCreated event -> refreshing jobs");
+      throttledFetchJobs();
+    });
+
+    socket.on("jobDeleted", () => {
+      // console.log("Received jobDeleted event -> refreshing jobs");
+      throttledFetchJobs();
+    });
+
     return () => {
-      window.removeEventListener("storage", onStorage);
+      // 🔥 cleanup
+      socket.off("jobUpdated");
+      socket.off("jobCreated");
+      socket.off("jobDeleted");
       throttledFetchJobs.cancel();
     };
   }, [throttledFetchJobs]);
@@ -269,7 +307,7 @@ const ViewKanbanBoardPage = ({
         throw new Error(resData.message || "Update failed");
       }
 
-      localStorage.setItem("kanban_sync", Date.now().toString());
+      // localStorage.setItem("kanban_sync", Date.now().toString());
     } catch (err) {
       console.error("Backend update failed", err);
     }
@@ -277,8 +315,13 @@ const ViewKanbanBoardPage = ({
 
   return (
     <div className="h-[calc(100vh-75px)] mx-1 flex flex-col">
+      {loading && (
+        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+          <Loading />
+        </div>
+      )}
       <div className="flex-1 bg-slate-400 rounded-md p-1 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200">
-        <div className="flex gap-1 min-w-fit overflow-x-auto "> 
+        <div className="flex gap-1 min-w-fit overflow-x-auto ">
           {boards
             .filter((board) => board.title !== printSubStatus)
             .map((board) => (

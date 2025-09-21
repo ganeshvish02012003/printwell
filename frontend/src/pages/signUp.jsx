@@ -7,15 +7,16 @@ import { FaLock } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
-
 import { Link, useNavigate } from "react-router-dom";
 import ImageTobase64 from "../helpers/ImageTobase64";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
+import Loading from "../middleware/Loading";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -50,34 +51,47 @@ const SignUp = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading
 
-    if (data.password === data.confirmPassword) {
-      const dataResponse = await fetch(SummaryApi.signUp.url, {
-        method: SummaryApi.signUp.method,
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      const dataApi = await dataResponse.json();
+    try {
+      if (data.password === data.confirmPassword) {
+        const dataResponse = await fetch(SummaryApi.signUp.url, {
+          method: SummaryApi.signUp.method,
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+        const dataApi = await dataResponse.json();
 
-      // console.log("dataAPI",dataApi)
+        // console.log("dataAPI",dataApi)
 
-      if (dataApi.success) {
-        toast.success(dataApi.message);
+        if (dataApi.success) {
+          toast.success(dataApi.message);
+        }
+        if (dataApi.error) {
+          toast.error(dataApi.message);
+        }
+        navigate("/login");
+      } else {
+        // console.log("Please check password and confirm password");
+        toast.error("Please check password and confirm password");
       }
-      if (dataApi.error) {
-        toast.error(dataApi.message);
-      }
-      navigate("/login");
-    } else {
-      // console.log("Please check password and confirm password");
-      toast.error("Please check password and confirm password");
+    } catch (error) {
+      console.error("SignUp failed:", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false); // Stop loading after response
     }
   };
 
   return (
     <div className=" bg-slate-400 min-h-[88vh] p-2 mx-1 rounded-md flex items-center justify-center">
+      {loading && (
+        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+          <Loading />
+        </div>
+      )}
       <div className="w-full max-w-md bg-slate-100 rounded-lg shadow-lg p-2 sm:p-4">
         <h1 className="text-center text-2xl sm:text-3xl font-semibold text-slate-700">
           SignUp

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SummaryApi from "../../common";
 import { toast } from "react-toastify";
+import Loading from "../../middleware/Loading";
 
 const JobCategory = () => {
   const [formData, setFormData] = useState({ label: "", value: "" });
@@ -8,17 +9,21 @@ const JobCategory = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const fetchCategories = async () => {
+    setLoading(true); // Start loading
     try {
       const res = await fetch(SummaryApi.alljobCategory.url, {
         method: SummaryApi.alljobCategory.method,
-        credentials: "include", 
+        credentials: "include",
       });
       const data = await res.json();
       if (data.success) setCategories(data.data.reverse());
     } catch (err) {
       console.error("Error fetching categories:", err);
+    } finally {
+      setLoading(false); // Stop loading after response
     }
   };
 
@@ -37,6 +42,7 @@ const JobCategory = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading
     try {
       const token = localStorage.getItem("token");
       const method = editingId
@@ -65,6 +71,8 @@ const JobCategory = () => {
     } catch (err) {
       console.error("Error submitting category:", err);
       toast.error("Failed to save category");
+    } finally {
+      setLoading(false); // Stop loading after response
     }
   };
 
@@ -101,6 +109,11 @@ const JobCategory = () => {
 
   return (
     <div className="p-2">
+      {loading && (
+        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+          <Loading />
+        </div>
+      )}
       <div className="w-full px-4 h-12 bg-slate-500 rounded-md flex justify-between items-center mb-1">
         <h2 className="font-bold text-white text-lg">Job Categories</h2>
         <button
@@ -175,6 +188,16 @@ const JobCategory = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          {loading && (
+            <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+              <Loading />
+            </div>
+            // <div className="flex justify-center items-center">
+            //   <div
+            //     className={`animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-gray-200 text-blue-500`}
+            //   ></div>
+            // </div>
+          )}
           <div className="bg-white p-6 rounded-md shadow-md w-full max-w-md">
             <h3 className="text-xl font-semibold mb-4 text-center">
               {editingId ? "Update Category" : "Add New Category"}

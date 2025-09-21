@@ -71,7 +71,7 @@ const Header = () => {
               </div>
               <div className="flex px-2  ">
                 <Link to={"/Home"} className="text-xl font-bold lg:text-3xl ">
-                  GPCI Maneger
+                  GPCI Manager
                 </Link>
               </div>
               <div className=" lg-px-2 ">
