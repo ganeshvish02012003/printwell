@@ -7,10 +7,17 @@ function init(server) {
     cors: { origin: process.env.FRONTEND_URL, credentials: true },
   });
 
+  // ioInstance.on("connection", (socket) => {
+  //   // console.log("User connected:", socket.id);
+  //   socket.on("disconnect", () => console.log("User disconnected:", socket.id));
+  // });
+
   ioInstance.on("connection", (socket) => {
-    console.log("User connected:", socket.id);
-    socket.on("disconnect", () => console.log("User disconnected:", socket.id));
+  socket.on("disconnect", () => {
+    // optional: handle disconnect logic here
   });
+});
+
 
   return ioInstance;
 }

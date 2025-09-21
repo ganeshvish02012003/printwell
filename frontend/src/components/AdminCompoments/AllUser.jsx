@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { MdModeEditOutline } from "react-icons/md";
 import ChangeUserRole from "../ChangeUserRole";
-import Loading from "../../middleware/Loading";
+import LineLoading from "../../middleware/LineLoading";
 
 const AllUser = () => {
   const [allUser, setAllUsers] = useState([]);
@@ -47,11 +47,7 @@ const AllUser = () => {
 
   return (
     <div className="p-2">
-      {loading && (
-        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
-          <Loading />
-        </div>
-      )}
+      {loading && <LineLoading />}
       <div className="border border-slate-300 overflow-hidden">
         <div className="overflow-y-auto relative z-0 h-[calc(100vh-95px)]">
           <table className="w-full table-auto border-collapse">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SummaryApi from "../../common";
 import { toast } from "react-toastify";
 import Loading from "../../middleware/Loading";
+import LineLoading from "../../middleware/LineLoading";
 
 const AllCustomer = () => {
   const [formData, setFormData] = useState({
@@ -142,11 +143,7 @@ const AllCustomer = () => {
 
   return (
     <div className="p-2">
-      {loading && (
-        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
-          <Loading />
-        </div>
-      )}
+      {loading && <LineLoading />}
       <div className="w-full px-4 h-12 bg-slate-500 rounded-md flex justify-between items-center mb-1">
         <h2 className="font-bold text-white text-lg">All Client</h2>
         <div>

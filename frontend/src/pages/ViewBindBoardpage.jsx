@@ -27,6 +27,7 @@ const ViewBindBoardpage = () => {
       printSubStatus="Finished"
       color="bg-gradient-to-r from-[#FFD54F] to-[#FFF7B2]" 
       text="text-yellow-900"
+      gradientColor="#FFD54F"
     />
   );
 };

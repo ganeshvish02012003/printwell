@@ -507,15 +507,36 @@ const Home = () => {
     },
   };
 
+  const loaderStyle = {
+    height: "4px",
+    width: "calc(100vw - 18px)",
+    background: `no-repeat linear-gradient(#94a3b8 0 0), no-repeat linear-gradient(#94a3b8 0 0), white`,
+    backgroundSize: "60% 100%",
+    animation: "l16 1s infinite",
+    position: "fixed",
+    top: 68,
+    left: 9,
+    zIndex: 9999,
+  };
+
   return (
-    <div className="lg:h-[calc(100vh-12vh)] flex flex-col lg:flex-row bg-slate-400 p-1 mx-1 rounded-md gap-1">
+    <div className="lg:h-[calc(100vh-12vh)] flex flex-col lg:flex-row bg-slate-400 p-1  mx-1 rounded-md ">
       {loading && (
-        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
-          <Loading />
+        <div className="z-50  ">
+          <style>
+            {`
+          @keyframes l16 {
+            0%   {background-position: -150% 0, -150% 0}
+            66%  {background-position: 250% 0, -150% 0}
+            100% {background-position: 250% 0, 250% 0}
+          }
+        `}
+          </style>
+          <div style={loaderStyle}></div>
         </div>
       )}
       {/* ================= Left Side ================= */}
-      <div className="bg-slate-200 p-2 rounded-md h-full w-full lg:w-[75%] flex flex-col ">
+      <div className="bg-slate-200 p-2 mr-1 rounded-md h-full w-full lg:w-[75%] flex flex-col ">
         {/* Count lable */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-2 p-2 shadow-md bg-white rounded-lg">
           {user?.role === "ADMIN" ? (

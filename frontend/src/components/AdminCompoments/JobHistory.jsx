@@ -3,7 +3,12 @@ import SummaryApi from "../../common";
 import AdminEditJob from "../AdminEditJob";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import moment from "moment";
-import Loading from "../../middleware/Loading";
+import { io } from "socket.io-client";
+import LineLoading from "../../middleware/LineLoading";
+
+const socket = io(import.meta.env.VITE_BACKEND_DOMAIN, {
+  withCredentials: true,
+});
 
 const JobHistory = () => {
   const [allJob, setAllJob] = useState([]);
@@ -36,6 +41,15 @@ const JobHistory = () => {
 
   useEffect(() => {
     fetchAllJob();
+    // Listen for job updates
+    socket.on("jobUpdated", () => {
+      fetchAllJob(); // refetch jobs when a job is added/updated
+    });
+
+    // Cleanup on unmount
+    return () => {
+      socket.off("jobUpdated");
+    };
   }, []);
 
   const handleSearchChange = (e) => {
@@ -78,11 +92,7 @@ const JobHistory = () => {
 
   return (
     <div className="p-2">
-      {loading && (
-        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
-          <Loading />
-        </div>
-      )}
+      {loading && <LineLoading />}
       <div className="bg-slate-500 px-4 py-2 rounded-md flex justify-between items-center mb-1">
         <h2 className="font-bold text-white text-lg">Job History (Paid)</h2>
       </div>

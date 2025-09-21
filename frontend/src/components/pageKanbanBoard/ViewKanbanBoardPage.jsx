@@ -5,7 +5,6 @@ import { throttle } from "lodash";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
-import Loading from "../../middleware/Loading";
 
 const socket = io(import.meta.env.VITE_BACKEND_DOMAIN, {
   withCredentials: true,
@@ -17,12 +16,13 @@ const ViewKanbanBoardPage = ({
   printSubStatus = null,
   color = "bg-gradient-to-r from-[#9C27B0] to-[#E1BEE7]", // default fallback color
   text = "text-black",
+  gradientColor = "#9C27B0",
 }) => {
   const [boards, setBoards] = useState([]);
   const [targetCard, setTargetCard] = useState({ bid: "", cid: "" });
   const user = useSelector((state) => state?.user?.user);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const boardIdToSubStatus = useMemo(() => {
     const mapping = {};
@@ -313,13 +313,35 @@ const ViewKanbanBoardPage = ({
     }
   };
 
+  const loaderStyle = {
+    height: "4px",
+    width: "calc(100vw - 18px)",
+    background: `no-repeat linear-gradient(${gradientColor} 0 0), no-repeat linear-gradient(${gradientColor} 0 0), white`,
+    backgroundSize: "60% 100%",
+    animation: "l16 1s infinite",
+    position: "fixed",
+    top: 68,
+    left: 9,
+    zIndex: 9999,
+  };
+
   return (
-    <div className="h-[calc(100vh-75px)] mx-1 flex flex-col">
+    <div className="h-[calc(100vh-75px)] mx-1   flex flex-col">
       {loading && (
-        <div className="fixed inset-0 flex justify-center items-center z-50">
-          <Loading />
+        <div className="z-50 flex px-2 justify-center ">
+          <style>
+            {`
+          @keyframes l16 {
+            0%   {background-position: -150% 0, -150% 0}
+            66%  {background-position: 250% 0, -150% 0}
+            100% {background-position: 250% 0, 250% 0}
+          }
+        `}
+          </style>
+          <div style={loaderStyle}></div>
         </div>
       )}
+
       <div className="flex-1 bg-slate-400 rounded-md p-1 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-200">
         <div className="flex gap-1 min-w-fit overflow-x-auto ">
           {boards

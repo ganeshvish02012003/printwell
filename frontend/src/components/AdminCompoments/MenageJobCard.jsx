@@ -5,8 +5,8 @@ import { useSelector } from "react-redux";
 import Login from "../../pages/Login";
 import throttle from "lodash/throttle";
 import TabPanel from "../TabPanel";
-import Loading from "../../middleware/Loading";
 import { io } from "socket.io-client";
+import LineLoading from "../../middleware/LineLoading";
 
 const socket = io(import.meta.env.VITE_BACKEND_DOMAIN, {
   withCredentials: true,
@@ -266,9 +266,7 @@ const MenageJobCard = () => {
   return (
     <div className="h-[calc(100vh-75px)] max-w-[84vw] min-w-full  mx-auto flex flex-col">
       {loading && (
-        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
-          <Loading />
-        </div>
+        <LineLoading/>
       )}
       <div className="w-full px-4 h-10 bg-slate-500 rounded-md flex justify-between items-center ">
         <h2 className="font-bold text-white text-lg">Menage Jobs</h2>

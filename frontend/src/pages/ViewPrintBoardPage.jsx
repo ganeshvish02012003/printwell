@@ -33,6 +33,7 @@ const ViewPrintBoardPage = () => {
       printSubStatus="Binding"
       color="bg-gradient-to-r from-[#03A9F4] to-[#B3E5FC]" 
       text="text-blue-900"
+      gradientColor="#03A9F4"
     />
   );
 };

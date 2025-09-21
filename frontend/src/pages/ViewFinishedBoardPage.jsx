@@ -26,6 +26,7 @@ const ViewFinishedBoardPage = () => {
       printSubStatus="Out_of_Stock"
       color="bg-gradient-to-r from-[#66BB6A] to-[#C8E6C9]"
        text="text-green-900"
+       gradientColor="#66BB6A"
     />
   );
 };
