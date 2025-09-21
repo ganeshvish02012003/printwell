@@ -6,6 +6,11 @@ import Login from "../../pages/Login";
 import throttle from "lodash/throttle";
 import TabPanel from "../TabPanel";
 import Loading from "../../middleware/Loading";
+import { io } from "socket.io-client";
+
+const socket = io(import.meta.env.VITE_BACKEND_DOMAIN, {
+  withCredentials: true,
+});
 
 const statusToBoardId = {
   Pending: "To_Do",
@@ -119,17 +124,38 @@ const MenageJobCard = () => {
   /* ------------------------------------------------------------------ */
   /* 3️⃣  INITIAL LOAD + STORAGE-EVENT LISTENER                         */
   /* ------------------------------------------------------------------ */
+  // useEffect(() => {
+  //   fetchAllJob();
+
+  //   const onStorage = (e) => {
+  //     if (e.key === "kanban_sync") throttledFetchJobs();
+  //   };
+  //   window.addEventListener("storage", onStorage);
+
+  //   return () => {
+  //     window.removeEventListener("storage", onStorage);
+  //     throttledFetchJobs.cancel();
+  //   };
+  // }, [fetchAllJob, throttledFetchJobs]);
+
   useEffect(() => {
     fetchAllJob();
 
+    // 🔹 Sync between tabs (storage event)
     const onStorage = (e) => {
       if (e.key === "kanban_sync") throttledFetchJobs();
     };
     window.addEventListener("storage", onStorage);
 
+    // 🔹 Socket listener
+    socket.on("jobUpdated", () => {
+      throttledFetchJobs();
+    });
+
     return () => {
       window.removeEventListener("storage", onStorage);
       throttledFetchJobs.cancel();
+      socket.off("jobUpdated"); // cleanup
     };
   }, [fetchAllJob, throttledFetchJobs]);
 
@@ -212,6 +238,14 @@ const MenageJobCard = () => {
           }),
         });
 
+        // 🔹 Broadcast via socket
+        socket.emit("jobUpdated", {
+          _id: movedCard._id,
+          status: newStatus,
+          subStatus: newSubStatus,
+        });
+
+        // Still keep localStorage sync for other tabs
         localStorage.setItem("kanban_sync", Date.now().toString());
       } catch (err) {
         console.error("Backend update failed", err);

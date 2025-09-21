@@ -316,7 +316,7 @@ const ViewKanbanBoardPage = ({
   return (
     <div className="h-[calc(100vh-75px)] mx-1 flex flex-col">
       {loading && (
-        <div className="fixed inset-0 bg-black/10 flex justify-center items-center z-50">
+        <div className="fixed inset-0 flex justify-center items-center z-50">
           <Loading />
         </div>
       )}
